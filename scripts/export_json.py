@@ -354,37 +354,9 @@ def export_retailers(cur):
             "sample_size": row["sample_size"],
         })
 
-    # Top deduction types per retailer (excluding distributors, within period).
-    cur.execute("""
-        SELECT
-            d.retailer_name,
-            d.deduction_type,
-            SUM(d.deduction_amount) AS amount,
-            COUNT(*) AS count
-        FROM fct_deductions d
-        JOIN dim_retailers dr ON dr.retailer_name = d.retailer_name
-        JOIN fct_payments p ON p.remittance_id = d.remittance_id
-        WHERE dr.channel_type = 'retailer'
-          AND p.received_date BETWEEN %s AND %s
-        GROUP BY d.retailer_name, d.deduction_type
-        ORDER BY d.retailer_name, SUM(d.deduction_amount) DESC
-    """, (PERIOD_START, PERIOD_END))
-    deduction_mix = {}
-    for row in cur.fetchall():
-        name = row["retailer_name"]
-        if name not in deduction_mix:
-            deduction_mix[name] = []
-        deduction_mix[name].append({
-            "type": row["deduction_type"],
-            "label": row["deduction_type"].replace("_", " ").title(),
-            "amount": round(row["amount"], 2),
-            "count": row["count"],
-        })
-
     retailers = {
         "leakage": retailer_leakage,
         "time_to_cash": time_to_cash,
-        "deduction_mix": deduction_mix,
     }
 
     write_json("retailers.json", retailers)
