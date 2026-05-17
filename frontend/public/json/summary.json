@@ -1,15 +1,15 @@
 {
-  "headline": "For Every Dollar Invoiced, Fifty-One Cents Arrives as Cash",
-  "headline_ratio": 0.512,
+  "headline": "For Every Dollar Invoiced, Fifty-Five Cents Arrives as Cash",
+  "headline_ratio": 0.55,
   "b2b": {
-    "invoiced": 31409072.52,
-    "gross_payments": 17434735.5,
-    "net_received": 15897344.8,
-    "total_deductions": 1537390.7,
-    "deduction_count": 3087,
-    "recovered": 98215.54,
-    "leakage_pct": 8.8,
-    "remittance_count": 515
+    "invoiced": 22325333.28,
+    "gross_payments": 13216397.84,
+    "net_received": 12117341.88,
+    "total_deductions": 1099055.96,
+    "deduction_count": 2191,
+    "recovered": 70614.36,
+    "leakage_pct": 8.3,
+    "remittance_count": 374
   },
   "dtc": {
     "gross": 426368.69,
@@ -20,15 +20,15 @@
     "leakage_pct": 7.2
   },
   "combined": {
-    "total_invoiced": 31835441.21,
-    "total_net": 16293068.78,
-    "total_leakage": 1568035.41,
-    "cents_per_dollar": 51.2
+    "total_invoiced": 22751701.97,
+    "total_net": 12513065.86,
+    "total_leakage": 1129700.67,
+    "cents_per_dollar": 55.0
   },
   "meta": {
-    "retailers_b2b": 10,
-    "retailers_total": 11,
-    "orders_b2b": 5838,
+    "retailers_b2b": 8,
+    "retailers_total": 9,
+    "orders_b2b": 4036,
     "orders_dtc": 10000,
     "skus": 90,
     "time_window": "Dec 2024 - May 2026"

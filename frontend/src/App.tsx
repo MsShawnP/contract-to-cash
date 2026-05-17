@@ -74,15 +74,15 @@ export function App() {
       </section>
 
       <section className="section" id="retailers">
-        <h2 className="section-title">Not All Partners Leak Equally</h2>
+        <h2 className="section-title">Not All Retailers Leak Equally</h2>
         <p className="section-body">
           Leakage rates range from{" "}
           {Math.min(...retailers.leakage.map((r) => r.leakage_pct))}% to{" "}
           {Math.max(...retailers.leakage.map((r) => r.leakage_pct))}% — a{" "}
           {(Math.max(...retailers.leakage.map((r) => r.leakage_pct)) - Math.min(...retailers.leakage.map((r) => r.leakage_pct))).toFixed(1)}{" "}
-          percentage-point spread. Distributors (KeHE, UNFI) leak at moderate
-          rates but move high volume. The smallest partners by dollar flow
-          show the highest deduction rates.
+          percentage-point spread across eight direct retail partners. The
+          smallest retailers by dollar flow show the highest deduction rates,
+          while the largest are not necessarily the most aggressive.
         </p>
         <div className="chart-container">
           <RetailerChart retailers={retailers.leakage} />
@@ -97,8 +97,8 @@ export function App() {
         <h2 className="section-title">Time Is Money (Literally)</h2>
         <p className="section-body">
           Beyond what is deducted, the speed of payment varies dramatically.
-          Distributors (KeHE, UNFI) pay in roughly 33 days. Big-box retailers
-          (Costco, Walmart) average over 52. That 22-day spread is working
+          The fastest retailer (Whole Foods) averages 46 days to cash while
+          the slowest (Costco) takes 55. That nine-day spread is working
           capital locked in transit — invisible on the P&L but real in cash
           flow.
         </p>

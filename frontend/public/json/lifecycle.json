@@ -1,70 +1,70 @@
 {
   "b2b": {
-    "gross": 17434735.5,
-    "net": 15897344.8,
+    "gross": 13216397.84,
+    "net": 12117341.88,
     "stages": [
       {
         "stage": "vague",
         "label": "Vague",
-        "amount": 339306.01,
-        "count": 233,
-        "recovered": 437.32
-      },
-      {
-        "stage": "promo_billback",
-        "label": "Promo Billback",
-        "amount": 275563.31,
-        "count": 355,
-        "recovered": 24657.19
+        "amount": 227012.63,
+        "count": 145,
+        "recovered": 181.06
       },
       {
         "stage": "short_ship",
         "label": "Short Ship",
-        "amount": 240133.32,
-        "count": 1062,
-        "recovered": 25764.69
+        "amount": 217761.3,
+        "count": 885,
+        "recovered": 24438.93
       },
       {
         "stage": "label_fine",
         "label": "Label Fine",
-        "amount": 222956.15,
-        "count": 452,
-        "recovered": 5882.45
+        "amount": 198511.49,
+        "count": 381,
+        "recovered": 4905.05
+      },
+      {
+        "stage": "promo_billback",
+        "label": "Promo Billback",
+        "amount": 148017.0,
+        "count": 171,
+        "recovered": 14259.35
       },
       {
         "stage": "spoilage",
         "label": "Spoilage",
-        "amount": 126263.26,
-        "count": 135,
-        "recovered": 18968.0
+        "amount": 92984.82,
+        "count": 92,
+        "recovered": 12923.46
       },
       {
         "stage": "slotting",
         "label": "Slotting",
-        "amount": 120401.48,
-        "count": 31,
+        "amount": 90205.93,
+        "count": 21,
         "recovered": 0.0
       },
       {
         "stage": "late_delivery",
         "label": "Late Delivery",
-        "amount": 114881.85,
-        "count": 580,
-        "recovered": 10568.87
+        "amount": 61140.19,
+        "count": 344,
+        "recovered": 5671.92
       },
       {
         "stage": "damaged",
         "label": "Damaged",
-        "amount": 77931.81,
-        "count": 125,
-        "recovered": 10047.89
+        "amount": 48285.7,
+        "count": 71,
+        "recovered": 6702.67
       },
       {
         "stage": "pallet_fine",
         "label": "Pallet Fine",
-        "amount": 19953.51,
-        "count": 114,
-        "recovered": 1889.13
+        "amount": 15136.9,
+        "count": 81,
+        "recovered": 1531.92
       }
     ]
   },

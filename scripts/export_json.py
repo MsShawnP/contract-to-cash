@@ -30,6 +30,17 @@ psycopg2.extensions.register_type(DEC2FLOAT)
 ROOT = Path(__file__).resolve().parent.parent
 OUT_DIR = ROOT / "frontend" / "public" / "json"
 
+ONES = ["", "One", "Two", "Three", "Four", "Five", "Six", "Seven", "Eight", "Nine",
+        "Ten", "Eleven", "Twelve", "Thirteen", "Fourteen", "Fifteen", "Sixteen",
+        "Seventeen", "Eighteen", "Nineteen"]
+TENS = ["", "", "Twenty", "Thirty", "Forty", "Fifty", "Sixty", "Seventy", "Eighty", "Ninety"]
+
+
+def num_to_word(n: int) -> str:
+    if n < 20:
+        return ONES[n]
+    return f"{TENS[n // 10]}-{ONES[n % 10]}" if n % 10 else TENS[n // 10]
+
 
 def connect():
     url = os.environ.get("DATABASE_URL")
@@ -54,29 +65,44 @@ def export_summary(cur):
     """Top-line metrics for the hero section."""
     print("\n--- summary.json ---", flush=True)
 
-    # B2B payments.
+    # B2B payments (retailers only, excluding distributors).
     cur.execute("""
         SELECT
-            SUM(gross_amount) AS b2b_gross,
-            SUM(net_amount) AS b2b_net,
+            SUM(p.gross_amount) AS b2b_gross,
+            SUM(p.net_amount) AS b2b_net,
             COUNT(*) AS remittance_count
-        FROM fct_payments
+        FROM fct_payments p
+        JOIN dim_retailers dr ON dr.retailer_name = p.retailer_name
+        WHERE dr.channel_type = 'retailer'
     """)
     pay = cur.fetchone()
 
-    # B2B invoiced.
+    # B2B invoiced (retailers only).
     cur.execute("""
-        SELECT SUM(line_total) AS total FROM fct_orders WHERE channel = 'B2B'
+        SELECT SUM(o.line_total) AS total, COUNT(DISTINCT o.order_id) AS order_count
+        FROM fct_orders o
+        JOIN dim_retailers dr ON dr.retailer_id = o.retailer_id
+        WHERE o.channel = 'B2B' AND dr.channel_type = 'retailer'
     """)
-    b2b_invoiced = cur.fetchone()["total"]
+    orders_row = cur.fetchone()
+    b2b_invoiced = orders_row["total"]
+    b2b_order_count = orders_row["order_count"]
 
-    # B2B deductions.
+    # B2B deductions (retailers only).
     cur.execute("""
-        SELECT COUNT(*) AS n, SUM(deduction_amount) AS total,
-               SUM(net_recovery) AS recovered
-        FROM fct_deductions
+        SELECT COUNT(*) AS n, SUM(d.deduction_amount) AS total,
+               SUM(d.net_recovery) AS recovered
+        FROM fct_deductions d
+        JOIN dim_retailers dr ON dr.retailer_name = d.retailer_name
+        WHERE dr.channel_type = 'retailer'
     """)
     ded = cur.fetchone()
+
+    # Retailer count.
+    cur.execute("""
+        SELECT COUNT(*) AS n FROM dim_retailers WHERE channel_type = 'retailer'
+    """)
+    retailer_count = cur.fetchone()["n"]
 
     # DTC.
     cur.execute("""
@@ -105,9 +131,14 @@ def export_summary(cur):
     combined_net = pay["b2b_net"] + dtc_net
     combined_leakage = (pay["b2b_gross"] - pay["b2b_net"]) + dtc_leakage
 
+    headline_ratio = combined_net / combined_invoiced
+    cents = round(combined_net / combined_invoiced * 100, 1)
+    cents_word = num_to_word(int(cents))
+    headline = f"For Every Dollar Invoiced, {cents_word} Cents Arrives as Cash"
+
     summary = {
-        "headline": "For Every Dollar Invoiced, Fifty-One Cents Arrives as Cash",
-        "headline_ratio": round(combined_net / combined_invoiced, 3),
+        "headline": headline,
+        "headline_ratio": round(headline_ratio, 3),
         "b2b": {
             "invoiced": round(b2b_invoiced, 2),
             "gross_payments": round(pay["b2b_gross"], 2),
@@ -130,12 +161,12 @@ def export_summary(cur):
             "total_invoiced": round(combined_invoiced, 2),
             "total_net": round(combined_net, 2),
             "total_leakage": round(combined_leakage, 2),
-            "cents_per_dollar": round(combined_net / combined_invoiced * 100, 1),
+            "cents_per_dollar": cents,
         },
         "meta": {
-            "retailers_b2b": 10,
-            "retailers_total": 11,
-            "orders_b2b": 5838,
+            "retailers_b2b": retailer_count,
+            "retailers_total": retailer_count + 1,
+            "orders_b2b": b2b_order_count,
             "orders_dtc": 10000,
             "skus": 90,
             "time_window": "Dec 2024 - May 2026",
@@ -150,17 +181,24 @@ def export_lifecycle(cur):
     """Waterfall stages — deduction type breakdown for the anchor chart."""
     print("\n--- lifecycle.json ---", flush=True)
 
-    # B2B waterfall: gross → each deduction type → net.
-    cur.execute("SELECT SUM(gross_amount) AS gross FROM fct_payments")
+    # B2B waterfall: gross → each deduction type → net (retailers only).
+    cur.execute("""
+        SELECT SUM(p.gross_amount) AS gross
+        FROM fct_payments p
+        JOIN dim_retailers dr ON dr.retailer_name = p.retailer_name
+        WHERE dr.channel_type = 'retailer'
+    """)
     b2b_gross = cur.fetchone()["gross"]
 
     cur.execute("""
-        SELECT deduction_type, COUNT(*) AS count,
-               SUM(deduction_amount) AS amount,
-               SUM(net_recovery) AS recovered
-        FROM fct_deductions
-        GROUP BY deduction_type
-        ORDER BY SUM(deduction_amount) DESC
+        SELECT d.deduction_type, COUNT(*) AS count,
+               SUM(d.deduction_amount) AS amount,
+               SUM(d.net_recovery) AS recovered
+        FROM fct_deductions d
+        JOIN dim_retailers dr ON dr.retailer_name = d.retailer_name
+        WHERE dr.channel_type = 'retailer'
+        GROUP BY d.deduction_type
+        ORDER BY SUM(d.deduction_amount) DESC
     """)
     deduction_stages = []
     for row in cur.fetchall():
@@ -172,7 +210,12 @@ def export_lifecycle(cur):
             "recovered": round(row["recovered"], 2),
         })
 
-    cur.execute("SELECT SUM(net_amount) AS net FROM fct_payments")
+    cur.execute("""
+        SELECT SUM(p.net_amount) AS net
+        FROM fct_payments p
+        JOIN dim_retailers dr ON dr.retailer_name = p.retailer_name
+        WHERE dr.channel_type = 'retailer'
+    """)
     b2b_net = cur.fetchone()["net"]
 
     # DTC waterfall.
@@ -219,7 +262,7 @@ def export_retailers(cur):
     """Per-retailer leakage comparison and time-to-cash."""
     print("\n--- retailers.json ---", flush=True)
 
-    # Leakage by retailer.
+    # Leakage by retailer (excluding distributors).
     cur.execute("""
         SELECT
             p.retailer_name,
@@ -228,6 +271,8 @@ def export_retailers(cur):
             SUM(p.gross_amount) - SUM(p.net_amount) AS leakage,
             COUNT(*) AS remittance_count
         FROM fct_payments p
+        JOIN dim_retailers dr ON dr.retailer_name = p.retailer_name
+        WHERE dr.channel_type = 'retailer'
         GROUP BY p.retailer_name
         ORDER BY SUM(p.gross_amount) - SUM(p.net_amount) DESC
     """)
@@ -243,7 +288,7 @@ def export_retailers(cur):
             "remittances": row["remittance_count"],
         })
 
-    # Time-to-cash by retailer.
+    # Time-to-cash by retailer (excluding distributors).
     cur.execute("""
         WITH order_payment AS (
             SELECT
@@ -252,7 +297,9 @@ def export_retailers(cur):
             FROM fct_deductions d
             JOIN fct_orders o ON o.order_id = d.order_id
             JOIN fct_payments p ON p.remittance_id = d.remittance_id
+            JOIN dim_retailers dr ON dr.retailer_name = d.retailer_name
             WHERE o.channel = 'B2B'
+              AND dr.channel_type = 'retailer'
               AND o.order_date IS NOT NULL
               AND p.received_date IS NOT NULL
         )
@@ -274,16 +321,18 @@ def export_retailers(cur):
             "sample_size": row["sample_size"],
         })
 
-    # Top deduction types per retailer.
+    # Top deduction types per retailer (excluding distributors).
     cur.execute("""
         SELECT
-            retailer_name,
-            deduction_type,
-            SUM(deduction_amount) AS amount,
+            d.retailer_name,
+            d.deduction_type,
+            SUM(d.deduction_amount) AS amount,
             COUNT(*) AS count
-        FROM fct_deductions
-        GROUP BY retailer_name, deduction_type
-        ORDER BY retailer_name, SUM(deduction_amount) DESC
+        FROM fct_deductions d
+        JOIN dim_retailers dr ON dr.retailer_name = d.retailer_name
+        WHERE dr.channel_type = 'retailer'
+        GROUP BY d.retailer_name, d.deduction_type
+        ORDER BY d.retailer_name, SUM(d.deduction_amount) DESC
     """)
     deduction_mix = {}
     for row in cur.fetchall():

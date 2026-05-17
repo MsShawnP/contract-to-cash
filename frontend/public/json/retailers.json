@@ -9,22 +9,6 @@
       "remittances": 70
     },
     {
-      "name": "UNFI",
-      "gross": 2443295.88,
-      "net": 2191108.66,
-      "leakage": 252187.22,
-      "leakage_pct": 10.3,
-      "remittances": 72
-    },
-    {
-      "name": "KeHE",
-      "gross": 1775041.78,
-      "net": 1588894.26,
-      "leakage": 186147.52,
-      "leakage_pct": 10.5,
-      "remittances": 69
-    },
-    {
       "name": "Costco",
       "gross": 1425076.15,
       "net": 1249227.18,
@@ -129,18 +113,6 @@
       "avg_days": 45.8,
       "median_days": 46.0,
       "sample_size": 1624
-    },
-    {
-      "name": "KeHE",
-      "avg_days": 34.3,
-      "median_days": 34.0,
-      "sample_size": 2662
-    },
-    {
-      "name": "UNFI",
-      "avg_days": 33.0,
-      "median_days": 33.0,
-      "sample_size": 2869
     }
   ],
   "deduction_mix": {
@@ -306,62 +278,6 @@
         "count": 1
       }
     ],
-    "KeHE": [
-      {
-        "type": "promo_billback",
-        "label": "Promo Billback",
-        "amount": 54063.09,
-        "count": 79
-      },
-      {
-        "type": "vague",
-        "label": "Vague",
-        "amount": 42915.08,
-        "count": 37
-      },
-      {
-        "type": "label_fine",
-        "label": "Label Fine",
-        "amount": 19768.36,
-        "count": 41
-      },
-      {
-        "type": "spoilage",
-        "label": "Spoilage",
-        "amount": 16126.59,
-        "count": 22
-      },
-      {
-        "type": "damaged",
-        "label": "Damaged",
-        "amount": 15523.31,
-        "count": 31
-      },
-      {
-        "type": "slotting",
-        "label": "Slotting",
-        "amount": 12779.94,
-        "count": 5
-      },
-      {
-        "type": "short_ship",
-        "label": "Short Ship",
-        "amount": 12227.09,
-        "count": 93
-      },
-      {
-        "type": "late_delivery",
-        "label": "Late Delivery",
-        "amount": 10491.66,
-        "count": 100
-      },
-      {
-        "type": "pallet_fine",
-        "label": "Pallet Fine",
-        "amount": 2252.4,
-        "count": 15
-      }
-    ],
     "Mountain Pantry Co": [
       {
         "type": "vague",
@@ -522,62 +438,6 @@
         "label": "Pallet Fine",
         "amount": 302.34,
         "count": 2
-      }
-    ],
-    "UNFI": [
-      {
-        "type": "promo_billback",
-        "label": "Promo Billback",
-        "amount": 73483.22,
-        "count": 105
-      },
-      {
-        "type": "vague",
-        "label": "Vague",
-        "amount": 69378.3,
-        "count": 51
-      },
-      {
-        "type": "late_delivery",
-        "label": "Late Delivery",
-        "amount": 43250.0,
-        "count": 136
-      },
-      {
-        "type": "slotting",
-        "label": "Slotting",
-        "amount": 17415.61,
-        "count": 5
-      },
-      {
-        "type": "spoilage",
-        "label": "Spoilage",
-        "amount": 17151.85,
-        "count": 21
-      },
-      {
-        "type": "damaged",
-        "label": "Damaged",
-        "amount": 14122.8,
-        "count": 23
-      },
-      {
-        "type": "short_ship",
-        "label": "Short Ship",
-        "amount": 10144.93,
-        "count": 84
-      },
-      {
-        "type": "label_fine",
-        "label": "Label Fine",
-        "amount": 4676.3,
-        "count": 30
-      },
-      {
-        "type": "pallet_fine",
-        "label": "Pallet Fine",
-        "amount": 2564.21,
-        "count": 18
       }
     ],
     "Walmart": [
