@@ -7,28 +7,50 @@ session. For session-by-session state, see HANDOFF.md.
 
 ## Goal
 
-[To be defined via /clarify]
+Build a portfolio piece that tells the complete money-leak story for a $25M CPG brand — tracing where revenue evaporates between contract and cash receipt. React SPA (Vite, Cloudflare Pages), static JSON data from the Cinderhaven Data Platform. Audience is CEO/CFO. The specific visual approach and narrative structure emerge from data exploration, not prescribed upfront.
 
 ## Why this arc, why now
 
-[To be defined via /clarify]
+Second buyer-facing consumer of the Cinderhaven Data Platform. Demonstrates revenue operations fluency to C-suite buyers. Platform dependency resolved — substrate is live. Building in parallel with channel-profitability-analysis (may ship first).
 
 ## Business question this arc answers
 
 On that deal we signed in Q1 — what did we actually net, and where did the money leak between systems?
 
+## Constraints
+
+- All Cinderhaven numbers must reconcile: $25M revenue, 90 SKUs, 11 retailers, 3,087 deductions, 5,838 shipments
+- No Streamlit
+- Business story first, claims backed by rigorous analysis
+- New synthetic data is acceptable if needed, but must be additive and consistent with existing projects
+- Quality over speed, no hard deadline
+
 ## Tasks
 
-- [ ] Run /clarify to scope the work
-- [ ] Define first arc tasks
+- [x] Run /clarify to scope the work
+- [x] Explore platform data — find the story, identify gaps
+- [x] Synthesize DTC payment lifecycle data
+- [x] Cross-project reconciliation validation (17 checks pass)
+- [x] Define narrative structure and visual approach based on findings
+- [ ] Build Python export script (summary.json, lifecycle.json, retailers.json)
+- [ ] Scaffold React SPA (Vite + TypeScript + Recharts + CF Pages)
+- [ ] Implement anchor waterfall + narrative sections
+- [ ] Polish, validate, deploy to Cloudflare Pages
 
 ## Out of scope for this arc
 
-[To be defined via /clarify]
+- Streamlit or server-rendered apps
+- DE proof (platform handles that)
+- Marketing/LinkedIn content
+- Rebuilding platform infrastructure
+- Anything that doesn't serve the story
 
 ## Definition of done for this arc
 
-- [ ] To be defined via /clarify
+- [ ] Fully deployed React SPA on Cloudflare Pages
+- [ ] Complete, compelling money-leak narrative backed by data
+- [ ] Numbers reconcile with all other Cinderhaven projects
+- [ ] CFO/CEO can understand the story without technical background
 
 ---
 
