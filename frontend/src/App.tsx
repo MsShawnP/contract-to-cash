@@ -98,7 +98,7 @@ export function App() {
         <p className="section-body">
           Beyond what is deducted, the speed of payment varies dramatically.
           The fastest retailer (Whole Foods) averages 46 days to cash while
-          the slowest (Costco) takes 55. That nine-day spread is working
+          the slowest (Costco) takes 56. That ten-day spread is working
           capital locked in transit — invisible on the P&L but real in cash
           flow.
         </p>

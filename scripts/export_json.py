@@ -30,6 +30,10 @@ psycopg2.extensions.register_type(DEC2FLOAT)
 ROOT = Path(__file__).resolve().parent.parent
 OUT_DIR = ROOT / "frontend" / "public" / "json"
 
+PERIOD_START = "2025-01-01"
+PERIOD_END = "2025-12-31"
+PERIOD_LABEL = "Calendar Year 2025"
+
 ONES = ["", "One", "Two", "Three", "Four", "Five", "Six", "Seven", "Eight", "Nine",
         "Ten", "Eleven", "Twelve", "Thirteen", "Fourteen", "Fifteen", "Sixteen",
         "Seventeen", "Eighteen", "Nineteen"]
@@ -65,7 +69,7 @@ def export_summary(cur):
     """Top-line metrics for the hero section."""
     print("\n--- summary.json ---", flush=True)
 
-    # B2B payments (retailers only, excluding distributors).
+    # B2B payments (retailers only, within period).
     cur.execute("""
         SELECT
             SUM(p.gross_amount) AS b2b_gross,
@@ -74,28 +78,32 @@ def export_summary(cur):
         FROM fct_payments p
         JOIN dim_retailers dr ON dr.retailer_name = p.retailer_name
         WHERE dr.channel_type = 'retailer'
-    """)
+          AND p.received_date BETWEEN %s AND %s
+    """, (PERIOD_START, PERIOD_END))
     pay = cur.fetchone()
 
-    # B2B invoiced (retailers only).
+    # B2B invoiced (retailers only, within period).
     cur.execute("""
         SELECT SUM(o.line_total) AS total, COUNT(DISTINCT o.order_id) AS order_count
         FROM fct_orders o
         JOIN dim_retailers dr ON dr.retailer_id = o.retailer_id
         WHERE o.channel = 'B2B' AND dr.channel_type = 'retailer'
-    """)
+          AND o.order_date BETWEEN %s AND %s
+    """, (PERIOD_START, PERIOD_END))
     orders_row = cur.fetchone()
     b2b_invoiced = orders_row["total"]
     b2b_order_count = orders_row["order_count"]
 
-    # B2B deductions (retailers only).
+    # B2B deductions (retailers only, within period via payment date).
     cur.execute("""
         SELECT COUNT(*) AS n, SUM(d.deduction_amount) AS total,
                SUM(d.net_recovery) AS recovered
         FROM fct_deductions d
         JOIN dim_retailers dr ON dr.retailer_name = d.retailer_name
+        JOIN fct_payments p ON p.remittance_id = d.remittance_id
         WHERE dr.channel_type = 'retailer'
-    """)
+          AND p.received_date BETWEEN %s AND %s
+    """, (PERIOD_START, PERIOD_END))
     ded = cur.fetchone()
 
     # Retailer count.
@@ -104,30 +112,43 @@ def export_summary(cur):
     """)
     retailer_count = cur.fetchone()["n"]
 
-    # DTC.
+    # DTC (within period).
     cur.execute("""
         SELECT
             SUM(order_amount) AS gross,
             SUM(processing_fee) AS fees,
             SUM(net_amount) AS net
         FROM raw.shopify_transactions
-    """)
+        WHERE transaction_date BETWEEN %s AND %s
+    """, (PERIOD_START, PERIOD_END))
     dtc_txn = cur.fetchone()
 
-    cur.execute("SELECT SUM(refund_amount) AS total FROM raw.shopify_refunds")
-    dtc_refunds = cur.fetchone()["total"]
+    cur.execute("""
+        SELECT SUM(refund_amount) AS total FROM raw.shopify_refunds
+        WHERE refund_date BETWEEN %s AND %s
+    """, (PERIOD_START, PERIOD_END))
+    dtc_refunds = cur.fetchone()["total"] or 0
 
     cur.execute("""
         SELECT SUM(chargeback_amount + chargeback_fee) AS total
-        FROM raw.shopify_chargebacks WHERE outcome = 'lost'
-    """)
+        FROM raw.shopify_chargebacks
+        WHERE outcome = 'lost' AND chargeback_date BETWEEN %s AND %s
+    """, (PERIOD_START, PERIOD_END))
     dtc_cb = cur.fetchone()["total"] or 0
 
-    dtc_leakage = dtc_txn["fees"] + dtc_refunds + dtc_cb
-    dtc_net = dtc_txn["gross"] - dtc_leakage
+    dtc_leakage = (dtc_txn["fees"] or 0) + (dtc_refunds or 0) + dtc_cb
+    dtc_gross = dtc_txn["gross"] or 0
+    dtc_net = dtc_gross - dtc_leakage
+
+    # DTC order count in period.
+    cur.execute("""
+        SELECT COUNT(DISTINCT order_id) AS n FROM fct_orders
+        WHERE channel = 'DTC' AND order_date BETWEEN %s AND %s
+    """, (PERIOD_START, PERIOD_END))
+    dtc_order_count = cur.fetchone()["n"]
 
     # Combined.
-    combined_invoiced = b2b_invoiced + dtc_txn["gross"]
+    combined_invoiced = b2b_invoiced + dtc_gross
     combined_net = pay["b2b_net"] + dtc_net
     combined_leakage = (pay["b2b_gross"] - pay["b2b_net"]) + dtc_leakage
 
@@ -150,12 +171,12 @@ def export_summary(cur):
             "remittance_count": pay["remittance_count"],
         },
         "dtc": {
-            "gross": round(dtc_txn["gross"], 2),
-            "processing_fees": round(dtc_txn["fees"], 2),
+            "gross": round(dtc_gross, 2),
+            "processing_fees": round(dtc_txn["fees"] or 0, 2),
             "refunds": round(dtc_refunds, 2),
             "chargebacks_lost": round(dtc_cb, 2),
             "net_received": round(dtc_net, 2),
-            "leakage_pct": round(dtc_leakage / dtc_txn["gross"] * 100, 1),
+            "leakage_pct": round(dtc_leakage / dtc_gross * 100, 1) if dtc_gross else 0,
         },
         "combined": {
             "total_invoiced": round(combined_invoiced, 2),
@@ -167,9 +188,9 @@ def export_summary(cur):
             "retailers_b2b": retailer_count,
             "retailers_total": retailer_count + 1,
             "orders_b2b": b2b_order_count,
-            "orders_dtc": 10000,
+            "orders_dtc": dtc_order_count,
             "skus": 90,
-            "time_window": "Dec 2024 - May 2026",
+            "time_window": PERIOD_LABEL,
         },
     }
 
@@ -181,13 +202,14 @@ def export_lifecycle(cur):
     """Waterfall stages — deduction type breakdown for the anchor chart."""
     print("\n--- lifecycle.json ---", flush=True)
 
-    # B2B waterfall: gross → each deduction type → net (retailers only).
+    # B2B waterfall: gross → each deduction type → net (retailers only, within period).
     cur.execute("""
         SELECT SUM(p.gross_amount) AS gross
         FROM fct_payments p
         JOIN dim_retailers dr ON dr.retailer_name = p.retailer_name
         WHERE dr.channel_type = 'retailer'
-    """)
+          AND p.received_date BETWEEN %s AND %s
+    """, (PERIOD_START, PERIOD_END))
     b2b_gross = cur.fetchone()["gross"]
 
     cur.execute("""
@@ -196,10 +218,12 @@ def export_lifecycle(cur):
                SUM(d.net_recovery) AS recovered
         FROM fct_deductions d
         JOIN dim_retailers dr ON dr.retailer_name = d.retailer_name
+        JOIN fct_payments p ON p.remittance_id = d.remittance_id
         WHERE dr.channel_type = 'retailer'
+          AND p.received_date BETWEEN %s AND %s
         GROUP BY d.deduction_type
         ORDER BY SUM(d.deduction_amount) DESC
-    """)
+    """, (PERIOD_START, PERIOD_END))
     deduction_stages = []
     for row in cur.fetchall():
         deduction_stages.append({
@@ -215,23 +239,31 @@ def export_lifecycle(cur):
         FROM fct_payments p
         JOIN dim_retailers dr ON dr.retailer_name = p.retailer_name
         WHERE dr.channel_type = 'retailer'
-    """)
+          AND p.received_date BETWEEN %s AND %s
+    """, (PERIOD_START, PERIOD_END))
     b2b_net = cur.fetchone()["net"]
 
-    # DTC waterfall.
-    cur.execute("SELECT SUM(order_amount) AS gross FROM raw.shopify_transactions")
-    dtc_gross = cur.fetchone()["gross"]
+    # DTC waterfall (within period).
+    cur.execute("""
+        SELECT SUM(order_amount) AS gross, SUM(processing_fee) AS fees
+        FROM raw.shopify_transactions
+        WHERE transaction_date BETWEEN %s AND %s
+    """, (PERIOD_START, PERIOD_END))
+    dtc_row = cur.fetchone()
+    dtc_gross = dtc_row["gross"] or 0
+    dtc_fees = dtc_row["fees"] or 0
 
-    cur.execute("SELECT SUM(processing_fee) AS total FROM raw.shopify_transactions")
-    dtc_fees = cur.fetchone()["total"]
-
-    cur.execute("SELECT SUM(refund_amount) AS total FROM raw.shopify_refunds")
-    dtc_refunds = cur.fetchone()["total"]
+    cur.execute("""
+        SELECT SUM(refund_amount) AS total FROM raw.shopify_refunds
+        WHERE refund_date BETWEEN %s AND %s
+    """, (PERIOD_START, PERIOD_END))
+    dtc_refunds = cur.fetchone()["total"] or 0
 
     cur.execute("""
         SELECT SUM(chargeback_amount) AS amt, SUM(chargeback_fee) AS fees
-        FROM raw.shopify_chargebacks WHERE outcome = 'lost'
-    """)
+        FROM raw.shopify_chargebacks
+        WHERE outcome = 'lost' AND chargeback_date BETWEEN %s AND %s
+    """, (PERIOD_START, PERIOD_END))
     cb = cur.fetchone()
     dtc_chargebacks = (cb["amt"] or 0) + (cb["fees"] or 0)
 
@@ -262,7 +294,7 @@ def export_retailers(cur):
     """Per-retailer leakage comparison and time-to-cash."""
     print("\n--- retailers.json ---", flush=True)
 
-    # Leakage by retailer (excluding distributors).
+    # Leakage by retailer (excluding distributors, within period).
     cur.execute("""
         SELECT
             p.retailer_name,
@@ -273,9 +305,10 @@ def export_retailers(cur):
         FROM fct_payments p
         JOIN dim_retailers dr ON dr.retailer_name = p.retailer_name
         WHERE dr.channel_type = 'retailer'
+          AND p.received_date BETWEEN %s AND %s
         GROUP BY p.retailer_name
         ORDER BY SUM(p.gross_amount) - SUM(p.net_amount) DESC
-    """)
+    """, (PERIOD_START, PERIOD_END))
     retailer_leakage = []
     for row in cur.fetchall():
         leak_pct = row["leakage"] / row["gross"] * 100 if row["gross"] else 0
@@ -288,7 +321,7 @@ def export_retailers(cur):
             "remittances": row["remittance_count"],
         })
 
-    # Time-to-cash by retailer (excluding distributors).
+    # Time-to-cash by retailer (excluding distributors, within period).
     cur.execute("""
         WITH order_payment AS (
             SELECT
@@ -300,8 +333,8 @@ def export_retailers(cur):
             JOIN dim_retailers dr ON dr.retailer_name = d.retailer_name
             WHERE o.channel = 'B2B'
               AND dr.channel_type = 'retailer'
+              AND p.received_date BETWEEN %s AND %s
               AND o.order_date IS NOT NULL
-              AND p.received_date IS NOT NULL
         )
         SELECT
             retailer_name,
@@ -311,7 +344,7 @@ def export_retailers(cur):
         FROM order_payment
         GROUP BY retailer_name
         ORDER BY AVG(days_to_cash) DESC
-    """)
+    """, (PERIOD_START, PERIOD_END))
     time_to_cash = []
     for row in cur.fetchall():
         time_to_cash.append({
@@ -321,7 +354,7 @@ def export_retailers(cur):
             "sample_size": row["sample_size"],
         })
 
-    # Top deduction types per retailer (excluding distributors).
+    # Top deduction types per retailer (excluding distributors, within period).
     cur.execute("""
         SELECT
             d.retailer_name,
@@ -330,10 +363,12 @@ def export_retailers(cur):
             COUNT(*) AS count
         FROM fct_deductions d
         JOIN dim_retailers dr ON dr.retailer_name = d.retailer_name
+        JOIN fct_payments p ON p.remittance_id = d.remittance_id
         WHERE dr.channel_type = 'retailer'
+          AND p.received_date BETWEEN %s AND %s
         GROUP BY d.retailer_name, d.deduction_type
         ORDER BY d.retailer_name, SUM(d.deduction_amount) DESC
-    """)
+    """, (PERIOD_START, PERIOD_END))
     deduction_mix = {}
     for row in cur.fetchall():
         name = row["retailer_name"]
