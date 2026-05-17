@@ -1,0 +1,92 @@
+{
+  "b2b": {
+    "gross": 17434735.5,
+    "net": 15897344.8,
+    "stages": [
+      {
+        "stage": "vague",
+        "label": "Vague",
+        "amount": 339306.01,
+        "count": 233,
+        "recovered": 437.32
+      },
+      {
+        "stage": "promo_billback",
+        "label": "Promo Billback",
+        "amount": 275563.31,
+        "count": 355,
+        "recovered": 24657.19
+      },
+      {
+        "stage": "short_ship",
+        "label": "Short Ship",
+        "amount": 240133.32,
+        "count": 1062,
+        "recovered": 25764.69
+      },
+      {
+        "stage": "label_fine",
+        "label": "Label Fine",
+        "amount": 222956.15,
+        "count": 452,
+        "recovered": 5882.45
+      },
+      {
+        "stage": "spoilage",
+        "label": "Spoilage",
+        "amount": 126263.26,
+        "count": 135,
+        "recovered": 18968.0
+      },
+      {
+        "stage": "slotting",
+        "label": "Slotting",
+        "amount": 120401.48,
+        "count": 31,
+        "recovered": 0.0
+      },
+      {
+        "stage": "late_delivery",
+        "label": "Late Delivery",
+        "amount": 114881.85,
+        "count": 580,
+        "recovered": 10568.87
+      },
+      {
+        "stage": "damaged",
+        "label": "Damaged",
+        "amount": 77931.81,
+        "count": 125,
+        "recovered": 10047.89
+      },
+      {
+        "stage": "pallet_fine",
+        "label": "Pallet Fine",
+        "amount": 19953.51,
+        "count": 114,
+        "recovered": 1889.13
+      }
+    ]
+  },
+  "dtc": {
+    "gross": 426368.69,
+    "net": 395723.98,
+    "stages": [
+      {
+        "stage": "processing_fees",
+        "label": "Processing Fees",
+        "amount": 15365.44
+      },
+      {
+        "stage": "refunds",
+        "label": "Refunds",
+        "amount": 12975.12
+      },
+      {
+        "stage": "chargebacks",
+        "label": "Chargebacks",
+        "amount": 2304.15
+      }
+    ]
+  }
+}

@@ -1,0 +1,36 @@
+{
+  "headline": "For Every Dollar Invoiced, Fifty-One Cents Arrives as Cash",
+  "headline_ratio": 0.512,
+  "b2b": {
+    "invoiced": 31409072.52,
+    "gross_payments": 17434735.5,
+    "net_received": 15897344.8,
+    "total_deductions": 1537390.7,
+    "deduction_count": 3087,
+    "recovered": 98215.54,
+    "leakage_pct": 8.8,
+    "remittance_count": 515
+  },
+  "dtc": {
+    "gross": 426368.69,
+    "processing_fees": 15365.44,
+    "refunds": 12975.12,
+    "chargebacks_lost": 2304.15,
+    "net_received": 395723.98,
+    "leakage_pct": 7.2
+  },
+  "combined": {
+    "total_invoiced": 31835441.21,
+    "total_net": 16293068.78,
+    "total_leakage": 1568035.41,
+    "cents_per_dollar": 51.2
+  },
+  "meta": {
+    "retailers_b2b": 10,
+    "retailers_total": 11,
+    "orders_b2b": 5838,
+    "orders_dtc": 10000,
+    "skus": 90,
+    "time_window": "Dec 2024 - May 2026"
+  }
+}
