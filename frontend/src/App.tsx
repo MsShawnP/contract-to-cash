@@ -40,9 +40,9 @@ export function App() {
         <div className="stat-row">
           <div className="stat-card">
             <span className="stat-value">
-              {summary.combined.cents_per_dollar}&cent;
+              {summary.combined.leakage_cents}&cent;
             </span>
-            <span className="stat-label">per dollar invoiced</span>
+            <span className="stat-label">per dollar lost to deductions</span>
           </div>
           <div className="stat-card">
             <span className="stat-value">{summary.b2b.leakage_pct}%</span>
@@ -97,8 +97,11 @@ export function App() {
         <h2 className="section-title">Time Is Money (Literally)</h2>
         <p className="section-body">
           Beyond what is deducted, the speed of payment varies dramatically.
-          The fastest retailer (Whole Foods) averages 46 days to cash while
-          the slowest (Costco) takes 56. That ten-day spread is working
+          The fastest retailer ({retailers.time_to_cash[retailers.time_to_cash.length - 1].name}) averages{" "}
+          {retailers.time_to_cash[retailers.time_to_cash.length - 1].avg_days} days to cash while
+          the slowest ({retailers.time_to_cash[0].name}) takes{" "}
+          {retailers.time_to_cash[0].avg_days}. That{" "}
+          {(retailers.time_to_cash[0].avg_days - retailers.time_to_cash[retailers.time_to_cash.length - 1].avg_days).toFixed(0)}-day spread is working
           capital locked in transit — invisible on the P&L but real in cash
           flow.
         </p>

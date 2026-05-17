@@ -142,10 +142,11 @@ def export_summary(cur):
     dtc_gross = dtc_txn["gross"] or 0
     dtc_net = dtc_gross - dtc_leakage
 
-    # DTC order count in period.
+    # DTC order count in period (from transactions, not fct_orders which may
+    # have a different generation cadence).
     cur.execute("""
-        SELECT COUNT(DISTINCT order_id) AS n FROM fct_orders
-        WHERE channel = 'DTC' AND order_date BETWEEN %s AND %s
+        SELECT COUNT(*) AS n FROM raw.shopify_transactions
+        WHERE transaction_date BETWEEN %s AND %s
     """, (PERIOD_START, PERIOD_END))
     dtc_order_count = cur.fetchone()["n"]
 
@@ -155,14 +156,15 @@ def export_summary(cur):
     combined_net = pay["b2b_net"] + dtc_net
     combined_leakage = (pay["b2b_gross"] - pay["b2b_net"]) + dtc_leakage
 
-    headline_ratio = combined_net / combined_gross
-    cents = round(combined_net / combined_gross * 100, 1)
-    cents_word = num_to_word(int(cents))
-    headline = f"For Every Dollar Collected, {cents_word} Cents Arrives as Cash"
+    leakage_cents = round(combined_leakage / combined_gross * 100, 1)
+    leakage_cents_word = num_to_word(int(leakage_cents))
+    headline = f"For Every Dollar Collected, {leakage_cents_word} Cents Vanishes in Deductions"
+
+    cents_per_dollar = round(combined_net / combined_gross * 100, 1)
 
     summary = {
         "headline": headline,
-        "headline_ratio": round(headline_ratio, 3),
+        "headline_ratio": round(leakage_cents / 100, 3),
         "b2b": {
             "invoiced": round(b2b_invoiced, 2),
             "gross_payments": round(pay["b2b_gross"], 2),
@@ -185,7 +187,8 @@ def export_summary(cur):
             "total_gross": round(combined_gross, 2),
             "total_net": round(combined_net, 2),
             "total_leakage": round(combined_leakage, 2),
-            "cents_per_dollar": cents,
+            "cents_per_dollar": cents_per_dollar,
+            "leakage_cents": leakage_cents,
         },
         "meta": {
             "retailers_b2b": retailer_count,

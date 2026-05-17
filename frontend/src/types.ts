@@ -24,6 +24,7 @@ export interface Summary {
     total_net: number;
     total_leakage: number;
     cents_per_dollar: number;
+    leakage_cents: number;
   };
   meta: {
     retailers_b2b: number;
