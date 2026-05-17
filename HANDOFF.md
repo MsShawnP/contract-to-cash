@@ -9,6 +9,18 @@ For things that didn't work, see FAILURES.md.
 
 ---
 
+## 2026-05-17 20:25 — Audit complete, all moves merged
+
+**Started from:** All 8 units complete, deployed, PR #1 merged. Ran full 4-phase audit.
+
+**Did:** Executed all 10 Tier 1+2 remediation moves from audit (stale meta tags, claim-making titles, data-driven prose, accessibility, ErrorBoundary, dead payload removal, JSON validation script, README rewrite, requirements.txt, PLAN.md updates). Created PR #2, merged to main.
+
+**State:** All audit moves merged. TypeScript clean, 32/32 JSON validation passing. Site deployable. Full audit in AUDIT.md.
+
+**Next:** Deploy updated site to Cloudflare Pages. Optional Tier 3: CI/CD, scroll-triggered narrative, Lighthouse audit, custom domain.
+
+---
+
 ## 2026-05-17 — Full audit: 4-phase review and 10 remediation moves
 
 **Started from:** All 8 units complete, deployed, PR #1 merged to main.

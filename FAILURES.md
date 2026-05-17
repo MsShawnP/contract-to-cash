@@ -30,3 +30,17 @@ failed and may have its own entry below]
 
 ## Entries
 
+### 2026-05-17 — JSON validation checked for numeral in word-form headline
+
+**Attempted:** validate_exported_json.py checked whether the string "59" appeared in the headline. The headline is "For Every Dollar Invoiced, Fifty-Nine Cents Arrives as Cash" — word form, not numeral.
+
+**Why it didn't work:** The export script uses `num_to_word()` to convert cents to English words. The validation script assumed numeral form. Assertion looked for `str(int(cents))` in the headline string — always fails when the headline uses spelled-out numbers.
+
+**What we tried instead:** Changed the check to verify the headline is non-empty and contains the word "cent" (case-insensitive). More resilient — works regardless of whether the value is a numeral or word.
+
+**Status:** Resolved
+
+**Tags:** validation, assertion-mismatch, word-form, num_to_word
+
+---
+

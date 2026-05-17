@@ -99,6 +99,12 @@ Each entry:
 
 ## Writing & Voice
 
+### 2026-05-17 — All narrative prose must be data-driven
+- **Decision:** Every figure referenced in body text, section titles, and annotations must be computed from the loaded JSON at render time.
+- **Why:** Hardcoded retailer names, day counts, and leakage figures silently go stale when `export_json.py` runs against updated data. Three instances were already wrong before this was caught during the audit.
+- **Scope:** All prose in App.tsx that references data values — section titles, body paragraphs, annotations.
+- **Do not:** Hardcode retailer names, counts, percentages, or dollar figures in JSX strings. Compute from the loaded JSON.
+
 ---
 
 ## Reversed / Superseded
