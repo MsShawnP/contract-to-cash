@@ -23,8 +23,6 @@ const TEAL_SCALE = [
   "#6BCABD",
   "#93DCD2",
   "#BDEEE8",
-  "#D4F4F0",
-  "#E8F9F6",
 ];
 
 export function RetailerChart({ retailers }: Props) {

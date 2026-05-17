@@ -14,8 +14,16 @@ interface Props {
   timeToCash: RetailerTimeToCash[];
 }
 
-const NAVY = "#1b3a5c";
-const STEEL = "#4a7ba7";
+const TEAL_SCALE = [
+  "#0A3D3D",
+  "#14605C",
+  "#1F8078",
+  "#2A9D93",
+  "#45B5AA",
+  "#6BCABD",
+  "#93DCD2",
+  "#BDEEE8",
+];
 
 export function TimeToCashChart({ timeToCash }: Props) {
   const sorted = [...timeToCash].sort((a, b) => b.avg_days - a.avg_days);
@@ -62,8 +70,11 @@ export function TimeToCashChart({ timeToCash }: Props) {
           width={130}
         />
         <Bar dataKey="avg_days" isAnimationActive={false}>
-          {sorted.map((row, i) => (
-            <Cell key={i} fill={row.avg_days > 50 ? NAVY : STEEL} />
+          {sorted.map((_row, i) => (
+            <Cell
+              key={i}
+              fill={TEAL_SCALE[Math.min(Math.round((i / Math.max(sorted.length - 1, 1)) * (TEAL_SCALE.length - 1)), TEAL_SCALE.length - 1)]}
+            />
           ))}
           <LabelList
             dataKey="avg_days"

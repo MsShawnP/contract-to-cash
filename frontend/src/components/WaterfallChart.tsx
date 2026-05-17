@@ -31,11 +31,7 @@ const TEAL_SCALE = [
   "#6BCABD",
   "#93DCD2",
   "#BDEEE8",
-  "#D4F4F0",
 ];
-
-const NAVY = "#1b3a5c";
-const STEEL = "#4a7ba7";
 
 function formatDollars(n: number): string {
   if (n >= 1_000_000) return `$${(n / 1_000_000).toFixed(1)}M`;
@@ -51,18 +47,23 @@ function buildWaterfallData(lifecycle: Lifecycle): WaterfallBar[] {
     name: "Gross Payments",
     base: 0,
     value: b2b.gross,
-    fill: NAVY,
+    fill: TEAL_SCALE[0],
     isTotal: true,
   });
 
   let running = b2b.gross;
+  const stageCount = b2b.stages.length;
   b2b.stages.forEach((stage, i) => {
     running -= stage.amount;
+    const colorIdx = Math.min(
+      Math.round((i / Math.max(stageCount - 1, 1)) * (TEAL_SCALE.length - 1)),
+      TEAL_SCALE.length - 1
+    );
     bars.push({
       name: stage.label,
       base: running,
       value: stage.amount,
-      fill: TEAL_SCALE[Math.min(i, TEAL_SCALE.length - 1)],
+      fill: TEAL_SCALE[colorIdx],
       isTotal: false,
     });
   });
@@ -71,7 +72,7 @@ function buildWaterfallData(lifecycle: Lifecycle): WaterfallBar[] {
     name: "Net Received",
     base: 0,
     value: b2b.net,
-    fill: STEEL,
+    fill: TEAL_SCALE[0],
     isTotal: true,
   });
 
