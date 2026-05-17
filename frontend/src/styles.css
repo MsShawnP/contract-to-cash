@@ -242,3 +242,45 @@ body {
     font-size: 15px;
   }
 }
+
+/* ─── Print ──────────────────────────────────────────────── */
+
+@page {
+  size: letter;
+  margin: 0.6in;
+}
+
+@media print {
+  body {
+    background: #fff;
+    font-size: 10pt;
+  }
+
+  .page {
+    max-width: none;
+    padding: 0;
+  }
+
+  .section {
+    break-inside: avoid;
+  }
+
+  .chart-container {
+    break-inside: avoid;
+  }
+
+  .stat-row {
+    break-inside: avoid;
+  }
+
+  .footer::after {
+    content: "Cinderhaven Foods — Revenue Lifecycle Analysis";
+    display: block;
+    margin-top: 24px;
+    font-family: var(--font-sans);
+    font-size: 9pt;
+    color: #555;
+    border-top: 1px solid var(--gridline);
+    padding-top: 8px;
+  }
+}
