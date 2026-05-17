@@ -32,10 +32,10 @@ On that deal we signed in Q1 — what did we actually net, and where did the mon
 - [x] Synthesize DTC payment lifecycle data
 - [x] Cross-project reconciliation validation (17 checks pass)
 - [x] Define narrative structure and visual approach based on findings
-- [ ] Build Python export script (summary.json, lifecycle.json, retailers.json)
-- [ ] Scaffold React SPA (Vite + TypeScript + Recharts + CF Pages)
-- [ ] Implement anchor waterfall + narrative sections
-- [ ] Polish, validate, deploy to Cloudflare Pages
+- [x] Build Python export script (summary.json, lifecycle.json, retailers.json)
+- [x] Scaffold React SPA (Vite + TypeScript + Recharts + CF Pages)
+- [x] Implement anchor waterfall + narrative sections
+- [x] Polish, validate, deploy to Cloudflare Pages
 
 ## Out of scope for this arc
 

@@ -9,6 +9,35 @@ For things that didn't work, see FAILURES.md.
 
 ---
 
+## 2026-05-17 — Full audit: 4-phase review and 10 remediation moves
+
+**Started from:** All 8 units complete, deployed, PR #1 merged to main.
+
+**Did:**
+- Ran 4-phase audit (baseline, internal review, landscape scan, synthesis)
+- Identified 23 findings across 8 dimensions, ranked by leverage
+- Executed all 10 Tier 1+2 remediation moves:
+  - M1: Fixed stale og:meta tags ("fifty-one cents" → "fifty-nine cents", "$31.8M" → "$15.6M")
+  - M2: Rewrote section titles from descriptive to claim-making (FT annotation style)
+  - M3: Made all hardcoded prose data-driven (retailer names, day counts, stage count)
+  - M4: Checked off completed PLAN.md tasks 5-8
+  - M5: Rewrote README with architecture, pipeline, build instructions, tech stack
+  - M6: Added aria-labels on all chart containers for screen reader accessibility
+  - M7: Added ErrorBoundary component wrapping each chart section
+  - M8: Added scripts/requirements.txt for Python dependencies
+  - M9: Removed unused deduction_mix from export, types, and JSON (dead payload)
+  - M10: Added validate_exported_json.py (32 internal consistency checks, all passing)
+- TypeScript compiles clean, preview renders correctly, JSON validation passes 32/32
+
+**State:** All audit moves complete. Full audit document in AUDIT.md.
+
+**Next:**
+- Deploy updated site to Cloudflare Pages
+- Optional Tier 3 moves: CI/CD, scroll-triggered narrative, Lighthouse audit
+- Consider /wrap if session is complete
+
+---
+
 ## 2026-05-16 — Polish pass: distributor exclusion, CY2025 scope, color fixes
 
 **Started from:** All 8 units complete, deployed.
