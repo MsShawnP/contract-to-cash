@@ -73,6 +73,24 @@ Each entry:
 - **Scope:** frontend/wrangler.jsonc, deployment workflow.
 - **Do not:** Add a custom domain until the piece is reviewed and finalized.
 
+### 2026-05-16 — Exclude distributors (KeHE, UNFI) from analysis
+- **Decision:** Filter all B2B queries by `dim_retailers.channel_type = 'retailer'`, excluding distributors entirely.
+- **Why:** Distributors are intermediaries — retailers buy from them. Including distributor payments alongside direct retail payments mixes fundamentally different commercial relationships. The analysis is about what Cinderhaven nets from its retail partners, not from middlemen.
+- **Scope:** scripts/export_json.py, all B2B queries, all JSON output.
+- **Do not:** Re-add distributors. If distributor analysis is needed, it's a separate piece.
+
+### 2026-05-16 — Scope analysis to Calendar Year 2025
+- **Decision:** All queries filter to Jan 1 – Dec 31, 2025.
+- **Why:** An 18-month window is unrealistic for a revenue lifecycle review. CFOs look at a fiscal year or quarter. CY2025 is a clean annual frame that produces meaningful numbers ($15.6M invoiced, 59 cents per dollar).
+- **Scope:** scripts/export_json.py (PERIOD_START, PERIOD_END constants), all JSON output.
+- **Do not:** Use unbounded date ranges. If a different period is needed, change the constants.
+
+### 2026-05-16 — Net Received bar in kelly green (#2D8E47)
+- **Decision:** The waterfall chart's Net Received bar uses kelly green, not teal.
+- **Why:** The teal gradient shows deductions "chipping away." The final net bar is the result — it needs to visually stand out as a different category (outcome vs. process). Green signals "what you kept."
+- **Scope:** frontend/src/components/WaterfallChart.tsx
+- **Do not:** Use navy, steel, or teal for the net bar.
+
 ---
 
 ## Output Formats

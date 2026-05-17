@@ -9,32 +9,31 @@ For things that didn't work, see FAILURES.md.
 
 ---
 
-## 2026-05-16 — All 8 units complete, deployed to Cloudflare Pages
+## 2026-05-16 — Polish pass: distributor exclusion, CY2025 scope, color fixes
 
-**Started from:** U7 in progress (charts and narrative partially implemented).
+**Started from:** All 8 units complete, deployed.
 
 **Did:**
-- Fixed retailer spread text bug (was using array sort order instead of min/max)
-- Confirmed all 3 charts render (waterfall, retailer leakage, time-to-cash)
-- Verified mobile layout at 375px — text wraps cleanly
-- Added print CSS (letter, 0.6in margins, break-inside avoidance, running footer)
-- Added OpenGraph/Twitter meta tags
-- Configured wrangler.jsonc with dist directory
-- Deployed to Cloudflare Pages: https://contract-to-cash.msshawnp.workers.dev
-- Verified live JSON assets are served correctly
-- Committed docs (brainstorm, plan, launch.json)
+- Excluded distributors (KeHE, UNFI) from entire analysis — they're intermediaries, not retail partners
+- Scoped all queries to Calendar Year 2025 (was unbounded 18-month window)
+- Fixed chart colors to use Lailara teal palette exclusively (removed navy/steel)
+- Net Received bar now kelly green (#2D8E47) to distinguish outcome from deduction gradient
+- Period label ("Calendar Year 2025") displayed above the fold in brand subtitle
+- Fixed retailer spread text bug (min/max instead of array index)
+- Redeployed multiple times to Cloudflare Pages
+- PR open: https://github.com/MsShawnP/contract-to-cash/pull/1
 
-**State:** All plan units (U1–U8) complete. 9 commits on `feat/revenue-lifecycle-portfolio` ahead of main. Live and deployed.
+**State:** Live at https://contract-to-cash.msshawnp.workers.dev. PR has 15 commits on `feat/revenue-lifecycle-portfolio`.
 
-**Canonical numbers reconciled:**
-- 3,087 deductions / $1,537,390.70
-- 5,838 B2B orders / $31,409,072.52
-- 10 B2B retailers + DTC = 11 channels
-- 51.2 cents per dollar invoiced
+**Current numbers (CY2025, retailers only):**
+- $15.6M invoiced, $9.2M net = 59.1 cents per dollar
+- 1,593 deductions / $668K total
+- 8 retailers, 2,711 B2B orders, 6,800 DTC orders
+- 7.0% B2B leakage, 7.1% DTC leakage
 
 **Next:**
-- Merge `feat/revenue-lifecycle-portfolio` to main (or create PR)
-- Visual review in browser (screenshot tool timed out — charts confirmed via accessibility tree but not visually inspected)
+- Merge PR to main
+- Visual review in browser (screenshot tool times out — charts confirmed via inspect + accessibility)
 - Optional: custom domain, Lighthouse audit, og:image asset
 
 ---
