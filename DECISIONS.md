@@ -65,6 +65,16 @@ Each entry:
 
 ---
 
+## Deployment
+
+### 2026-05-16 — Deploy to Cloudflare Pages via wrangler
+- **Decision:** Ship the SPA as a Cloudflare Workers static site using wrangler deploy from frontend/.
+- **Why:** Zero-config static hosting with global CDN. SPA not_found_handling routes all paths to index.html. No server-side logic needed — all data is pre-exported JSON. Workers domain (contract-to-cash.msshawnp.workers.dev) serves as the portfolio URL.
+- **Scope:** frontend/wrangler.jsonc, deployment workflow.
+- **Do not:** Add a custom domain until the piece is reviewed and finalized.
+
+---
+
 ## Output Formats
 
 ---
