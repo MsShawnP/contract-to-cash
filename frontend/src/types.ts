@@ -20,7 +20,7 @@ export interface Summary {
     leakage_pct: number;
   };
   combined: {
-    total_invoiced: number;
+    total_gross: number;
     total_net: number;
     total_leakage: number;
     cents_per_dollar: number;

@@ -149,15 +149,16 @@ def export_summary(cur):
     """, (PERIOD_START, PERIOD_END))
     dtc_order_count = cur.fetchone()["n"]
 
-    # Combined.
-    combined_invoiced = b2b_invoiced + dtc_gross
+    # Combined — use gross payments (not invoiced) as denominator so both
+    # sides come from the same remittance/transaction cohort.
+    combined_gross = pay["b2b_gross"] + dtc_gross
     combined_net = pay["b2b_net"] + dtc_net
     combined_leakage = (pay["b2b_gross"] - pay["b2b_net"]) + dtc_leakage
 
-    headline_ratio = combined_net / combined_invoiced
-    cents = round(combined_net / combined_invoiced * 100, 1)
+    headline_ratio = combined_net / combined_gross
+    cents = round(combined_net / combined_gross * 100, 1)
     cents_word = num_to_word(int(cents))
-    headline = f"For Every Dollar Invoiced, {cents_word} Cents Arrives as Cash"
+    headline = f"For Every Dollar Collected, {cents_word} Cents Arrives as Cash"
 
     summary = {
         "headline": headline,
@@ -181,7 +182,7 @@ def export_summary(cur):
             "leakage_pct": round(dtc_leakage / dtc_gross * 100, 1) if dtc_gross else 0,
         },
         "combined": {
-            "total_invoiced": round(combined_invoiced, 2),
+            "total_gross": round(combined_gross, 2),
             "total_net": round(combined_net, 2),
             "total_leakage": round(combined_leakage, 2),
             "cents_per_dollar": cents,

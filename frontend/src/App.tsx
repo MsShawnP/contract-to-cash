@@ -31,11 +31,11 @@ export function App() {
         </div>
         <h1 className="headline">{summary.headline}</h1>
         <p className="subhead">
-          Of {formatM(summary.combined.total_invoiced)} invoiced across{" "}
+          Of {formatM(summary.combined.total_gross)} collected across{" "}
           {summary.meta.retailers_total} channels over {summary.meta.time_window},
-          only {formatM(summary.combined.total_net)} arrived as cash. The rest
-          evaporated in retailer deductions, processing fees, refunds, and
-          uncollected receivables.
+          only {formatM(summary.combined.total_net)} arrived as net cash. The rest
+          was absorbed by retailer deductions, processing fees, refunds, and
+          chargebacks.
         </p>
         <div className="stat-row">
           <div className="stat-card">
