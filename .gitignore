@@ -21,5 +21,8 @@ venv/
 # Jupyter
 .ipynb_checkpoints/
 
+# Build artifacts
+*.tsbuildinfo
+
 # Project
 .claude-project-url
