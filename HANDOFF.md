@@ -9,6 +9,32 @@ For things that didn't work, see FAILURES.md.
 
 ---
 
+## 2026-05-16 — Realism audit: dataset gaps identified, upstream fix planned
+
+**Started from:** PR open, deployed, all visuals working. User questioned deduction depth and DTC volume.
+
+**Did:**
+- Ran comprehensive realism check against mid-market CPG industry norms
+- Identified two major gaps: deduction rate (7% vs 10-20% industry) and DTC volume (1.9% vs 5-15% of total)
+- Mapped the blast radius: channel-profitability-analysis, short-ship-cost, and cinderhaven-data-platform dbt tests all affected
+- Traced generation logic in cinderhaven-data/scripts/11_generate_deductions.py — volume target explicitly set at $750K-$1.2M (3-5%), needs to be $2.5-$3.5M (12-15%)
+- DTC issue is AOV ($42 vs $45-80) and order volume — generator produces 10K orders/18mo but at low values
+- User decided: fix upstream properly (not export-time scaling), handle as a dedicated new project with CE workflow
+
+**State:** PR still open on `feat/revenue-lifecycle-portfolio`. Current deployment works but has mild numbers. Waiting on upstream data regeneration before final numbers.
+
+**Blocked on:**
+- New "dataset improvement" project to handle cinderhaven-data deduction rate tuning + DTC volume increase
+- After that ships: re-ingest, re-run dbt, re-export this project, update narrative text, redeploy
+
+**What specifically needs to change here after upstream is fixed:**
+- Re-run `scripts/export_json.py` (all JSON will update)
+- Headline will change from "Fifty-Nine Cents" to likely "Forty-Five to Fifty Cents"
+- Body text with hardcoded retailer names/numbers in App.tsx timing section may need updating
+- PR will need additional commits
+
+---
+
 ## 2026-05-16 — Polish pass: distributor exclusion, CY2025 scope, color fixes
 
 **Started from:** All 8 units complete, deployed.
