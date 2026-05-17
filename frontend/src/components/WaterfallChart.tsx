@@ -33,6 +33,8 @@ const TEAL_SCALE = [
   "#BDEEE8",
 ];
 
+const KELLY_GREEN = "#2D8E47";
+
 function formatDollars(n: number): string {
   if (n >= 1_000_000) return `$${(n / 1_000_000).toFixed(1)}M`;
   if (n >= 1_000) return `$${(n / 1_000).toFixed(0)}K`;
@@ -72,7 +74,7 @@ function buildWaterfallData(lifecycle: Lifecycle): WaterfallBar[] {
     name: "Net Received",
     base: 0,
     value: b2b.net,
-    fill: TEAL_SCALE[0],
+    fill: KELLY_GREEN,
     isTotal: true,
   });
 

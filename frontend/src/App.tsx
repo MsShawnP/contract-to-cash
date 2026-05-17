@@ -27,7 +27,7 @@ export function App() {
       <header className="hero">
         <div className="brand">
           <span className="brand-name">Cinderhaven Foods</span>
-          <span className="brand-sub">Revenue Lifecycle Analysis</span>
+          <span className="brand-sub">Revenue Lifecycle Analysis &middot; {summary.meta.time_window}</span>
         </div>
         <h1 className="headline">{summary.headline}</h1>
         <p className="subhead">
