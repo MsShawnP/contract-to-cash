@@ -142,11 +142,9 @@ def export_summary(cur):
     dtc_gross = dtc_txn["gross"] or 0
     dtc_net = dtc_gross - dtc_leakage
 
-    # DTC order count in period (from transactions, not fct_orders which may
-    # have a different generation cadence).
     cur.execute("""
-        SELECT COUNT(*) AS n FROM raw.shopify_transactions
-        WHERE transaction_date BETWEEN %s AND %s
+        SELECT COUNT(DISTINCT order_id) AS n FROM fct_orders
+        WHERE channel = 'DTC' AND order_date BETWEEN %s AND %s
     """, (PERIOD_START, PERIOD_END))
     dtc_order_count = cur.fetchone()["n"]
 

@@ -69,23 +69,23 @@
     ]
   },
   "dtc": {
-    "gross": 288712.44,
-    "net": 268070.37,
+    "gross": 1447820.92,
+    "net": 1342118.03,
     "stages": [
       {
         "stage": "processing_fees",
         "label": "Processing Fees",
-        "amount": 10413.21
+        "amount": 52066.15
       },
       {
         "stage": "refunds",
         "label": "Refunds",
-        "amount": 8730.37
+        "amount": 45925.57
       },
       {
         "stage": "chargebacks",
         "label": "Chargebacks",
-        "amount": 1498.49
+        "amount": 7711.17
       }
     ]
   }

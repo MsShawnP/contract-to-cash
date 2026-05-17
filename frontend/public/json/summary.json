@@ -1,6 +1,6 @@
 {
-  "headline": "For Every Dollar Collected, Thirteen Cents Vanishes in Deductions",
-  "headline_ratio": 0.132,
+  "headline": "For Every Dollar Collected, Twelve Cents Vanishes in Deductions",
+  "headline_ratio": 0.129,
   "b2b": {
     "invoiced": 16336050.24,
     "gross_payments": 21605031.24,
@@ -12,25 +12,25 @@
     "remittance_count": 335
   },
   "dtc": {
-    "gross": 288712.44,
-    "processing_fees": 10413.21,
-    "refunds": 8730.37,
-    "chargebacks_lost": 1498.49,
-    "net_received": 268070.37,
-    "leakage_pct": 7.1
+    "gross": 1447820.92,
+    "processing_fees": 52066.15,
+    "refunds": 45925.57,
+    "chargebacks_lost": 7711.17,
+    "net_received": 1342118.03,
+    "leakage_pct": 7.3
   },
   "combined": {
-    "total_gross": 21893743.68,
-    "total_net": 19010694.08,
-    "total_leakage": 2883049.6,
-    "cents_per_dollar": 86.8,
-    "leakage_cents": 13.2
+    "total_gross": 23052852.16,
+    "total_net": 20084741.74,
+    "total_leakage": 2968110.42,
+    "cents_per_dollar": 87.1,
+    "leakage_cents": 12.9
   },
   "meta": {
     "retailers_b2b": 8,
     "retailers_total": 9,
     "orders_b2b": 2754,
-    "orders_dtc": 6800,
+    "orders_dtc": 26333,
     "skus": 50,
     "time_window": "Calendar Year 2025"
   }
