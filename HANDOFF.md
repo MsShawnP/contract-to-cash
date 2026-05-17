@@ -9,6 +9,35 @@ For things that didn't work, see FAILURES.md.
 
 ---
 
+## 2026-05-17 — Data audit: DTC backfill, headline reframe, timing made data-driven
+
+**Started from:** Post-realism-audit. Known gaps: DTC volume too low, headline framing broke after denominator change.
+
+**Did:**
+- Built comprehensive 59-check audit script (scripts/audit_data.py) — internal consistency, cross-file reconciliation, range checks, structural completeness
+- Fixed headline: switched from retention framing ("86 cents arrives") to loss framing ("Twelve Cents Vanishes in Deductions") — stable regardless of denominator choice
+- Backfilled raw.shopify_transactions from 6,800 → 26,333 CY2025 records (scripts/backfill_dtc.py), with proportional refunds (1,057) and chargebacks (109 lost)
+- DTC gross now $1.45M (6.3% of total, in 5-15% industry norm), AOV $55
+- Reverted DTC order count to fct_orders source (26,333) instead of reducing to match sparse payment data
+- Made time-to-cash paragraph data-driven (Whole Foods 45.7d, Costco 54.5d, 9-day spread — all derived from retailers.time_to_cash array)
+- Added leakage_cents field to combined summary and types
+- All 59 audit checks pass, TypeScript compiles clean, browser verified
+
+**Current numbers (CY2025, retailers only):**
+- $23.1M combined gross, $20.1M net = 12.9¢ per dollar lost
+- B2B: $21.6M gross, $18.7M net, 13.2% leakage, 3,633 deductions
+- DTC: $1.45M gross, $1.34M net, 7.3% leakage, 26,333 orders
+- 8 retailers, 2,754 B2B orders, 50 SKUs
+
+**State:** 3 commits ahead of origin on `feat/revenue-lifecycle-portfolio`. Not yet pushed or redeployed to Cloudflare.
+
+**Next session:**
+- Chart polish: adjust axis formatting, data labels, spacing, and visual refinements across all three charts (waterfall, retailer bars, time-to-cash)
+- Push and redeploy to Cloudflare Pages
+- Merge PR to main
+
+---
+
 ## 2026-05-16 — Realism audit: dataset gaps identified, upstream fix planned
 
 **Started from:** PR open, deployed, all visuals working. User questioned deduction depth and DTC volume.

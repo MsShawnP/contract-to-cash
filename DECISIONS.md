@@ -57,11 +57,20 @@ Each entry:
 - **Scope:** frontend/src/App.tsx
 - **Do not:** Add tabs, filters, or multi-page navigation.
 
-### 2026-05-16 — Headline: "For Every Dollar Invoiced, Fifty-One Cents Arrives as Cash"
-- **Decision:** Use this Economist-style provocative headline.
-- **Why:** $15.9M net / $31.4M invoiced = 50.6%. This framing is immediately shocking — it combines AR timing and deductions into a single devastating ratio. It differentiates instantly from RDR (which focuses on deduction recovery, not the full lifecycle). The specificity ("fifty-one cents") is more arresting than a percentage.
-- **Scope:** frontend/src/App.tsx (hero section)
-- **Do not:** Hedge the headline. The data supports it. Caveats go in supporting text.
+### ~~2026-05-16 — Headline: "For Every Dollar Invoiced, Fifty-One Cents Arrives as Cash"~~
+- ~~Superseded by 2026-05-17 entry below. Retention framing broke when denominator changed from invoiced to gross payments.~~
+
+### 2026-05-17 — Headline reframed as leakage: "For Every Dollar Collected, Twelve Cents Vanishes in Deductions"
+- **Decision:** Use loss framing (leakage cents) instead of retention framing (cents per dollar).
+- **Why:** After switching the denominator from invoiced ($16.3M) to gross payments ($21.6M), the retention ratio flipped to 87¢ — not dramatic. Loss framing ("twelve cents vanishes") is mathematically stable regardless of which gross figure is used, and the word "vanishes" is more provocative than "arrives." The headline_ratio field now tracks leakage (0.129), not retention.
+- **Scope:** scripts/export_json.py, frontend/src/App.tsx (hero section), summary.json
+- **Do not:** Switch back to retention framing — it's fragile to denominator choice.
+
+### 2026-05-17 — DTC volume: backfill transactions to match fct_orders, don't reduce order count
+- **Decision:** When DTC payment records (shopify_transactions) are sparse relative to fct_orders, insert additional records rather than reducing the reported order count.
+- **Why:** The order count from fct_orders (26,333) represents the real business volume. Reducing it to match sparse payment data understates the business. Backfilling brings AOV to $55 (industry norm) and DTC share to 6.3% of total (in the 5-15% norm range).
+- **Scope:** scripts/backfill_dtc.py, raw.shopify_transactions/refunds/chargebacks
+- **Do not:** Count DTC orders from shopify_transactions — always use fct_orders.
 
 ---
 

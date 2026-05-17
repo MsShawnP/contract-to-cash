@@ -32,10 +32,15 @@ On that deal we signed in Q1 — what did we actually net, and where did the mon
 - [x] Synthesize DTC payment lifecycle data
 - [x] Cross-project reconciliation validation (17 checks pass)
 - [x] Define narrative structure and visual approach based on findings
-- [ ] Build Python export script (summary.json, lifecycle.json, retailers.json)
-- [ ] Scaffold React SPA (Vite + TypeScript + Recharts + CF Pages)
-- [ ] Implement anchor waterfall + narrative sections
-- [ ] Polish, validate, deploy to Cloudflare Pages
+- [x] Build Python export script (summary.json, lifecycle.json, retailers.json)
+- [x] Scaffold React SPA (Vite + TypeScript + Recharts + CF Pages)
+- [x] Implement anchor waterfall + narrative sections
+- [x] Data audit — internal consistency, cross-file reconciliation, realism checks
+- [x] DTC backfill — match fct_orders volume (26,333), realistic AOV ($55)
+- [x] Headline reframe — loss framing ("Twelve Cents Vanishes")
+- [x] Make time-to-cash narrative data-driven
+- [ ] Chart polish — axis formatting, data labels, spacing, visual refinements
+- [ ] Final deploy to Cloudflare Pages + merge PR
 
 ## Out of scope for this arc
 
