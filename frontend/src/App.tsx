@@ -3,10 +3,13 @@ import { loadData, type AppData } from "./data";
 import { WaterfallChart } from "./components/WaterfallChart";
 import { RetailerChart } from "./components/RetailerChart";
 import { TimeToCashChart } from "./components/TimeToCashChart";
+import { ErrorBoundary } from "./components/ErrorBoundary";
 import "./styles.css";
 
-function formatM(n: number): string {
-  return `$${(n / 1e6).toFixed(1)}M`;
+function formatDollars(n: number): string {
+  if (n >= 1_000_000) return `$${(n / 1e6).toFixed(1)}M`;
+  if (n >= 1_000) return `$${(n / 1e3).toFixed(0)}K`;
+  return `$${n.toFixed(0)}`;
 }
 
 export function App() {
@@ -22,6 +25,20 @@ export function App() {
 
   const { summary, lifecycle, retailers } = data;
 
+  const stageCount = lifecycle.b2b.stages.length;
+  const retailerCount = retailers.leakage.length;
+  const leakagePcts = retailers.leakage.map((r) => r.leakage_pct);
+  const minLeakage = Math.min(...leakagePcts);
+  const maxLeakage = Math.max(...leakagePcts);
+  const leakageSpread = (maxLeakage - minLeakage).toFixed(1);
+
+  const sortedByDays = [...retailers.time_to_cash].sort(
+    (a, b) => a.avg_days - b.avg_days,
+  );
+  const fastest = sortedByDays[0];
+  const slowest = sortedByDays[sortedByDays.length - 1];
+  const daySpread = Math.round(slowest.avg_days - fastest.avg_days);
+
   return (
     <main className="page">
       <header className="hero">
@@ -31,9 +48,9 @@ export function App() {
         </div>
         <h1 className="headline">{summary.headline}</h1>
         <p className="subhead">
-          Of {formatM(summary.combined.total_invoiced)} invoiced across{" "}
+          Of {formatDollars(summary.combined.total_invoiced)} invoiced across{" "}
           {summary.meta.retailers_total} channels over {summary.meta.time_window},
-          only {formatM(summary.combined.total_net)} arrived as cash. The rest
+          only {formatDollars(summary.combined.total_net)} arrived as cash. The rest
           evaporated in retailer deductions, processing fees, refunds, and
           uncollected receivables.
         </p>
@@ -55,62 +72,71 @@ export function App() {
         </div>
       </header>
 
-      <section className="section" id="waterfall">
-        <h2 className="section-title">Where the Money Goes</h2>
-        <p className="section-body">
-          Of {formatM(lifecycle.b2b.gross)} in gross B2B payments acknowledged by
-          retailers, {formatM(lifecycle.b2b.gross - lifecycle.b2b.net)} was deducted
-          before cash arrived. Nine categories of deductions — from vague
-          post-audit claims to short-ship penalties — each take their cut.
-        </p>
-        <div className="chart-container">
-          <WaterfallChart lifecycle={lifecycle} />
-        </div>
-        <p className="footnote">
-          Source: fct_payments, fct_deductions. Gross = sum of remittance
-          gross_amount across {summary.b2b.remittance_count} remittances.
-          Net = gross minus linked deductions. {summary.meta.time_window}.
-        </p>
-      </section>
+      <ErrorBoundary section="waterfall">
+        <section className="section" id="waterfall">
+          <h2 className="section-title">
+            {formatDollars(lifecycle.b2b.gross - lifecycle.b2b.net)} Deducted Across {stageCount} Categories Before Cash Arrives
+          </h2>
+          <p className="section-body">
+            Of {formatDollars(lifecycle.b2b.gross)} in gross B2B payments acknowledged
+            by retailers, {formatDollars(lifecycle.b2b.gross - lifecycle.b2b.net)} was
+            deducted before cash arrived. {stageCount} categories of deductions — from
+            vague post-audit claims to short-ship penalties — each take their cut.
+          </p>
+          <div className="chart-container" role="img" aria-label={`Waterfall chart showing gross payments of ${formatDollars(lifecycle.b2b.gross)} declining through ${stageCount} deduction categories to net received of ${formatDollars(lifecycle.b2b.net)}`}>
+            <WaterfallChart lifecycle={lifecycle} />
+          </div>
+          <p className="footnote">
+            Source: fct_payments, fct_deductions. Gross = sum of remittance
+            gross_amount across {summary.b2b.remittance_count} remittances.
+            Net = gross minus linked deductions. {summary.meta.time_window}.
+          </p>
+        </section>
+      </ErrorBoundary>
 
-      <section className="section" id="retailers">
-        <h2 className="section-title">Not All Retailers Leak Equally</h2>
-        <p className="section-body">
-          Leakage rates range from{" "}
-          {Math.min(...retailers.leakage.map((r) => r.leakage_pct))}% to{" "}
-          {Math.max(...retailers.leakage.map((r) => r.leakage_pct))}% — a{" "}
-          {(Math.max(...retailers.leakage.map((r) => r.leakage_pct)) - Math.min(...retailers.leakage.map((r) => r.leakage_pct))).toFixed(1)}{" "}
-          percentage-point spread across eight direct retail partners. The
-          smallest retailers by dollar flow show the highest deduction rates,
-          while the largest are not necessarily the most aggressive.
-        </p>
-        <div className="chart-container">
-          <RetailerChart retailers={retailers.leakage} />
-        </div>
-        <p className="footnote">
-          Source: fct_payments grouped by retailer_name. Leakage % = (gross -
-          net) / gross. {summary.meta.time_window}.
-        </p>
-      </section>
+      <ErrorBoundary section="retailers">
+        <section className="section" id="retailers">
+          <h2 className="section-title">
+            A {leakageSpread}-Point Gap Separates the Best and Worst Retailers
+          </h2>
+          <p className="section-body">
+            Leakage rates range from {minLeakage}% to {maxLeakage}% — a{" "}
+            {leakageSpread} percentage-point spread across {retailerCount} direct
+            retail partners. The smallest retailers by dollar flow show the highest
+            deduction rates, while the largest are not necessarily the most aggressive.
+          </p>
+          <div className="chart-container" role="img" aria-label={`Horizontal bar chart comparing leakage rates across ${retailerCount} retailers, ranging from ${minLeakage}% to ${maxLeakage}%`}>
+            <RetailerChart retailers={retailers.leakage} />
+          </div>
+          <p className="footnote">
+            Source: fct_payments grouped by retailer_name. Leakage % = (gross -
+            net) / gross. {summary.meta.time_window}.
+          </p>
+        </section>
+      </ErrorBoundary>
 
-      <section className="section" id="timing">
-        <h2 className="section-title">Time Is Money (Literally)</h2>
-        <p className="section-body">
-          Beyond what is deducted, the speed of payment varies dramatically.
-          The fastest retailer (Whole Foods) averages 46 days to cash while
-          the slowest (Costco) takes 56. That ten-day spread is working
-          capital locked in transit — invisible on the P&L but real in cash
-          flow.
-        </p>
-        <div className="chart-container">
-          <TimeToCashChart timeToCash={retailers.time_to_cash} />
-        </div>
-        <p className="footnote">
-          Source: fct_orders.order_date to fct_payments.received_date, joined
-          via fct_deductions. Average days to cash across all linked
-          order-payment pairs. {summary.meta.time_window}.
-        </p>
-      </section>
+      <ErrorBoundary section="timing">
+        <section className="section" id="timing">
+          <h2 className="section-title">
+            {daySpread} Days Separate the Fastest and Slowest Payer
+          </h2>
+          <p className="section-body">
+            Beyond what is deducted, the speed of payment varies dramatically.
+            The fastest payer ({fastest.name}) averages {Math.round(fastest.avg_days)} days
+            to cash while the slowest ({slowest.name}) takes {Math.round(slowest.avg_days)}.
+            That {daySpread}-day spread is working capital locked in transit — invisible
+            on the P&L but real in cash flow.
+          </p>
+          <div className="chart-container" role="img" aria-label={`Horizontal bar chart showing average days to cash by retailer, from ${Math.round(fastest.avg_days)} days for ${fastest.name} to ${Math.round(slowest.avg_days)} days for ${slowest.name}`}>
+            <TimeToCashChart timeToCash={retailers.time_to_cash} />
+          </div>
+          <p className="footnote">
+            Source: fct_orders.order_date to fct_payments.received_date, joined
+            via fct_deductions. Average days to cash across all linked
+            order-payment pairs. {summary.meta.time_window}.
+          </p>
+        </section>
+      </ErrorBoundary>
 
       <footer className="footer">
         <p>

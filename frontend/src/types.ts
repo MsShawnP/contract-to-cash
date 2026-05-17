@@ -75,5 +75,4 @@ export interface RetailerTimeToCash {
 export interface Retailers {
   leakage: RetailerLeakage[];
   time_to_cash: RetailerTimeToCash[];
-  deduction_mix: Record<string, { type: string; label: string; amount: number; count: number }[]>;
 }
