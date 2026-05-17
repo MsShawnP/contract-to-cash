@@ -122,6 +122,54 @@ body {
   max-width: 660px;
 }
 
+/* ─── Stats ───────────────────────────────────────────────── */
+
+.stat-row {
+  display: flex;
+  gap: 24px;
+  margin-top: 32px;
+  flex-wrap: wrap;
+}
+
+.stat-card {
+  display: flex;
+  flex-direction: column;
+  padding: 16px 24px;
+  border: 1px solid var(--border);
+  border-radius: 2px;
+  min-width: 140px;
+}
+
+.stat-value {
+  font-family: var(--font-serif);
+  font-size: 36px;
+  font-weight: 700;
+  letter-spacing: -0.02em;
+  color: var(--text-primary);
+}
+
+.stat-label {
+  font-family: var(--font-sans);
+  font-size: 13px;
+  color: var(--text-secondary);
+  margin-top: 4px;
+}
+
+/* ─── Charts ──────────────────────────────────────────────── */
+
+.chart-container {
+  margin: 24px 0 12px;
+}
+
+.footnote {
+  font-family: var(--font-sans);
+  font-size: 11px;
+  font-style: italic;
+  color: var(--text-secondary);
+  max-width: 660px;
+  line-height: 1.5;
+}
+
 /* ─── Sections ────────────────────────────────────────────── */
 
 .section {
