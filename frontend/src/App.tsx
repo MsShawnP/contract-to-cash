@@ -74,15 +74,15 @@ export function App() {
       </section>
 
       <section className="section" id="retailers">
-        <h2 className="section-title">Not All Retailers Leak Equally</h2>
+        <h2 className="section-title">Not All Partners Leak Equally</h2>
         <p className="section-body">
           Leakage rates range from{" "}
           {Math.min(...retailers.leakage.map((r) => r.leakage_pct))}% to{" "}
           {Math.max(...retailers.leakage.map((r) => r.leakage_pct))}% — a{" "}
           {(Math.max(...retailers.leakage.map((r) => r.leakage_pct)) - Math.min(...retailers.leakage.map((r) => r.leakage_pct))).toFixed(1)}{" "}
-          percentage-point spread. The smallest retailers by volume show the
-          highest deduction rates, while the largest by dollar flow are not
-          necessarily the most aggressive.
+          percentage-point spread. Distributors (KeHE, UNFI) leak at moderate
+          rates but move high volume. The smallest partners by dollar flow
+          show the highest deduction rates.
         </p>
         <div className="chart-container">
           <RetailerChart retailers={retailers.leakage} />
