@@ -40,7 +40,7 @@ The existing portfolio already covers deduction recovery (retailer-deduction-rec
 
 **Data and integrity**
 
-- R5. All figures reconcile with established Cinderhaven numbers: $25M revenue, 90 SKUs, 10 B2B retailers + DTC channel, 3,087 deductions, 5,838 B2B orders/shipments
+- R5. All figures reconcile with established Cinderhaven numbers: $25M revenue, 50 SKUs, 10 B2B retailers + DTC channel, 13,496 deductions, 11,634 B2B orders/shipments
 - R6. When the lifecycle story requires data not currently in the platform, new synthetic data is generated that is additive and internally consistent with existing projects
 - R7. Every claim or figure in the piece traces back to a verifiable query against the platform
 

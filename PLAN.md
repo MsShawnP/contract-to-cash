@@ -19,7 +19,7 @@ On that deal we signed in Q1 — what did we actually net, and where did the mon
 
 ## Constraints
 
-- All Cinderhaven numbers must reconcile: $25M revenue, 90 SKUs, 11 retailers, 3,087 deductions, 5,838 shipments
+- All Cinderhaven numbers must reconcile: $25M revenue, 50 SKUs, 11 retailers, 13,496 deductions, 11,634 shipments
 - No Streamlit
 - Business story first, claims backed by rigorous analysis
 - New synthetic data is acceptable if needed, but must be additive and consistent with existing projects

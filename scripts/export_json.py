@@ -189,7 +189,7 @@ def export_summary(cur):
             "retailers_total": retailer_count + 1,
             "orders_b2b": b2b_order_count,
             "orders_dtc": dtc_order_count,
-            "skus": 90,
+            "skus": 50,
             "time_window": PERIOD_LABEL,
         },
     }
