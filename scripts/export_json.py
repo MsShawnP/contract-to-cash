@@ -41,6 +41,8 @@ TENS = ["", "", "Twenty", "Thirty", "Forty", "Fifty", "Sixty", "Seventy", "Eight
 
 
 def num_to_word(n: int) -> str:
+    if n < 0 or n >= 100:
+        return str(n)
     if n < 20:
         return ONES[n]
     return f"{TENS[n // 10]}-{ONES[n % 10]}" if n % 10 else TENS[n // 10]
