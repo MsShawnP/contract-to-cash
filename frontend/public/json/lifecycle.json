@@ -1,91 +1,91 @@
 {
   "b2b": {
-    "gross": 9590996.29,
-    "net": 8922734.21,
+    "gross": 1100247.3,
+    "net": 960621.21,
     "stages": [
       {
         "stage": "short_ship",
         "label": "Short Ship",
-        "amount": 163753.1,
-        "count": 662,
-        "recovered": 19198.0
-      },
-      {
-        "stage": "vague",
-        "label": "Vague",
-        "amount": 130146.46,
-        "count": 106,
-        "recovered": 181.06
-      },
-      {
-        "stage": "spoilage",
-        "label": "Spoilage",
-        "amount": 74815.69,
-        "count": 71,
-        "recovered": 12320.59
-      },
-      {
-        "stage": "label_fine",
-        "label": "Label Fine",
-        "amount": 71779.74,
-        "count": 279,
-        "recovered": 3889.31
-      },
-      {
-        "stage": "promo_billback",
-        "label": "Promo Billback",
-        "amount": 68156.03,
-        "count": 116,
-        "recovered": 13446.75
-      },
-      {
-        "stage": "slotting",
-        "label": "Slotting",
-        "amount": 67168.47,
-        "count": 15,
-        "recovered": 0.0
-      },
-      {
-        "stage": "late_delivery",
-        "label": "Late Delivery",
-        "amount": 43073.68,
-        "count": 236,
-        "recovered": 4779.07
-      },
-      {
-        "stage": "damaged",
-        "label": "Damaged",
-        "amount": 38875.29,
-        "count": 53,
-        "recovered": 4580.47
+        "amount": 3108.09,
+        "count": 125,
+        "recovered": 495.01
       },
       {
         "stage": "pallet_fine",
         "label": "Pallet Fine",
-        "amount": 10493.62,
-        "count": 55,
-        "recovered": 1198.83
+        "amount": 3034.48,
+        "count": 126,
+        "recovered": 713.67
+      },
+      {
+        "stage": "damaged",
+        "label": "Damaged",
+        "amount": 2910.59,
+        "count": 133,
+        "recovered": 319.72
+      },
+      {
+        "stage": "label_fine",
+        "label": "Label Fine",
+        "amount": 2852.32,
+        "count": 124,
+        "recovered": 515.95
+      },
+      {
+        "stage": "promo_billback",
+        "label": "Promo Billback",
+        "amount": 2789.45,
+        "count": 121,
+        "recovered": 700.2
+      },
+      {
+        "stage": "pricing_error",
+        "label": "Pricing Error",
+        "amount": 2643.37,
+        "count": 112,
+        "recovered": 492.73
+      },
+      {
+        "stage": "spoilage",
+        "label": "Spoilage",
+        "amount": 2462.16,
+        "count": 121,
+        "recovered": 419.64
+      },
+      {
+        "stage": "slotting",
+        "label": "Slotting",
+        "amount": 2441.89,
+        "count": 116,
+        "recovered": 649.24
+      },
+      {
+        "stage": "late_delivery",
+        "label": "Late Delivery",
+        "amount": 2221.04,
+        "count": 102,
+        "recovered": 239.64
       }
     ]
   },
   "dtc": {
-    "gross": 288712.44,
-    "net": 268070.37,
+    "gross": 179848.45,
+    "net": 166253.21,
     "stages": [
       {
         "stage": "processing_fees",
         "label": "Processing Fees",
-        "amount": 10413.21
+        "amount": 5408.95
       },
       {
         "stage": "refunds",
         "label": "Refunds",
-        "amount": 8730.37
+        "amount": 7898.93
       },
       {
         "stage": "chargebacks",
         "label": "Chargebacks",
-        "amount": 1498.49
+        "amount": 287.36
       }
     ]
   }

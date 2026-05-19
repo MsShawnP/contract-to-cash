@@ -1,118 +1,428 @@
 {
   "leakage": [
     {
-      "name": "Walmart",
-      "gross": 6512802.69,
-      "net": 6133524.45,
-      "leakage": 379278.24,
-      "leakage_pct": 5.8,
-      "remittances": 50
+      "name": "Whole Foods",
+      "gross": 197762.7,
+      "net": 172306.76,
+      "leakage": 25455.94,
+      "leakage_pct": 12.9,
+      "remittances": 13
+    },
+    {
+      "name": "Regional Group",
+      "gross": 192491.52,
+      "net": 167331.62,
+      "leakage": 25159.9,
+      "leakage_pct": 13.1,
+      "remittances": 13
+    },
+    {
+      "name": "Sprouts",
+      "gross": 188217.54,
+      "net": 163111.93,
+      "leakage": 25105.61,
+      "leakage_pct": 13.3,
+      "remittances": 13
     },
     {
       "name": "Costco",
-      "gross": 1014687.71,
-      "net": 916918.75,
-      "leakage": 97768.96,
-      "leakage_pct": 9.6,
-      "remittances": 27
+      "gross": 176057.28,
+      "net": 152748.9,
+      "leakage": 23308.38,
+      "leakage_pct": 13.2,
+      "remittances": 13
     },
     {
-      "name": "Whole Foods",
-      "gross": 1130334.9,
-      "net": 1037876.59,
-      "leakage": 92458.31,
-      "leakage_pct": 8.2,
-      "remittances": 49
+      "name": "Walmart",
+      "gross": 176431.5,
+      "net": 154529.47,
+      "leakage": 21902.03,
+      "leakage_pct": 12.4,
+      "remittances": 13
     },
     {
-      "name": "Green Basket Market",
-      "gross": 303716.22,
-      "net": 268887.8,
-      "leakage": 34828.42,
-      "leakage_pct": 11.5,
-      "remittances": 34
-    },
-    {
-      "name": "Southside Grocers",
-      "gross": 172419.63,
-      "net": 149319.7,
-      "leakage": 23099.93,
-      "leakage_pct": 13.4,
-      "remittances": 28
-    },
-    {
-      "name": "Harbor Fresh",
-      "gross": 302993.81,
-      "net": 284859.92,
-      "leakage": 18133.89,
-      "leakage_pct": 6.0,
-      "remittances": 25
-    },
-    {
-      "name": "Prairie Provisions",
-      "gross": 96334.35,
-      "net": 81456.18,
-      "leakage": 14878.17,
-      "leakage_pct": 15.4,
-      "remittances": 29
-    },
-    {
-      "name": "Mountain Pantry Co",
-      "gross": 57706.98,
-      "net": 49890.82,
-      "leakage": 7816.16,
-      "leakage_pct": 13.5,
-      "remittances": 25
+      "name": "Kroger",
+      "gross": 169286.76,
+      "net": 150592.53,
+      "leakage": 18694.23,
+      "leakage_pct": 11.0,
+      "remittances": 12
     }
   ],
   "time_to_cash": [
     {
-      "name": "Costco",
-      "avg_days": 55.7,
-      "median_days": 53.0,
-      "sample_size": 169
+      "name": "Kroger",
+      "avg_days": 30.5,
+      "median_days": 32.0,
+      "sample_size": 177
     },
     {
       "name": "Walmart",
-      "avg_days": 52.3,
-      "median_days": 52.0,
-      "sample_size": 4690
+      "avg_days": 27.4,
+      "median_days": 27.0,
+      "sample_size": 160
     },
     {
-      "name": "Mountain Pantry Co",
-      "avg_days": 48.9,
-      "median_days": 48.0,
-      "sample_size": 129
-    },
-    {
-      "name": "Prairie Provisions",
-      "avg_days": 47.7,
-      "median_days": 47.0,
-      "sample_size": 218
-    },
-    {
-      "name": "Green Basket Market",
-      "avg_days": 46.8,
-      "median_days": 47.0,
-      "sample_size": 289
-    },
-    {
-      "name": "Harbor Fresh",
-      "avg_days": 46.8,
-      "median_days": 48.0,
-      "sample_size": 133
-    },
-    {
-      "name": "Southside Grocers",
-      "avg_days": 45.9,
-      "median_days": 46.0,
-      "sample_size": 208
+      "name": "Sprouts",
+      "avg_days": 26.8,
+      "median_days": 27.0,
+      "sample_size": 186
     },
     {
       "name": "Whole Foods",
-      "avg_days": 45.7,
-      "median_days": 46.0,
-      "sample_size": 1154
+      "avg_days": 22.7,
+      "median_days": 22.0,
+      "sample_size": 180
+    },
+    {
+      "name": "Costco",
+      "avg_days": 22.2,
+      "median_days": 24.0,
+      "sample_size": 185
+    },
+    {
+      "name": "Regional Group",
+      "avg_days": 21.7,
+      "median_days": 22.0,
+      "sample_size": 192
     }
-  ]
+  ],
+  "deduction_mix": {
+    "Costco": [
+      {
+        "type": "label_fine",
+        "label": "Label Fine",
+        "amount": 664.68,
+        "count": 26
+      },
+      {
+        "type": "pallet_fine",
+        "label": "Pallet Fine",
+        "amount": 561.31,
+        "count": 23
+      },
+      {
+        "type": "short_ship",
+        "label": "Short Ship",
+        "amount": 519.45,
+        "count": 24
+      },
+      {
+        "type": "slotting",
+        "label": "Slotting",
+        "amount": 462.1,
+        "count": 20
+      },
+      {
+        "type": "spoilage",
+        "label": "Spoilage",
+        "amount": 399.51,
+        "count": 23
+      },
+      {
+        "type": "promo_billback",
+        "label": "Promo Billback",
+        "amount": 382.52,
+        "count": 18
+      },
+      {
+        "type": "pricing_error",
+        "label": "Pricing Error",
+        "amount": 381.78,
+        "count": 16
+      },
+      {
+        "type": "damaged",
+        "label": "Damaged",
+        "amount": 373.55,
+        "count": 19
+      },
+      {
+        "type": "late_delivery",
+        "label": "Late Delivery",
+        "amount": 291.22,
+        "count": 16
+      }
+    ],
+    "Kroger": [
+      {
+        "type": "damaged",
+        "label": "Damaged",
+        "amount": 660.95,
+        "count": 28
+      },
+      {
+        "type": "short_ship",
+        "label": "Short Ship",
+        "amount": 527.23,
+        "count": 21
+      },
+      {
+        "type": "spoilage",
+        "label": "Spoilage",
+        "amount": 496.65,
+        "count": 25
+      },
+      {
+        "type": "pallet_fine",
+        "label": "Pallet Fine",
+        "amount": 467.35,
+        "count": 22
+      },
+      {
+        "type": "pricing_error",
+        "label": "Pricing Error",
+        "amount": 449.58,
+        "count": 18
+      },
+      {
+        "type": "promo_billback",
+        "label": "Promo Billback",
+        "amount": 422.68,
+        "count": 17
+      },
+      {
+        "type": "slotting",
+        "label": "Slotting",
+        "amount": 370.86,
+        "count": 18
+      },
+      {
+        "type": "label_fine",
+        "label": "Label Fine",
+        "amount": 281.2,
+        "count": 12
+      },
+      {
+        "type": "late_delivery",
+        "label": "Late Delivery",
+        "amount": 230.07,
+        "count": 16
+      }
+    ],
+    "Regional Group": [
+      {
+        "type": "promo_billback",
+        "label": "Promo Billback",
+        "amount": 610.88,
+        "count": 26
+      },
+      {
+        "type": "pallet_fine",
+        "label": "Pallet Fine",
+        "amount": 594.2,
+        "count": 20
+      },
+      {
+        "type": "pricing_error",
+        "label": "Pricing Error",
+        "amount": 558.76,
+        "count": 25
+      },
+      {
+        "type": "late_delivery",
+        "label": "Late Delivery",
+        "amount": 521.35,
+        "count": 21
+      },
+      {
+        "type": "short_ship",
+        "label": "Short Ship",
+        "amount": 510.52,
+        "count": 19
+      },
+      {
+        "type": "label_fine",
+        "label": "Label Fine",
+        "amount": 498.43,
+        "count": 25
+      },
+      {
+        "type": "slotting",
+        "label": "Slotting",
+        "amount": 466.21,
+        "count": 24
+      },
+      {
+        "type": "spoilage",
+        "label": "Spoilage",
+        "amount": 367.07,
+        "count": 19
+      },
+      {
+        "type": "damaged",
+        "label": "Damaged",
+        "amount": 262.6,
+        "count": 13
+      }
+    ],
+    "Sprouts": [
+      {
+        "type": "short_ship",
+        "label": "Short Ship",
+        "amount": 620.02,
+        "count": 19
+      },
+      {
+        "type": "late_delivery",
+        "label": "Late Delivery",
+        "amount": 590.74,
+        "count": 23
+      },
+      {
+        "type": "damaged",
+        "label": "Damaged",
+        "amount": 586.06,
+        "count": 24
+      },
+      {
+        "type": "pricing_error",
+        "label": "Pricing Error",
+        "amount": 575.91,
+        "count": 21
+      },
+      {
+        "type": "label_fine",
+        "label": "Label Fine",
+        "amount": 529.88,
+        "count": 22
+      },
+      {
+        "type": "promo_billback",
+        "label": "Promo Billback",
+        "amount": 447.43,
+        "count": 20
+      },
+      {
+        "type": "pallet_fine",
+        "label": "Pallet Fine",
+        "amount": 430.01,
+        "count": 21
+      },
+      {
+        "type": "slotting",
+        "label": "Slotting",
+        "amount": 395.39,
+        "count": 20
+      },
+      {
+        "type": "spoilage",
+        "label": "Spoilage",
+        "amount": 238.64,
+        "count": 16
+      }
+    ],
+    "Walmart": [
+      {
+        "type": "damaged",
+        "label": "Damaged",
+        "amount": 699.14,
+        "count": 31
+      },
+      {
+        "type": "label_fine",
+        "label": "Label Fine",
+        "amount": 488.46,
+        "count": 22
+      },
+      {
+        "type": "short_ship",
+        "label": "Short Ship",
+        "amount": 425.93,
+        "count": 20
+      },
+      {
+        "type": "pricing_error",
+        "label": "Pricing Error",
+        "amount": 411.92,
+        "count": 16
+      },
+      {
+        "type": "pallet_fine",
+        "label": "Pallet Fine",
+        "amount": 368.04,
+        "count": 16
+      },
+      {
+        "type": "spoilage",
+        "label": "Spoilage",
+        "amount": 298.41,
+        "count": 13
+      },
+      {
+        "type": "promo_billback",
+        "label": "Promo Billback",
+        "amount": 289.79,
+        "count": 16
+      },
+      {
+        "type": "slotting",
+        "label": "Slotting",
+        "amount": 284.51,
+        "count": 16
+      },
+      {
+        "type": "late_delivery",
+        "label": "Late Delivery",
+        "amount": 147.32,
+        "count": 10
+      }
+    ],
+    "Whole Foods": [
+      {
+        "type": "spoilage",
+        "label": "Spoilage",
+        "amount": 661.88,
+        "count": 25
+      },
+      {
+        "type": "promo_billback",
+        "label": "Promo Billback",
+        "amount": 636.15,
+        "count": 24
+      },
+      {
+        "type": "pallet_fine",
+        "label": "Pallet Fine",
+        "amount": 613.57,
+        "count": 24
+      },
+      {
+        "type": "short_ship",
+        "label": "Short Ship",
+        "amount": 504.94,
+        "count": 22
+      },
+      {
+        "type": "slotting",
+        "label": "Slotting",
+        "amount": 462.82,
+        "count": 18
+      },
+      {
+        "type": "late_delivery",
+        "label": "Late Delivery",
+        "amount": 440.34,
+        "count": 16
+      },
+      {
+        "type": "label_fine",
+        "label": "Label Fine",
+        "amount": 389.67,
+        "count": 17
+      },
+      {
+        "type": "damaged",
+        "label": "Damaged",
+        "amount": 328.29,
+        "count": 18
+      },
+      {
+        "type": "pricing_error",
+        "label": "Pricing Error",
+        "amount": 265.42,
+        "count": 16
+      }
+    ]
+  }
 }
