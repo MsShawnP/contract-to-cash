@@ -9,6 +9,18 @@ For things that didn't work, see FAILURES.md.
 
 ---
 
+## 2026-05-20 16:45
+
+**What changed:** Applied Lailara Design System brand kit to frontend — aligned all CSS variables, chart teal scales (Hong Kong family), and hardcoded colors across 3 chart components. Fixed inconsistent waterfall label positioning (all labels now above bars).
+
+**Why:** Colors were ad-hoc hex values, not from the design system's city-named families. Waterfall labels mixed inside/above placement depending on bar type.
+
+**State:** Frontend compiles clean, renders correctly in dev preview. Brand colors verified via inspect (canvas, text-primary, text-secondary, gridline all match spec). Not yet deployed to Cloudflare Pages.
+
+**Next:** Deploy updated site to Cloudflare Pages.
+
+---
+
 ## 2026-05-17 — Full audit: 4-phase review and 10 remediation moves
 
 **Started from:** All 8 units complete, deployed, PR #1 merged to main.
