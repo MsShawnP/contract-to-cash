@@ -9,15 +9,22 @@ For things that didn't work, see FAILURES.md.
 
 ---
 
-## 2026-05-20 16:45
+## 2026-05-20 16:50 — Lailara Design System brand kit applied
 
-**What changed:** Applied Lailara Design System brand kit to frontend — aligned all CSS variables, chart teal scales (Hong Kong family), and hardcoded colors across 3 chart components. Fixed inconsistent waterfall label positioning (all labels now above bars).
+**Started from:** All 8 units complete, audit remediation done (May 17). Site deployed but using ad-hoc hex colors instead of the Lailara Design System's city-named families.
 
-**Why:** Colors were ad-hoc hex values, not from the design system's city-named families. Waterfall labels mixed inside/above placement depending on bar type.
+**Did:**
+- Aligned all CSS variables to design system spec (canvas, text-primary, text-secondary, gridline, border, navy, red)
+- Removed off-spec tokens (--steel-blue, --warm-gray), added missing ones (--ink, --reference, --disabled, --navy-hover, --navy-light)
+- Replaced custom teal scale in all 3 chart components with Hong Kong family steps
+- Updated all hardcoded chart SVG colors (gridlines, axis text, labels)
+- Fixed waterfall label positioning — all labels now consistently above bars
+- Created .claude/launch.json for dev server preview
+- Verified via preview_inspect: all computed RGB values match spec
 
-**State:** Frontend compiles clean, renders correctly in dev preview. Brand colors verified via inspect (canvas, text-primary, text-secondary, gridline all match spec). Not yet deployed to Cloudflare Pages.
+**State:** Frontend compiles clean, renders correctly in dev. All colors match Lailara Design System. Not yet deployed — live site still has old colors.
 
-**Next:** Deploy updated site to Cloudflare Pages.
+**Next:** Deploy brand kit update to Cloudflare Pages (`npm run deploy` from frontend/). Then address project health: README, tests, /ce:code-review, /improve.
 
 ---
 

@@ -91,6 +91,12 @@ Each entry:
 - **Scope:** frontend/src/components/WaterfallChart.tsx
 - **Do not:** Use navy, steel, or teal for the net bar.
 
+### 2026-05-20 — All colors must come from Lailara Design System families
+- **Decision:** Every color in this project must trace to a Lailara Design System family and step number (Hong Kong teal, London greyscale, Chicago blue, Red).
+- **Why:** Previous colors were close but freehand. Aligning to the city-named families ensures brand consistency across all Lailara portfolio pieces.
+- **Scope:** frontend/src/styles.css, all chart components
+- **Do not:** Use arbitrary hex values. Every color must trace to a family and step number from the design system.
+
 ---
 
 ## Output Formats
