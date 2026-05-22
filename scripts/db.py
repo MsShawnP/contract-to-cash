@@ -16,13 +16,25 @@ DEC2FLOAT = psycopg2.extensions.new_type(
 )
 psycopg2.extensions.register_type(DEC2FLOAT)
 
+ALLOWED_SCHEMAS = frozenset([
+    "public", "public_marts", "public_staging", "raw",
+])
+
 
 def connect(search_path: str = "public_marts, public_staging, raw, public"):
     """Return a psycopg2 connection with RealDictCursor and search_path set."""
     url = os.environ.get("DATABASE_URL")
     if not url:
-        pw = os.environ.get("POSTGRES_PASSWORD", "")
+        if not os.environ.get("POSTGRES_PASSWORD"):
+            print("ERROR: DATABASE_URL or POSTGRES_PASSWORD must be set", file=sys.stderr)
+            sys.exit(1)
+        pw = os.environ["POSTGRES_PASSWORD"]
         url = f"postgresql://postgres:REDACTED@localhost:5432/cinderhaven"
+
+    schemas = [s.strip() for s in search_path.split(",")]
+    if not all(s in ALLOWED_SCHEMAS for s in schemas):
+        raise ValueError(f"Invalid schema in search_path: {search_path}")
+
     conn = psycopg2.connect(url, cursor_factory=psycopg2.extras.RealDictCursor)
     with conn.cursor() as cur:
         cur.execute(f"SET search_path TO {search_path}")

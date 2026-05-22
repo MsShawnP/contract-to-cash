@@ -9,6 +9,18 @@ For things that didn't work, see FAILURES.md.
 
 ---
 
+## 2026-05-22 16:14 — /improve: fix all 10 audit findings, add tests, deploy
+
+**What changed:** Fixed 10 /improve findings: closed $1.7M waterfall hole (added Unclassified Shortfall stage), updated stale README, fixed validation script (29/29 pass), hardened db.py (schema allowlist + require credentials), aligned DTC chargeback_fee between export and validation, expanded .gitignore, added security headers, populated FAILURES.md, annotated stale HANDOFF numbers. Also added test suites (11 vitest + 7 pytest, all passing).
+
+**Why:** /improve audit found the exported JSON didn't reconcile — waterfall stages summed to $462K but gross-net gap was $2.16M. README cited numbers from a prior data export. Security review found latent SQL injection and credential fallback issues.
+
+**State:** All validation passes (29/29 JSON, 11/11 vitest, 7/7 pytest). Site deployed with closed waterfall. README matches current data. Export script will produce correct output on next re-export.
+
+**Next:** Finish /improve Step 7 (log audit in PLAN.md improvement history). Then /wrap.
+
+---
+
 ## 2026-05-22 15:45 — Code review, fix all findings, deploy
 
 **Started from:** All 8 units complete, brand kit applied (May 20). Site deployed but not yet code-reviewed. Project health items pending.
@@ -101,11 +113,12 @@ For things that didn't work, see FAILURES.md.
 
 **State:** Live at https://contract-to-cash.msshawnp.workers.dev. PR has 15 commits on `feat/revenue-lifecycle-portfolio`.
 
-**Current numbers (CY2025, retailers only):**
+**Current numbers (CY2025, retailers only) — as of this session, superseded by later re-export:**
 - $15.6M invoiced, $9.2M net = 59.1 cents per dollar
 - 1,593 deductions / $668K total
 - 8 retailers, 2,711 B2B orders, 6,800 DTC orders
 - 7.0% B2B leakage, 7.1% DTC leakage
+- *(Note: data platform updated between sessions; current figures as of 2026-05-22: $17.8M invoiced, $15.4M net, 86.5¢, 6 retailers)*
 
 **Next:**
 - Merge PR to main

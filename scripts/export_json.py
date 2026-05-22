@@ -106,11 +106,12 @@ def export_summary(cur):
     dtc_refunds = cur.fetchone()["total"] or 0
 
     cur.execute("""
-        SELECT SUM(chargeback_amount) AS total
+        SELECT SUM(chargeback_amount) AS amount, SUM(chargeback_fee) AS fees
         FROM raw.shopify_chargebacks
         WHERE outcome = 'lost' AND chargeback_date BETWEEN %s AND %s
     """, (PERIOD_START, PERIOD_END))
-    dtc_cb = cur.fetchone()["total"] or 0
+    cb_row = cur.fetchone()
+    dtc_cb = (cb_row["amount"] or 0) + (cb_row["fees"] or 0)
 
     dtc_leakage = (dtc_txn["fees"] or 0) + (dtc_refunds or 0) + dtc_cb
     dtc_gross = dtc_txn["gross"] or 0
@@ -213,6 +214,17 @@ def export_lifecycle(cur):
     """, (PERIOD_START, PERIOD_END))
     b2b_net = cur.fetchone()["net"]
 
+    categorized = sum(s["amount"] for s in deduction_stages)
+    unclassified = round(b2b_gross - b2b_net - categorized, 2)
+    if unclassified > 0:
+        deduction_stages.append({
+            "stage": "unclassified_shortfall",
+            "label": "Unclassified Shortfall",
+            "amount": unclassified,
+            "count": 0,
+            "recovered": 0,
+        })
+
     # DTC waterfall (within period).
     cur.execute("""
         SELECT SUM(order_amount) AS gross, SUM(processing_fee) AS fees
@@ -230,12 +242,12 @@ def export_lifecycle(cur):
     dtc_refunds = cur.fetchone()["total"] or 0
 
     cur.execute("""
-        SELECT SUM(chargeback_amount) AS amt
+        SELECT SUM(chargeback_amount) AS amt, SUM(chargeback_fee) AS fees
         FROM raw.shopify_chargebacks
         WHERE outcome = 'lost' AND chargeback_date BETWEEN %s AND %s
     """, (PERIOD_START, PERIOD_END))
     cb = cur.fetchone()
-    dtc_chargebacks = cb["amt"] or 0
+    dtc_chargebacks = (cb["amt"] or 0) + (cb["fees"] or 0)
 
     dtc_net = dtc_gross - dtc_fees - dtc_refunds - dtc_chargebacks
 

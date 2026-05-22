@@ -16,38 +16,34 @@ from pathlib import Path
 ROOT = Path(__file__).resolve().parent.parent
 JSON_DIR = ROOT / "frontend" / "public" / "json"
 
-failures: list[tuple[str, object, object]] = []
-checks: list[tuple[str, bool]] = []
-
-
-def check(name: str, expected: object, actual: object, tolerance: float = 0.01) -> None:
-    passed = True
-    if isinstance(expected, (int, float)) and isinstance(actual, (int, float)):
-        if expected == 0:
-            passed = actual == 0
-        else:
-            passed = abs(actual - expected) / abs(expected) <= tolerance
-    else:
-        passed = actual == expected
-
-    status = "PASS" if passed else "FAIL"
-    print(f"  [{status}] {name}")
-    if not passed:
-        print(f"         Expected: {expected}")
-        print(f"         Actual:   {actual}")
-        failures.append((name, expected, actual))
-    checks.append((name, passed))
-
-
-def check_true(name: str, condition: bool) -> None:
-    status = "PASS" if condition else "FAIL"
-    print(f"  [{status}] {name}")
-    if not condition:
-        failures.append((name, True, False))
-    checks.append((name, condition))
-
-
 def main() -> None:
+    failures: list[tuple[str, object, object]] = []
+    checks: list[tuple[str, bool]] = []
+
+    def check(name: str, expected: object, actual: object, tolerance: float = 0.01) -> None:
+        passed = True
+        if isinstance(expected, (int, float)) and isinstance(actual, (int, float)):
+            if expected == 0:
+                passed = actual == 0
+            else:
+                passed = abs(actual - expected) / abs(expected) <= tolerance
+        else:
+            passed = actual == expected
+
+        status = "PASS" if passed else "FAIL"
+        print(f"  [{status}] {name}")
+        if not passed:
+            print(f"         Expected: {expected}")
+            print(f"         Actual:   {actual}")
+            failures.append((name, expected, actual))
+        checks.append((name, passed))
+
+    def check_true(name: str, condition: bool) -> None:
+        status = "PASS" if condition else "FAIL"
+        print(f"  [{status}] {name}")
+        if not condition:
+            failures.append((name, True, False))
+        checks.append((name, condition))
     print("=" * 60)
     print("  EXPORTED JSON VALIDATION (CY2025 subset)")
     print("=" * 60)
@@ -127,12 +123,19 @@ def main() -> None:
         all(s["amount"] > 0 for s in b2b_lc["stages"]),
     )
 
+    categorized = [s for s in b2b_lc["stages"] if s["stage"] != "unclassified_shortfall"]
     check_true(
-        "Stages are sorted by amount descending",
+        "Categorized stages are sorted by amount descending",
         all(
-            b2b_lc["stages"][i]["amount"] >= b2b_lc["stages"][i + 1]["amount"]
-            for i in range(len(b2b_lc["stages"]) - 1)
+            categorized[i]["amount"] >= categorized[i + 1]["amount"]
+            for i in range(len(categorized) - 1)
         ),
+    )
+
+    check(
+        "B2B total_deductions matches sum of categorized stages",
+        b2b["total_deductions"],
+        round(sum(s["amount"] for s in categorized), 2),
     )
 
     dtc_lc = lifecycle["dtc"]

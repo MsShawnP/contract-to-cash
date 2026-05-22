@@ -1,6 +1,6 @@
 # Contract to Cash
 
-Revenue lifecycle analysis for a mid-market CPG brand — tracing where money leaks between invoice and cash receipt. For every dollar Cinderhaven Foods invoiced in Calendar Year 2025, fifty-nine cents arrived as cash.
+Revenue lifecycle analysis for a mid-market CPG brand — tracing where money leaks between invoice and cash receipt. For every dollar Cinderhaven Foods invoiced in Calendar Year 2025, eighty-six cents arrived as cash.
 
 **Live:** [contract-to-cash.msshawnp.workers.dev](https://contract-to-cash.msshawnp.workers.dev)
 
@@ -8,11 +8,11 @@ Revenue lifecycle analysis for a mid-market CPG brand — tracing where money le
 
 A single-page narrative that answers the question a $25M CPG brand's CFO cannot: *On that deal we signed in Q1 — what did we actually net, and where did the money leak between systems?*
 
-The piece traces $15.6M invoiced across 8 retail partners and a DTC channel through deductions, processing fees, refunds, and timing delays. Three charts tell the story:
+The piece traces $17.8M invoiced across 6 retail partners and a DTC channel through deductions, processing fees, refunds, and timing delays. Three charts tell the story:
 
-1. **Waterfall** — gross B2B payments descending through 9 deduction categories to net received
-2. **Retailer comparison** — leakage rates from 5.8% to 15.4% across 8 direct retail partners
-3. **Time-to-cash** — average days from order to payment, ranging 46–56 days by retailer
+1. **Waterfall** — gross B2B payments descending through 10 deduction categories to net received
+2. **Retailer comparison** — leakage rates from 11.8% to 12.9% across 6 direct retail partners
+3. **Time-to-cash** — average days from order to payment, ranging 22–29 days by retailer
 
 Economist-style visual language: minimal gridlines, text labels on every data point, no decoration. Written in sober, declarative prose.
 
