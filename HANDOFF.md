@@ -9,6 +9,18 @@ For things that didn't work, see FAILURES.md.
 
 ---
 
+## 2026-05-22 15:38 — Fix all 16 code review findings
+
+**What changed:** Fixed all 16 findings from `/ce:code-review`: extracted shared `chartConstants.ts` and `scripts/db.py`, replaced off-palette kelly green with Chicago-20 navy, added empty-array guards in App.tsx, used ErrorBoundary section prop, replaced non-null assertion in main.tsx, fixed print footer/page counter, fixed `num_to_word` edge cases, added ZeroDivisionError guards and try/finally in export script, moved mutable globals inside `main()` in validation script, removed unused imports.
+
+**Why:** Code review ensemble identified duplication, off-palette colors, crash-on-empty-data paths, leaked cursors, and mutable module-level state. All fixes align code to Lailara Design System (SSOT unchanged).
+
+**State:** TypeScript compiles clean. Production build succeeds. Dev server renders all sections without errors. DECISIONS.md updated (kelly green struck, navy replacement added). Not yet deployed — live site still has pre-review code.
+
+**Next:** Deploy updated site to Cloudflare Pages (`npm run deploy` from frontend/). Then commit and push.
+
+---
+
 ## 2026-05-20 16:50 — Lailara Design System brand kit applied
 
 **Started from:** All 8 units complete, audit remediation done (May 17). Site deployed but using ad-hoc hex colors instead of the Lailara Design System's city-named families.

@@ -20,15 +20,9 @@ import sys
 from datetime import date, timedelta
 
 import psycopg2
-import psycopg2.extensions
 import psycopg2.extras
 
-DEC2FLOAT = psycopg2.extensions.new_type(
-    psycopg2.extensions.DECIMAL.values,
-    "DEC2FLOAT",
-    lambda value, curs: float(value) if value is not None else None,
-)
-psycopg2.extensions.register_type(DEC2FLOAT)
+from db import DEC2FLOAT  # noqa: F401 — registered at import time
 
 SEED = 42
 
@@ -67,13 +61,12 @@ def main():
     # Load existing DTC orders from the platform (order grain, not line grain).
     cur.execute("""
         SELECT DISTINCT order_id, order_date, order_total
-        FROM public_marts.fct_orders
-        WHERE channel = 'DTC'
+        FROM public_marts.fct_dtc_orders
         ORDER BY order_date, order_id
     """)
     orders = cur.fetchall()
     if not orders:
-        print("ERROR: No DTC orders found in fct_orders", file=sys.stderr)
+        print("ERROR: No DTC orders found in fct_dtc_orders", file=sys.stderr)
         sys.exit(1)
     log(f"Loaded {len(orders):,} DTC orders from platform")
 
@@ -376,7 +369,7 @@ def main():
     print(f"  Total DTC leakage:       ${total_leakage:,.2f} ({total_leakage / total_order_revenue * 100:.1f}%)")
     print(f"  Net cash received:       ${net_received:,.2f}")
     print(f"\n  DTC as % of combined revenue: "
-          f"{total_order_revenue / (total_order_revenue + 31_409_072.52) * 100:.1f}%")
+          f"{total_order_revenue / (total_order_revenue + 31_409_072.52) * 100:.1f}%")  # B2B revenue from fct_retailer_orders
     print(f"  (Note: DTC is small relative to B2B — realistic for a")
     print(f"   primarily wholesale CPG brand with nascent DTC channel)")
 

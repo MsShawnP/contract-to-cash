@@ -9,21 +9,11 @@ import {
   LabelList,
 } from "recharts";
 import type { RetailerTimeToCash } from "../types";
+import { pickTealColor } from "../chartConstants";
 
 interface Props {
   timeToCash: RetailerTimeToCash[];
 }
-
-const TEAL_SCALE = [
-  "#063d32",
-  "#0a5c4b",
-  "#0e6e5a",
-  "#158f75",
-  "#1fa282",
-  "#35b595",
-  "#6dcdb5",
-  "#b5e4d8",
-];
 
 export function TimeToCashChart({ timeToCash }: Props) {
   const sorted = [...timeToCash].sort((a, b) => b.avg_days - a.avg_days);
@@ -73,7 +63,7 @@ export function TimeToCashChart({ timeToCash }: Props) {
           {sorted.map((_row, i) => (
             <Cell
               key={i}
-              fill={TEAL_SCALE[Math.min(Math.round((i / Math.max(sorted.length - 1, 1)) * (TEAL_SCALE.length - 1)), TEAL_SCALE.length - 1)]}
+              fill={pickTealColor(i, sorted.length)}
             />
           ))}
           <LabelList

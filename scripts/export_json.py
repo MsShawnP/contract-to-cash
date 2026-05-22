@@ -12,20 +12,9 @@ Usage:
 from __future__ import annotations
 
 import json
-import os
-import sys
 from pathlib import Path
 
-import psycopg2
-import psycopg2.extensions
-import psycopg2.extras
-
-DEC2FLOAT = psycopg2.extensions.new_type(
-    psycopg2.extensions.DECIMAL.values,
-    "DEC2FLOAT",
-    lambda value, curs: float(value) if value is not None else None,
-)
-psycopg2.extensions.register_type(DEC2FLOAT)
+from db import connect
 
 ROOT = Path(__file__).resolve().parent.parent
 OUT_DIR = ROOT / "frontend" / "public" / "json"
@@ -41,20 +30,13 @@ TENS = ["", "", "Twenty", "Thirty", "Forty", "Fifty", "Sixty", "Seventy", "Eight
 
 
 def num_to_word(n: int) -> str:
+    if n == 0:
+        return "Zero"
     if n < 20:
         return ONES[n]
+    if n >= 100:
+        return str(n)
     return f"{TENS[n // 10]}-{ONES[n % 10]}" if n % 10 else TENS[n // 10]
-
-
-def connect():
-    url = os.environ.get("DATABASE_URL")
-    if not url:
-        pw = os.environ.get("POSTGRES_PASSWORD", "")
-        url = f"postgresql://postgres:REDACTED@localhost:5432/cinderhaven"
-    conn = psycopg2.connect(url, cursor_factory=psycopg2.extras.RealDictCursor)
-    conn.cursor().execute("SET search_path TO public_marts, public_staging, raw, public")
-    conn.commit()
-    return conn
 
 
 def write_json(filename, data, indent=2):
@@ -146,7 +128,7 @@ def export_summary(cur):
     combined_net = pay["b2b_net"] + dtc_net
     combined_leakage = (pay["b2b_gross"] - pay["b2b_net"]) + dtc_leakage
 
-    headline_ratio = combined_net / combined_invoiced
+    headline_ratio = combined_net / combined_invoiced if combined_invoiced else 0
     cents = round(combined_net / combined_invoiced * 100, 1)
     cents_word = num_to_word(int(cents))
     headline = f"For Every Dollar Invoiced, {cents_word} Cents Arrives as Cash"
@@ -161,7 +143,7 @@ def export_summary(cur):
             "total_deductions": round(ded["total"], 2),
             "deduction_count": ded["n"],
             "recovered": round(ded["recovered"], 2),
-            "leakage_pct": round((pay["b2b_gross"] - pay["b2b_net"]) / pay["b2b_gross"] * 100, 1),
+            "leakage_pct": round((pay["b2b_gross"] - pay["b2b_net"]) / pay["b2b_gross"] * 100, 1) if pay["b2b_gross"] else 0,
             "remittance_count": pay["remittance_count"],
         },
         "dtc": {
@@ -183,7 +165,7 @@ def export_summary(cur):
             "retailers_total": retailer_count + 1,
             "orders_b2b": b2b_order_count,
             "orders_dtc": dtc_order_count,
-            "skus": 90,
+            "skus": 90,  # Cinderhaven product catalog size
             "time_window": PERIOD_LABEL,
         },
     }
@@ -381,18 +363,19 @@ def main():
     print("=" * 60, flush=True)
 
     conn = connect()
-    cur = conn.cursor()
+    try:
+        cur = conn.cursor()
 
-    summary = export_summary(cur)
-    lifecycle = export_lifecycle(cur)
-    retailers = export_retailers(cur)
+        summary = export_summary(cur)
+        lifecycle = export_lifecycle(cur)
+        retailers = export_retailers(cur)
 
-    conn.close()
-
-    print(f"\n{'=' * 60}")
-    print(f"  Export complete. Files in frontend/public/json/")
-    print(f"  Headline ratio: {summary['combined']['cents_per_dollar']}c per dollar")
-    print(f"{'=' * 60}")
+        print(f"\n{'=' * 60}")
+        print(f"  Export complete. Files in frontend/public/json/")
+        print(f"  Headline ratio: {summary['combined']['cents_per_dollar']}c per dollar")
+        print(f"{'=' * 60}")
+    finally:
+        conn.close()
 
 
 if __name__ == "__main__":

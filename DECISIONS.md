@@ -85,11 +85,18 @@ Each entry:
 - **Scope:** scripts/export_json.py (PERIOD_START, PERIOD_END constants), all JSON output.
 - **Do not:** Use unbounded date ranges. If a different period is needed, change the constants.
 
-### 2026-05-16 — Net Received bar in kelly green (#2D8E47)
-- **Decision:** The waterfall chart's Net Received bar uses kelly green, not teal.
-- **Why:** The teal gradient shows deductions "chipping away." The final net bar is the result — it needs to visually stand out as a different category (outcome vs. process). Green signals "what you kept."
+### ~~2026-05-16 — Net Received bar in kelly green (#2D8E47)~~
+- ~~**Decision:** The waterfall chart's Net Received bar uses kelly green, not teal.~~
+- ~~**Why:** The teal gradient shows deductions "chipping away." The final net bar is the result — it needs to visually stand out as a different category (outcome vs. process). Green signals "what you kept."~~
+- ~~**Scope:** frontend/src/components/WaterfallChart.tsx~~
+- ~~**Do not:** Use navy, steel, or teal for the net bar.~~
+- **Superseded by:** 2026-05-22 — Net Received bar in Chicago-20 navy
+
+### 2026-05-22 — Net Received bar in Chicago-20 navy (#1f2e7a)
+- **Decision:** The waterfall chart's Net Received bar uses Chicago-20 navy from the Lailara Design System.
+- **Why:** Kelly green (#2D8E47) was off-palette — not traceable to any Lailara Design System family. Chicago-20 navy provides the same categorical distinction (outcome vs. deduction process) while staying on-palette. Navy is the design system's primary accent color.
 - **Scope:** frontend/src/components/WaterfallChart.tsx
-- **Do not:** Use navy, steel, or teal for the net bar.
+- **Do not:** Use off-palette colors for chart elements.
 
 ### 2026-05-20 — All colors must come from Lailara Design System families
 - **Decision:** Every color in this project must trace to a Lailara Design System family and step number (Hong Kong teal, London greyscale, Chicago blue, Red).

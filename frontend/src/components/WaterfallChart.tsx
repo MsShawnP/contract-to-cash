@@ -9,6 +9,7 @@ import {
   Text,
 } from "recharts";
 import type { Lifecycle } from "../types";
+import { TEAL_SCALE, formatDollars, pickTealColor } from "../chartConstants";
 
 interface Props {
   lifecycle: Lifecycle;
@@ -22,24 +23,7 @@ interface WaterfallBar {
   isTotal: boolean;
 }
 
-const TEAL_SCALE = [
-  "#063d32",
-  "#0a5c4b",
-  "#0e6e5a",
-  "#158f75",
-  "#1fa282",
-  "#35b595",
-  "#6dcdb5",
-  "#b5e4d8",
-];
-
-const KELLY_GREEN = "#2D8E47";
-
-function formatDollars(n: number): string {
-  if (n >= 1_000_000) return `$${(n / 1_000_000).toFixed(1)}M`;
-  if (n >= 1_000) return `$${(n / 1_000).toFixed(0)}K`;
-  return `$${n.toFixed(0)}`;
-}
+const NAVY = "#1f2e7a";
 
 function buildWaterfallData(lifecycle: Lifecycle): WaterfallBar[] {
   const { b2b } = lifecycle;
@@ -57,15 +41,11 @@ function buildWaterfallData(lifecycle: Lifecycle): WaterfallBar[] {
   const stageCount = b2b.stages.length;
   b2b.stages.forEach((stage, i) => {
     running -= stage.amount;
-    const colorIdx = Math.min(
-      Math.round((i / Math.max(stageCount - 1, 1)) * (TEAL_SCALE.length - 1)),
-      TEAL_SCALE.length - 1
-    );
     bars.push({
       name: stage.label,
       base: running,
       value: stage.amount,
-      fill: TEAL_SCALE[colorIdx],
+      fill: pickTealColor(i, stageCount),
       isTotal: false,
     });
   });
@@ -74,7 +54,7 @@ function buildWaterfallData(lifecycle: Lifecycle): WaterfallBar[] {
     name: "Net Received",
     base: 0,
     value: b2b.net,
-    fill: KELLY_GREEN,
+    fill: NAVY,
     isTotal: true,
   });
 

@@ -9,21 +9,11 @@ import {
   LabelList,
 } from "recharts";
 import type { RetailerLeakage } from "../types";
+import { pickTealColor } from "../chartConstants";
 
 interface Props {
   retailers: RetailerLeakage[];
 }
-
-const TEAL_SCALE = [
-  "#063d32",
-  "#0a5c4b",
-  "#0e6e5a",
-  "#158f75",
-  "#1fa282",
-  "#35b595",
-  "#6dcdb5",
-  "#b5e4d8",
-];
 
 export function RetailerChart({ retailers }: Props) {
   const sorted = [...retailers].sort((a, b) => b.leakage_pct - a.leakage_pct);
@@ -67,7 +57,7 @@ export function RetailerChart({ retailers }: Props) {
         />
         <Bar dataKey="leakage_pct" isAnimationActive={false}>
           {sorted.map((_, i) => (
-            <Cell key={i} fill={TEAL_SCALE[i % TEAL_SCALE.length]} />
+            <Cell key={i} fill={pickTealColor(i, sorted.length)} />
           ))}
           <LabelList
             dataKey="leakage_pct"

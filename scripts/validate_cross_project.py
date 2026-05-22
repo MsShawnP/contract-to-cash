@@ -15,57 +15,34 @@ Usage:
 
 from __future__ import annotations
 
-import os
 import sys
 
-import psycopg2
-import psycopg2.extensions
-import psycopg2.extras
-
-DEC2FLOAT = psycopg2.extensions.new_type(
-    psycopg2.extensions.DECIMAL.values,
-    "DEC2FLOAT",
-    lambda value, curs: float(value) if value is not None else None,
-)
-psycopg2.extensions.register_type(DEC2FLOAT)
-
-
-def connect():
-    url = os.environ.get("DATABASE_URL")
-    if not url:
-        print("ERROR: DATABASE_URL not set", file=sys.stderr)
-        sys.exit(1)
-    conn = psycopg2.connect(url, cursor_factory=psycopg2.extras.RealDictCursor)
-    conn.cursor().execute("SET search_path TO public_marts, raw, public")
-    conn.commit()
-    return conn
-
-
-CHECKS = []
-failures = []
-
-
-def check(name, expected, actual, tolerance=0.01):
-    """Register a check. Tolerance is relative (0.01 = 1%)."""
-    passed = True
-    if isinstance(expected, (int, float)) and isinstance(actual, (int, float)):
-        if expected == 0:
-            passed = actual == 0
-        else:
-            passed = abs(actual - expected) / abs(expected) <= tolerance
-    else:
-        passed = actual == expected
-
-    status = "PASS" if passed else "FAIL"
-    print(f"  [{status}] {name}")
-    if not passed:
-        print(f"         Expected: {expected}")
-        print(f"         Actual:   {actual}")
-        failures.append((name, expected, actual))
-    CHECKS.append((name, passed))
+from db import connect
 
 
 def main():
+    checks = []
+    failures = []
+
+    def check(name, expected, actual, tolerance=0.01):
+        """Register a check. Tolerance is relative (0.01 = 1%)."""
+        passed = True
+        if isinstance(expected, (int, float)) and isinstance(actual, (int, float)):
+            if expected == 0:
+                passed = actual == 0
+            else:
+                passed = abs(actual - expected) / abs(expected) <= tolerance
+        else:
+            passed = actual == expected
+
+        status = "PASS" if passed else "FAIL"
+        print(f"  [{status}] {name}")
+        if not passed:
+            print(f"         Expected: {expected}")
+            print(f"         Actual:   {actual}")
+            failures.append((name, expected, actual))
+        checks.append((name, passed))
+
     print("=" * 60, flush=True)
     print("  CROSS-PROJECT RECONCILIATION VALIDATION")
     print("=" * 60)
@@ -76,21 +53,21 @@ def main():
     # ─── Section 1: Deduction totals (must match RDR) ─────────────────────
     print("\n--- Deductions (vs retailer-deduction-recovery) ---\n", flush=True)
 
-    cur.execute("SELECT COUNT(*) AS n, SUM(deduction_amount) AS total FROM fct_deductions")
+    cur.execute("SELECT COUNT(*) AS n, SUM(deduction_amount) AS total FROM fct_retailer_deductions")
     ded = cur.fetchone()
     check("Deduction count", 3087, ded["n"], tolerance=0)
     check("Deduction total ($)", 1537390.70, ded["total"], tolerance=0.001)
 
     # Deduction type count.
-    cur.execute("SELECT COUNT(DISTINCT deduction_type) AS n FROM fct_deductions")
+    cur.execute("SELECT COUNT(DISTINCT deduction_type) AS n FROM fct_retailer_deductions")
     check("Deduction types", 9, cur.fetchone()["n"], tolerance=0)
 
     # Disputes filed.
-    cur.execute("SELECT COUNT(*) AS n FROM fct_deductions WHERE was_disputed = true")
+    cur.execute("SELECT COUNT(*) AS n FROM fct_retailer_deductions WHERE was_disputed = true")
     check("Disputes filed", 1410, cur.fetchone()["n"], tolerance=0)
 
     # Recovery amount.
-    cur.execute("SELECT SUM(net_recovery) AS total FROM fct_deductions WHERE net_recovery > 0")
+    cur.execute("SELECT SUM(net_recovery) AS total FROM fct_retailer_deductions WHERE net_recovery > 0")
     check("Dispute recovery ($)", 98215.54, cur.fetchone()["total"], tolerance=0.01)
 
     # ─── Section 2: Order totals ──────────────────────────────────────────
@@ -98,20 +75,20 @@ def main():
 
     cur.execute("""
         SELECT COUNT(DISTINCT order_id) AS n, SUM(line_total) AS total
-        FROM fct_orders WHERE channel = 'B2B'
+        FROM fct_retailer_orders WHERE channel = 'B2B'
     """)
     ord_b2b = cur.fetchone()
     check("B2B order count", 5838, ord_b2b["n"], tolerance=0)
     check("B2B invoiced total ($)", 31409072.52, ord_b2b["total"], tolerance=0.001)
 
     # DTC orders exist.
-    cur.execute("SELECT COUNT(DISTINCT order_id) AS n FROM fct_orders WHERE channel = 'DTC'")
+    cur.execute("SELECT COUNT(DISTINCT order_id) AS n FROM fct_dtc_orders")
     check("DTC order count", 10000, cur.fetchone()["n"], tolerance=0)
 
     # ─── Section 3: Shipments ─────────────────────────────────────────────
     print("\n--- Shipments ---\n", flush=True)
 
-    cur.execute("SELECT COUNT(*) AS n FROM fct_shipments")
+    cur.execute("SELECT COUNT(*) AS n FROM fct_retailer_shipments")
     check("Shipment count (1:1 with B2B orders)", 5838, cur.fetchone()["n"], tolerance=0)
 
     # ─── Section 4: Retailers ─────────────────────────────────────────────
@@ -127,7 +104,7 @@ def main():
     # ─── Section 5: Payments ──────────────────────────────────────────────
     print("\n--- Payments ---\n", flush=True)
 
-    cur.execute("SELECT SUM(gross_amount) AS gross, SUM(net_amount) AS net FROM fct_payments")
+    cur.execute("SELECT SUM(gross_amount) AS gross, SUM(net_amount) AS net FROM fct_retailer_payments")
     pay = cur.fetchone()
     # Payments gross-net difference should match deductions total (approximately).
     implied_deductions = pay["gross"] - pay["net"]
@@ -148,7 +125,7 @@ def main():
 
     # B2B deduction total unchanged (no DTC deductions mixed in).
     cur.execute("""
-        SELECT SUM(deduction_amount) AS total FROM fct_deductions
+        SELECT SUM(deduction_amount) AS total FROM fct_retailer_deductions
     """)
     check(
         "Deductions still B2B-only after DTC synthesis",
@@ -159,7 +136,7 @@ def main():
 
     # B2B order total unchanged.
     cur.execute("""
-        SELECT SUM(line_total) AS total FROM fct_orders WHERE channel = 'B2B'
+        SELECT SUM(line_total) AS total FROM fct_retailer_orders WHERE channel = 'B2B'
     """)
     check(
         "B2B order total unchanged after DTC synthesis",
@@ -202,8 +179,8 @@ def main():
 
     # ─── Results ──────────────────────────────────────────────────────────
     print("\n" + "=" * 60)
-    total = len(CHECKS)
-    passed = sum(1 for _, p in CHECKS if p)
+    total = len(checks)
+    passed = sum(1 for _, p in checks if p)
     failed = total - passed
 
     if failed == 0:

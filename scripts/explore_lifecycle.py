@@ -1,6 +1,6 @@
 """Explore the B2B revenue lifecycle in the Cinderhaven Data Platform.
 
-Queries fct_payments, fct_deductions, fct_orders, and fct_shipments to
+Queries fct_retailer_payments, fct_retailer_deductions, fct_retailer_orders, and fct_retailer_shipments to
 calculate the full gross-to-net waterfall, identify leakage by stage and
 retailer, and determine whether the data tells a dramatic story.
 
@@ -9,31 +9,7 @@ Output: structured console report for human review.
 
 from __future__ import annotations
 
-import os
-import sys
-from decimal import Decimal
-
-import psycopg2
-import psycopg2.extensions
-import psycopg2.extras
-
-DEC2FLOAT = psycopg2.extensions.new_type(
-    psycopg2.extensions.DECIMAL.values,
-    "DEC2FLOAT",
-    lambda value, curs: float(value) if value is not None else None,
-)
-psycopg2.extensions.register_type(DEC2FLOAT)
-
-
-def connect():
-    url = os.environ.get("DATABASE_URL")
-    if not url:
-        print("ERROR: DATABASE_URL not set", file=sys.stderr)
-        sys.exit(1)
-    conn = psycopg2.connect(url, cursor_factory=psycopg2.extras.RealDictCursor)
-    conn.cursor().execute("SET search_path TO public_marts, public")
-    conn.commit()
-    return conn
+from db import connect
 
 
 def fmt_dollars(n):
@@ -63,7 +39,7 @@ def run():
     cur = conn.cursor()
 
     # ─── 1. Aggregate B2B gross-to-net from payments ───────────────────────
-    section("1. AGGREGATE B2B GROSS-TO-NET (from fct_payments)")
+    section("1. AGGREGATE B2B GROSS-TO-NET (from fct_retailer_payments)")
 
     cur.execute("""
         SELECT
@@ -73,7 +49,7 @@ def run():
             SUM(gross_amount) - SUM(net_amount) AS total_leakage,
             MIN(received_date) AS earliest_payment,
             MAX(received_date) AS latest_payment
-        FROM fct_payments
+        FROM fct_retailer_payments
     """)
     payments = cur.fetchone()
     print(f"  Remittances:      {payments['remittance_count']:,}")
@@ -91,7 +67,7 @@ def run():
             COUNT(DISTINCT order_id) AS order_count,
             COUNT(*) AS line_count,
             SUM(line_total) AS total_invoiced
-        FROM fct_orders
+        FROM fct_retailer_orders
         WHERE channel = 'B2B'
     """)
     orders = cur.fetchone()
@@ -109,7 +85,7 @@ def run():
             SUM(deduction_amount) AS total_amount,
             SUM(net_recovery) AS total_recovered,
             SUM(net_loss) AS total_net_loss
-        FROM fct_deductions
+        FROM fct_retailer_deductions
         GROUP BY deduction_type
         ORDER BY total_amount DESC
     """)
@@ -137,7 +113,7 @@ def run():
             SUM(p.gross_amount) AS gross,
             SUM(p.net_amount) AS net,
             SUM(p.gross_amount) - SUM(p.net_amount) AS leakage
-        FROM fct_payments p
+        FROM fct_retailer_payments p
         GROUP BY p.retailer_name
         ORDER BY leakage DESC
     """)
@@ -162,7 +138,7 @@ def run():
             deduction_type,
             COUNT(*) AS count,
             SUM(deduction_amount) AS total_amount
-        FROM fct_deductions
+        FROM fct_retailer_deductions
         WHERE retailer_name = ANY(%s)
         GROUP BY retailer_name, deduction_type
         ORDER BY retailer_name, total_amount DESC
@@ -186,9 +162,9 @@ def run():
                 o.order_date,
                 p.received_date,
                 (p.received_date - o.order_date) AS days_to_cash
-            FROM fct_deductions d
-            JOIN fct_orders o ON o.order_id = d.order_id
-            JOIN fct_payments p ON p.remittance_id = d.remittance_id
+            FROM fct_retailer_deductions d
+            JOIN fct_retailer_orders o ON o.order_id = d.order_id
+            JOIN fct_retailer_payments p ON p.remittance_id = d.remittance_id
             WHERE o.channel = 'B2B'
               AND o.order_date IS NOT NULL
               AND p.received_date IS NOT NULL
@@ -222,8 +198,8 @@ def run():
         SELECT
             COUNT(DISTINCT o.order_id) AS total_b2b_orders,
             COUNT(DISTINCT d.order_id) AS orders_with_deductions
-        FROM fct_orders o
-        LEFT JOIN fct_deductions d ON d.order_id = o.order_id
+        FROM fct_retailer_orders o
+        LEFT JOIN fct_retailer_deductions d ON d.order_id = o.order_id
         WHERE o.channel = 'B2B'
     """)
     clean = cur.fetchone()
@@ -242,7 +218,7 @@ def run():
             SUM(deduction_amount) AS total_amount,
             COUNT(*) FILTER (WHERE order_id IS NULL) AS no_order,
             SUM(deduction_amount) FILTER (WHERE order_id IS NULL) AS no_order_amount
-        FROM fct_deductions
+        FROM fct_retailer_deductions
     """)
     unlinked = cur.fetchone()
     print(f"  Total deductions:          {unlinked['total']:,}")
@@ -259,7 +235,7 @@ def run():
             COUNT(*) FILTER (WHERE NOT clean_delivery) AS not_clean,
             COUNT(*) FILTER (WHERE NOT asn_compliant) AS asn_noncompliant,
             COUNT(*) FILTER (WHERE transit_days > 7) AS slow_transit
-        FROM fct_shipments
+        FROM fct_retailer_shipments
     """)
     ship = cur.fetchone()
     print(f"  Total shipments:           {ship['total_shipments']:,}")

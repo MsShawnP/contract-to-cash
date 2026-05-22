@@ -21,7 +21,7 @@ export class ErrorBoundary extends Component<Props, State> {
       return (
         <section className="section">
           <p className="section-body">
-            This section could not be rendered. Data may be unavailable.
+            The {this.props.section} section could not be rendered. Data may be unavailable.
           </p>
         </section>
       );

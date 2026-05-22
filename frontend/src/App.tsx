@@ -4,13 +4,8 @@ import { WaterfallChart } from "./components/WaterfallChart";
 import { RetailerChart } from "./components/RetailerChart";
 import { TimeToCashChart } from "./components/TimeToCashChart";
 import { ErrorBoundary } from "./components/ErrorBoundary";
+import { formatDollars } from "./chartConstants";
 import "./styles.css";
-
-function formatDollars(n: number): string {
-  if (n >= 1_000_000) return `$${(n / 1e6).toFixed(1)}M`;
-  if (n >= 1_000) return `$${(n / 1e3).toFixed(0)}K`;
-  return `$${n.toFixed(0)}`;
-}
 
 export function App() {
   const [data, setData] = useState<AppData | null>(null);
@@ -28,15 +23,15 @@ export function App() {
   const stageCount = lifecycle.b2b.stages.length;
   const retailerCount = retailers.leakage.length;
   const leakagePcts = retailers.leakage.map((r) => r.leakage_pct);
-  const minLeakage = Math.min(...leakagePcts);
-  const maxLeakage = Math.max(...leakagePcts);
+  const minLeakage = leakagePcts.length > 0 ? Math.min(...leakagePcts) : 0;
+  const maxLeakage = leakagePcts.length > 0 ? Math.max(...leakagePcts) : 0;
   const leakageSpread = (maxLeakage - minLeakage).toFixed(1);
 
   const sortedByDays = [...retailers.time_to_cash].sort(
     (a, b) => a.avg_days - b.avg_days,
   );
-  const fastest = sortedByDays[0];
-  const slowest = sortedByDays[sortedByDays.length - 1];
+  const fastest = sortedByDays[0] ?? { name: "N/A", avg_days: 0 };
+  const slowest = sortedByDays[sortedByDays.length - 1] ?? { name: "N/A", avg_days: 0 };
   const daySpread = Math.round(slowest.avg_days - fastest.avg_days);
 
   return (

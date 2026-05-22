@@ -251,11 +251,25 @@ body {
 @page {
   size: letter;
   margin: 0.6in;
+
+  @bottom-left {
+    content: "Lailara LLC";
+    font-family: "Source Sans 3", sans-serif;
+    font-size: 9pt;
+    color: #595959;
+  }
+
+  @bottom-right {
+    content: counter(page);
+    font-family: "Source Sans 3", sans-serif;
+    font-size: 9pt;
+    color: #595959;
+  }
 }
 
 @media print {
   body {
-    background: #fff;
+    background: var(--canvas, #f5f3ee);
     font-size: 10pt;
   }
 
@@ -277,7 +291,7 @@ body {
   }
 
   .footer::after {
-    content: "Cinderhaven Foods — Revenue Lifecycle Analysis";
+    content: "Lailara LLC";
     display: block;
     margin-top: 24px;
     font-family: var(--font-sans);
