@@ -60,4 +60,21 @@ On that deal we signed in Q1 — what did we actually net, and where did the mon
 
 ## Improvement history
 
-<!-- Entries are added by /improve — don't delete this section -->
+### 2026-05-22 — Improvement pass
+
+- **Trigger:** User-initiated after code review and test addition
+- **What was reviewed:** Code quality, tests, dependencies, documentation, git hygiene, security, data reconciliation, workflow files
+- **Findings:** 3 critical, 4 important, 3 nice-to-have
+- **What was fixed (all 10):**
+  1. Closed $1.7M waterfall gap — added Unclassified Shortfall stage
+  2. Updated stale README (all numbers matched to current JSON)
+  3. Fixed validation script — 29/29 checks pass
+  4. Hardened db.py — schema allowlist + require credentials
+  5. Aligned DTC chargeback_fee between export and validation
+  6. Expanded .gitignore (secrets patterns)
+  7. Added security headers (_headers file)
+  8. Populated FAILURES.md (3 entries)
+  9. Annotated stale HANDOFF numbers with current figures
+  10. Added test suites (11 vitest + 7 pytest, all passing)
+- **Deferred:** None — all findings addressed
+- **Next review:** 2026-06-22

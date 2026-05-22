@@ -104,6 +104,12 @@ Each entry:
 - **Scope:** frontend/src/components/, scripts/
 - **Do not:** Duplicate TEAL_SCALE, formatDollars, or DEC2FLOAT/connect in individual files.
 
+### 2026-05-22 — Waterfall uses explicit "Unclassified Shortfall" stage for unaccounted gross-net gap
+- **Decision:** When categorized deductions don't account for the full gross-net gap, compute and append an "Unclassified Shortfall" catch-all stage.
+- **Why:** Categorized deductions from `fct_retailer_deductions` only capture a fraction of the payment-level gross-net gap from `fct_retailer_payments`. Hiding the difference would make the waterfall dishonest. Distributing it across existing categories would misrepresent their magnitudes.
+- **Scope:** B2B waterfall in lifecycle.json and WaterfallChart.tsx
+- **Do not:** Distribute unaccounted shortfall across existing deduction categories or silently drop it.
+
 ### 2026-05-20 — All colors must come from Lailara Design System families
 - **Decision:** Every color in this project must trace to a Lailara Design System family and step number (Hong Kong teal, London greyscale, Chicago blue, Red).
 - **Why:** Previous colors were close but freehand. Aligning to the city-named families ensures brand consistency across all Lailara portfolio pieces.

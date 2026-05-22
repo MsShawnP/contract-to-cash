@@ -9,6 +9,22 @@ For things that didn't work, see FAILURES.md.
 
 ---
 
+## 2026-05-22 16:20 — /wrap: code review, tests, /improve, all arc items complete
+
+**Started from:** All 8 units complete, brand kit applied. Site deployed but not code-reviewed, no tests, project health items pending.
+
+**Did:**
+- Fixed all 16 `/ce:code-review` findings (shared chartConstants.ts + db.py, replaced kelly green with navy, empty-array guards, ErrorBoundary, print CSS, num_to_word, ZeroDivisionError guards, try/finally, mutable globals, unused imports)
+- Deployed, pushed, tagged v1.0
+- Added tests (11 vitest + 7 pytest, all passing)
+- Ran `/improve` full pass, fixed all 10 findings (closed $1.7M waterfall gap, updated stale README, hardened db.py, aligned chargeback_fee, expanded .gitignore, security headers, populated FAILURES.md, annotated stale HANDOFF numbers)
+
+**State:** All validation passes (29/29 JSON, 11/11 vitest, 7/7 pytest). Site deployed. README current. All PLAN.md tasks and definition-of-done items complete. Next `/improve` due 2026-06-22.
+
+**Next:** Arc is complete. Options: archive arc and start new one, run Tier 3 improvements (CI/CD, scroll-triggered narrative, Lighthouse), or move on to other projects.
+
+---
+
 ## 2026-05-22 16:14 — /improve: fix all 10 audit findings, add tests, deploy
 
 **What changed:** Fixed 10 /improve findings: closed $1.7M waterfall hole (added Unclassified Shortfall stage), updated stale README, fixed validation script (29/29 pass), hardened db.py (schema allowlist + require credentials), aligned DTC chargeback_fee between export and validation, expanded .gitignore, added security headers, populated FAILURES.md, annotated stale HANDOFF numbers. Also added test suites (11 vitest + 7 pytest, all passing).
