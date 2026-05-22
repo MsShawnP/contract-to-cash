@@ -47,10 +47,10 @@ On that deal we signed in Q1 — what did we actually net, and where did the mon
 
 ## Definition of done for this arc
 
-- [ ] Fully deployed React SPA on Cloudflare Pages
-- [ ] Complete, compelling money-leak narrative backed by data
-- [ ] Numbers reconcile with all other Cinderhaven projects
-- [ ] CFO/CEO can understand the story without technical background
+- [x] Fully deployed React SPA on Cloudflare Pages
+- [x] Complete, compelling money-leak narrative backed by data
+- [x] Numbers reconcile with all other Cinderhaven projects
+- [x] CFO/CEO can understand the story without technical background
 
 ---
 

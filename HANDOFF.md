@@ -9,6 +9,22 @@ For things that didn't work, see FAILURES.md.
 
 ---
 
+## 2026-05-22 15:45 — Code review, fix all findings, deploy
+
+**Started from:** All 8 units complete, brand kit applied (May 20). Site deployed but not yet code-reviewed. Project health items pending.
+
+**Did:**
+- Deployed to Cloudflare Workers, ran dep audit fix, ran `/ce:code-review` (16 findings)
+- Fixed all 16: created shared `chartConstants.ts` and `scripts/db.py`, replaced off-palette kelly green with Chicago-20 navy, added empty-array guards, fixed ErrorBoundary section prop, null check in main.tsx, print CSS footer/page counter, `num_to_word` edge cases, ZeroDivisionError guards, try/finally, moved mutable globals inside main(), removed unused imports
+- Superseded kelly green decision in DECISIONS.md
+- Redeployed with all fixes, pushed to GitHub
+
+**State:** TypeScript compiles clean. Production build succeeds. Site live at contract-to-cash.msshawnp.workers.dev. All 16 review findings resolved. No test suite yet.
+
+**Next:** Add basic tests (project-health.md shows "no" for tests). Consider running `/improve` for broader quality pass.
+
+---
+
 ## 2026-05-22 15:38 — Fix all 16 code review findings
 
 **What changed:** Fixed all 16 findings from `/ce:code-review`: extracted shared `chartConstants.ts` and `scripts/db.py`, replaced off-palette kelly green with Chicago-20 navy, added empty-array guards in App.tsx, used ErrorBoundary section prop, replaced non-null assertion in main.tsx, fixed print footer/page counter, fixed `num_to_word` edge cases, added ZeroDivisionError guards and try/finally in export script, moved mutable globals inside `main()` in validation script, removed unused imports.

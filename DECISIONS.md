@@ -98,6 +98,12 @@ Each entry:
 - **Scope:** frontend/src/components/WaterfallChart.tsx
 - **Do not:** Use off-palette colors for chart elements.
 
+### 2026-05-22 — Shared chart constants in chartConstants.ts
+- **Decision:** All chart color scales, formatting helpers, and color-picking functions live in `frontend/src/chartConstants.ts`. Python DB helpers live in `scripts/db.py`.
+- **Why:** Three chart components and four Python scripts each had identical copies. Centralization eliminates drift and makes design system updates one-line changes.
+- **Scope:** frontend/src/components/, scripts/
+- **Do not:** Duplicate TEAL_SCALE, formatDollars, or DEC2FLOAT/connect in individual files.
+
 ### 2026-05-20 — All colors must come from Lailara Design System families
 - **Decision:** Every color in this project must trace to a Lailara Design System family and step number (Hong Kong teal, London greyscale, Chicago blue, Red).
 - **Why:** Previous colors were close but freehand. Aligning to the city-named families ensures brand consistency across all Lailara portfolio pieces.
