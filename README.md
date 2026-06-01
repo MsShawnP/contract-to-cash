@@ -2,7 +2,7 @@
 
 Revenue lifecycle analysis for a mid-market CPG brand — tracing where money leaks between invoice and cash receipt. For every dollar Cinderhaven Foods invoiced in Calendar Year 2025, eighty-six cents arrived as cash.
 
-**Live:** [contract-to-cash.msshawnp.workers.dev](https://contract-to-cash.msshawnp.workers.dev)
+**Live:** [contract-to-cash.msshawnp.workers.dev](https://cash.lailarallc.com)
 
 ## What this is
 
