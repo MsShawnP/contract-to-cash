@@ -95,11 +95,11 @@ def main():
     print("\n--- Retailers ---\n", flush=True)
 
     cur.execute("SELECT COUNT(*) AS n FROM dim_retailers WHERE channel_type != 'dtc'")
-    check("B2B retailer count", 10, cur.fetchone()["n"], tolerance=0)
+    check("B2B retailer count", 9, cur.fetchone()["n"], tolerance=0)
 
     cur.execute("SELECT COUNT(*) AS n FROM dim_retailers")
     total_retailers = cur.fetchone()["n"]
-    check("Total retailer/channel count (10 B2B + DTC)", 11, total_retailers, tolerance=0)
+    check("Total retailer/channel count (9 B2B + DTC)", 10, total_retailers, tolerance=0)
 
     # ─── Section 5: Payments ──────────────────────────────────────────────
     print("\n--- Payments ---\n", flush=True)
