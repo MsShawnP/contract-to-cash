@@ -82,7 +82,7 @@ build (export script, scaffold SPA, implement charts, polish + deploy).
 - README.md — 3 lines
 
 **Deployment:**
-Live at contract-to-cash.msshawnp.workers.dev. PR #1 merged to main.
+Live at cash.lailarallc.com. PR #1 merged to main.
 
 ---
 
