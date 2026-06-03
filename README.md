@@ -2,7 +2,7 @@
 
 Revenue lifecycle analysis for a mid-market CPG brand — tracing where money leaks between invoice and cash receipt. For every dollar Cinderhaven Foods invoiced in Calendar Year 2025, eighty-six cents arrived as cash.
 
-**Live:** [contract-to-cash.msshawnp.workers.dev](https://cash.lailarallc.com)
+**Live:** [cash.lailarallc.com](https://cash.lailarallc.com)
 
 ## What this is
 
@@ -85,7 +85,7 @@ npm run deploy
 
 ## Part of the Cinderhaven portfolio
 
-This is the second buyer-facing project built on the [Cinderhaven Data Platform](https://github.com/MsShawnP/cinderhaven-data-platform). It tells the full revenue lifecycle story — differentiated from [Retailer Deduction Recovery](https://github.com/MsShawnP/retailer-deduction-recovery), which covers deduction recovery in depth.
+This is the second buyer-facing project built on the Cinderhaven Data Platform. It tells the full revenue lifecycle story — differentiated from [Retailer Deduction Recovery](https://github.com/MsShawnP/retailer-deduction-recovery), which covers deduction recovery in depth.
 
 ---
 Built by [Lailara LLC](https://lailarallc.com) — data hygiene and analytics consulting for specialty food brands scaling into national retail.
