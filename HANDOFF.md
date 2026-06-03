@@ -47,7 +47,7 @@ For things that didn't work, see FAILURES.md.
 - Superseded kelly green decision in DECISIONS.md
 - Redeployed with all fixes, pushed to GitHub
 
-**State:** TypeScript compiles clean. Production build succeeds. Site live at contract-to-cash.msshawnp.workers.dev. All 16 review findings resolved. No test suite yet.
+**State:** TypeScript compiles clean. Production build succeeds. Site live at cash.lailarallc.com. All 16 review findings resolved. No test suite yet.
 
 **Next:** Add basic tests (project-health.md shows "no" for tests). Consider running `/improve` for broader quality pass.
 
@@ -127,7 +127,7 @@ For things that didn't work, see FAILURES.md.
 - Redeployed multiple times to Cloudflare Pages
 - PR open: https://github.com/MsShawnP/contract-to-cash/pull/1
 
-**State:** Live at https://contract-to-cash.msshawnp.workers.dev. PR has 15 commits on `feat/revenue-lifecycle-portfolio`.
+**State:** Live at https://cash.lailarallc.com. PR has 15 commits on `feat/revenue-lifecycle-portfolio`.
 
 **Current numbers (CY2025, retailers only) — as of this session, superseded by later re-export:**
 - $15.6M invoiced, $9.2M net = 59.1 cents per dollar
