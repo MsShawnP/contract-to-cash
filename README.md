@@ -86,3 +86,6 @@ npm run deploy
 ## Part of the Cinderhaven portfolio
 
 This is the second buyer-facing project built on the [Cinderhaven Data Platform](https://github.com/MsShawnP/cinderhaven-data-platform). It tells the full revenue lifecycle story — differentiated from [Retailer Deduction Recovery](https://github.com/MsShawnP/retailer-deduction-recovery), which covers deduction recovery in depth.
+
+---
+Built by [Lailara LLC](https://lailarallc.com) — data hygiene and analytics consulting for specialty food brands scaling into national retail.
