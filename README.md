@@ -8,7 +8,7 @@ Revenue lifecycle analysis for a mid-market CPG brand — tracing where money le
 
 A single-page narrative that answers the question a $25M CPG brand's CFO cannot: *On that deal we signed in Q1 — what did we actually net, and where did the money leak between systems?*
 
-The piece traces $17.8M invoiced across 6 retail partners and a DTC channel through deductions, processing fees, refunds, and timing delays. Three charts tell the story:
+The piece traces $17.8M invoiced across 6 retail partners, 3 distributors (UNFI, KeHE, DPI Northwest), and a DTC channel — 10 channels total — through deductions, processing fees, refunds, and timing delays. Three charts tell the story:
 
 1. **Waterfall** — gross B2B payments descending through 10 deduction categories to net received
 2. **Retailer comparison** — leakage rates from 11.8% to 12.9% across 6 direct retail partners

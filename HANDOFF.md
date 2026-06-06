@@ -134,7 +134,7 @@ For things that didn't work, see FAILURES.md.
 - 1,593 deductions / $668K total
 - 8 retailers, 2,711 B2B orders, 6,800 DTC orders
 - 7.0% B2B leakage, 7.1% DTC leakage
-- *(Note: data platform updated between sessions; current figures as of 2026-05-22: $17.8M invoiced, $15.4M net, 86.5¢, 6 retailers)*
+- *(Note: data platform updated between sessions; current figures as of 2026-05-22: $17.8M invoiced, $15.4M net, 86.5¢, 6 retailers + 3 distributors + DTC = 10 channels)*
 
 **Next:**
 - Merge PR to main
