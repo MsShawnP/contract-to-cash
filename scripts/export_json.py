@@ -106,12 +106,12 @@ def export_summary(cur):
     dtc_refunds = cur.fetchone()["total"] or 0
 
     cur.execute("""
-        SELECT SUM(chargeback_amount) AS amount, SUM(chargeback_fee) AS fees
+        SELECT SUM(chargeback_amount) AS amount
         FROM raw.shopify_chargebacks
         WHERE outcome = 'lost' AND chargeback_date BETWEEN %s AND %s
     """, (PERIOD_START, PERIOD_END))
     cb_row = cur.fetchone()
-    dtc_cb = (cb_row["amount"] or 0) + (cb_row["fees"] or 0)
+    dtc_cb = cb_row["amount"] or 0
 
     dtc_leakage = (dtc_txn["fees"] or 0) + (dtc_refunds or 0) + dtc_cb
     dtc_gross = dtc_txn["gross"] or 0
@@ -242,12 +242,12 @@ def export_lifecycle(cur):
     dtc_refunds = cur.fetchone()["total"] or 0
 
     cur.execute("""
-        SELECT SUM(chargeback_amount) AS amt, SUM(chargeback_fee) AS fees
+        SELECT SUM(chargeback_amount) AS amt
         FROM raw.shopify_chargebacks
         WHERE outcome = 'lost' AND chargeback_date BETWEEN %s AND %s
     """, (PERIOD_START, PERIOD_END))
     cb = cur.fetchone()
-    dtc_chargebacks = (cb["amt"] or 0) + (cb["fees"] or 0)
+    dtc_chargebacks = cb["amt"] or 0
 
     dtc_net = dtc_gross - dtc_fees - dtc_refunds - dtc_chargebacks
 
