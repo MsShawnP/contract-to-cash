@@ -1,75 +1,75 @@
 {
   "b2b": {
     "gross": 16797432.0,
-    "net": 14585446.25,
+    "net": 14491731.42,
     "stages": [
+      {
+        "stage": "short_ship",
+        "label": "Short Ship",
+        "amount": 88578.96,
+        "count": 3009,
+        "recovered": 13937.85
+      },
       {
         "stage": "damaged",
         "label": "Damaged",
         "amount": 53785.36,
         "count": 525,
-        "recovered": 9132.8
+        "recovered": 8999.25
       },
       {
         "stage": "spoilage",
         "label": "Spoilage",
         "amount": 51846.48,
         "count": 552,
-        "recovered": 7693.73
+        "recovered": 8107.06
       },
       {
         "stage": "label_fine",
         "label": "Label Fine",
         "amount": 51616.84,
         "count": 536,
-        "recovered": 9770.73
-      },
-      {
-        "stage": "short_ship",
-        "label": "Short Ship",
-        "amount": 51263.5,
-        "count": 552,
-        "recovered": 9292.6
-      },
-      {
-        "stage": "late_delivery",
-        "label": "Late Delivery",
-        "amount": 50120.1,
-        "count": 537,
-        "recovered": 8499.79
+        "recovered": 8671.88
       },
       {
         "stage": "slotting",
         "label": "Slotting",
         "amount": 49996.87,
         "count": 515,
-        "recovered": 9513.67
+        "recovered": 8103.75
       },
       {
         "stage": "pricing_error",
         "label": "Pricing Error",
         "amount": 49236.65,
         "count": 496,
-        "recovered": 9355.98
+        "recovered": 6871.57
       },
       {
         "stage": "promo_billback",
         "label": "Promo Billback",
         "amount": 48395.65,
         "count": 533,
-        "recovered": 10119.17
+        "recovered": 7326.91
       },
       {
         "stage": "pallet_fine",
         "label": "Pallet Fine",
         "amount": 47941.75,
         "count": 506,
-        "recovered": 8949.1
+        "recovered": 7152.36
+      },
+      {
+        "stage": "late_delivery",
+        "label": "Late Delivery",
+        "amount": 2732.62,
+        "count": 81,
+        "recovered": 344.96
       },
       {
         "stage": "unclassified_shortfall",
         "label": "Unclassified Shortfall",
-        "amount": 1757782.55,
+        "amount": 1861569.4,
         "count": 0,
         "recovered": 0
       }

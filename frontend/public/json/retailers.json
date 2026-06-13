@@ -1,94 +1,100 @@
 {
   "leakage": [
     {
-      "name": "Whole Foods",
-      "gross": 3381264.72,
-      "net": 2931135.87,
-      "leakage": 450128.85,
-      "leakage_pct": 13.3,
+      "name": "Walmart",
+      "gross": 3566628.0,
+      "net": 2954509.09,
+      "leakage": 612118.91,
+      "leakage_pct": 17.2,
       "remittances": 12
     },
     {
       "name": "Kroger",
       "gross": 3152223.36,
-      "net": 2717851.54,
-      "leakage": 434371.82,
-      "leakage_pct": 13.8,
+      "net": 2695452.07,
+      "leakage": 456771.29,
+      "leakage_pct": 14.5,
       "remittances": 11
     },
     {
-      "name": "Walmart",
-      "gross": 3566628.0,
-      "net": 3136003.38,
-      "leakage": 430624.62,
-      "leakage_pct": 12.1,
+      "name": "Whole Foods",
+      "gross": 3381264.72,
+      "net": 2978837.14,
+      "leakage": 402427.58,
+      "leakage_pct": 11.9,
       "remittances": 12
     },
     {
       "name": "Sprouts",
       "gross": 2751642.96,
-      "net": 2406651.96,
-      "leakage": 344991.0,
-      "leakage_pct": 12.5,
+      "net": 2400773.78,
+      "leakage": 350869.18,
+      "leakage_pct": 12.8,
       "remittances": 12
     },
     {
       "name": "Costco",
       "gross": 2180419.2,
-      "net": 1881403.42,
-      "leakage": 299015.78,
+      "net": 1880738.32,
+      "leakage": 299680.88,
       "leakage_pct": 13.7,
       "remittances": 12
     },
     {
       "name": "Regional Group",
       "gross": 1765253.76,
-      "net": 1512400.08,
-      "leakage": 252853.68,
-      "leakage_pct": 14.3,
+      "net": 1581421.02,
+      "leakage": 183832.74,
+      "leakage_pct": 10.4,
       "remittances": 11
     }
   ],
   "time_to_cash": [
     {
       "name": "Sprouts",
-      "avg_days": 28.8,
-      "median_days": 29.0,
-      "sample_size": 777
+      "avg_days": 28.6,
+      "median_days": 28.0,
+      "sample_size": 1028
     },
     {
       "name": "Regional Group",
-      "avg_days": 27.7,
-      "median_days": 28.0,
-      "sample_size": 492
+      "avg_days": 27.1,
+      "median_days": 27.0,
+      "sample_size": 594
     },
     {
       "name": "Kroger",
-      "avg_days": 24.6,
+      "avg_days": 24.8,
       "median_days": 24.0,
-      "sample_size": 891
+      "sample_size": 1308
     },
     {
       "name": "Whole Foods",
-      "avg_days": 23.0,
-      "median_days": 23.0,
-      "sample_size": 872
+      "avg_days": 23.2,
+      "median_days": 24.0,
+      "sample_size": 1160
     },
     {
       "name": "Walmart",
-      "avg_days": 21.6,
-      "median_days": 22.0,
-      "sample_size": 1061
+      "avg_days": 22.6,
+      "median_days": 23.0,
+      "sample_size": 1760
     },
     {
       "name": "Costco",
-      "avg_days": 21.0,
+      "avg_days": 21.7,
       "median_days": 21.0,
-      "sample_size": 659
+      "sample_size": 903
     }
   ],
   "deduction_mix": {
     "Costco": [
+      {
+        "type": "short_ship",
+        "label": "Short Ship",
+        "amount": 11386.86,
+        "count": 388
+      },
       {
         "type": "spoilage",
         "label": "Spoilage",
@@ -108,22 +114,10 @@
         "count": 74
       },
       {
-        "type": "short_ship",
-        "label": "Short Ship",
-        "amount": 6661.1,
-        "count": 74
-      },
-      {
         "type": "slotting",
         "label": "Slotting",
         "amount": 6633.64,
         "count": 74
-      },
-      {
-        "type": "late_delivery",
-        "label": "Late Delivery",
-        "amount": 6156.1,
-        "count": 70
       },
       {
         "type": "label_fine",
@@ -146,22 +140,16 @@
     ],
     "Kroger": [
       {
-        "type": "late_delivery",
-        "label": "Late Delivery",
-        "amount": 10783.65,
-        "count": 108
+        "type": "short_ship",
+        "label": "Short Ship",
+        "amount": 18718.58,
+        "count": 629
       },
       {
         "type": "label_fine",
         "label": "Label Fine",
         "amount": 10177.85,
         "count": 105
-      },
-      {
-        "type": "short_ship",
-        "label": "Short Ship",
-        "amount": 9979.57,
-        "count": 115
       },
       {
         "type": "spoilage",
@@ -198,9 +186,21 @@
         "label": "Pricing Error",
         "amount": 8143.89,
         "count": 79
+      },
+      {
+        "type": "late_delivery",
+        "label": "Late Delivery",
+        "amount": 361.1,
+        "count": 11
       }
     ],
     "Regional Group": [
+      {
+        "type": "short_ship",
+        "label": "Short Ship",
+        "amount": 6300.47,
+        "count": 214
+      },
       {
         "type": "spoilage",
         "label": "Spoilage",
@@ -212,12 +212,6 @@
         "label": "Damaged",
         "amount": 5573.68,
         "count": 52
-      },
-      {
-        "type": "late_delivery",
-        "label": "Late Delivery",
-        "amount": 5525.0,
-        "count": 59
       },
       {
         "type": "slotting",
@@ -244,12 +238,6 @@
         "count": 54
       },
       {
-        "type": "short_ship",
-        "label": "Short Ship",
-        "amount": 4367.53,
-        "count": 53
-      },
-      {
         "type": "pallet_fine",
         "label": "Pallet Fine",
         "amount": 4096.64,
@@ -257,6 +245,12 @@
       }
     ],
     "Sprouts": [
+      {
+        "type": "short_ship",
+        "label": "Short Ship",
+        "amount": 11329.77,
+        "count": 404
+      },
       {
         "type": "label_fine",
         "label": "Label Fine",
@@ -282,12 +276,6 @@
         "count": 91
       },
       {
-        "type": "short_ship",
-        "label": "Short Ship",
-        "amount": 8654.35,
-        "count": 89
-      },
-      {
         "type": "spoilage",
         "label": "Spoilage",
         "amount": 8055.01,
@@ -300,30 +288,30 @@
         "count": 80
       },
       {
-        "type": "late_delivery",
-        "label": "Late Delivery",
-        "amount": 7373.97,
-        "count": 75
-      },
-      {
         "type": "slotting",
         "label": "Slotting",
         "amount": 7039.55,
         "count": 65
+      },
+      {
+        "type": "late_delivery",
+        "label": "Late Delivery",
+        "amount": 367.78,
+        "count": 11
       }
     ],
     "Walmart": [
+      {
+        "type": "short_ship",
+        "label": "Short Ship",
+        "amount": 26156.56,
+        "count": 903
+      },
       {
         "type": "pallet_fine",
         "label": "Pallet Fine",
         "amount": 12535.89,
         "count": 126
-      },
-      {
-        "type": "late_delivery",
-        "label": "Late Delivery",
-        "amount": 12450.27,
-        "count": 137
       },
       {
         "type": "spoilage",
@@ -350,12 +338,6 @@
         "count": 119
       },
       {
-        "type": "short_ship",
-        "label": "Short Ship",
-        "amount": 9767.03,
-        "count": 118
-      },
-      {
         "type": "label_fine",
         "label": "Label Fine",
         "amount": 9415.96,
@@ -366,20 +348,26 @@
         "label": "Pricing Error",
         "amount": 9167.3,
         "count": 109
+      },
+      {
+        "type": "late_delivery",
+        "label": "Late Delivery",
+        "amount": 1691.68,
+        "count": 51
       }
     ],
     "Whole Foods": [
+      {
+        "type": "short_ship",
+        "label": "Short Ship",
+        "amount": 14686.72,
+        "count": 471
+      },
       {
         "type": "damaged",
         "label": "Damaged",
         "amount": 12098.69,
         "count": 102
-      },
-      {
-        "type": "short_ship",
-        "label": "Short Ship",
-        "amount": 11833.92,
-        "count": 103
       },
       {
         "type": "slotting",
@@ -420,8 +408,8 @@
       {
         "type": "late_delivery",
         "label": "Late Delivery",
-        "amount": 7831.11,
-        "count": 88
+        "amount": 312.06,
+        "count": 8
       }
     ]
   }
