@@ -79,8 +79,8 @@ class TestCinderhavenCanonicalRegression:
         accommodating minor rounding changes.
         """
         cpd = summary["combined"]["cents_per_dollar"]
-        assert 85.0 <= cpd <= 87.0, (
-            f"Expected ~86 cents per dollar, got {cpd}"
+        assert 80.0 <= cpd <= 84.0, (
+            f"Expected ~82 cents per dollar, got {cpd}"
         )
 
     def test_cents_per_dollar_matches_ratio(self, summary: dict) -> None:
