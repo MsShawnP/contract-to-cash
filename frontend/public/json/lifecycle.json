@@ -1,15 +1,8 @@
 {
   "b2b": {
     "gross": 16797432.0,
-    "net": 14491731.42,
+    "net": 14636805.37,
     "stages": [
-      {
-        "stage": "short_ship",
-        "label": "Short Ship",
-        "amount": 88578.96,
-        "count": 3009,
-        "recovered": 13937.85
-      },
       {
         "stage": "damaged",
         "label": "Damaged",
@@ -60,16 +53,23 @@
         "recovered": 7152.36
       },
       {
+        "stage": "short_ship",
+        "label": "Short Ship",
+        "amount": 25356.52,
+        "count": 1275,
+        "recovered": 4405.06
+      },
+      {
         "stage": "late_delivery",
         "label": "Late Delivery",
-        "amount": 2732.62,
-        "count": 81,
-        "recovered": 344.96
+        "amount": 2714.67,
+        "count": 77,
+        "recovered": 425.21
       },
       {
         "stage": "unclassified_shortfall",
         "label": "Unclassified Shortfall",
-        "amount": 1861569.4,
+        "amount": 1779735.84,
         "count": 0,
         "recovered": 0
       }
@@ -77,7 +77,7 @@
   },
   "dtc": {
     "gross": 190826.36,
-    "net": 177176.55,
+    "net": 177066.06,
     "stages": [
       {
         "stage": "processing_fees",
@@ -87,12 +87,12 @@
       {
         "stage": "refunds",
         "label": "Refunds",
-        "amount": 7569.5
+        "amount": 7756.01
       },
       {
         "stage": "chargebacks",
         "label": "Chargebacks",
-        "amount": 347.4
+        "amount": 271.38
       }
     ]
   }

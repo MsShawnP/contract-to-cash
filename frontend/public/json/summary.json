@@ -1,29 +1,29 @@
 {
   "headline": "For Every Dollar Invoiced, Eighty-Two Cents Arrives as Cash",
-  "headline_ratio": 0.82,
+  "headline_ratio": 0.829,
   "b2b": {
     "invoiced": 17689036.08,
     "gross_payments": 16797432.0,
-    "net_received": 14491731.42,
-    "total_deductions": 444131.18,
-    "deduction_count": 6753,
-    "recovered": 69515.59,
-    "leakage_pct": 13.7,
+    "net_received": 14636805.37,
+    "total_deductions": 380890.79,
+    "deduction_count": 5015,
+    "recovered": 60063.05,
+    "leakage_pct": 12.9,
     "remittance_count": 70
   },
   "dtc": {
     "gross": 190826.36,
     "processing_fees": 5732.91,
-    "refunds": 7569.5,
-    "chargebacks_lost": 347.4,
-    "net_received": 177176.55,
+    "refunds": 7756.01,
+    "chargebacks_lost": 271.38,
+    "net_received": 177066.06,
     "leakage_pct": 7.2
   },
   "combined": {
     "total_invoiced": 17879862.44,
-    "total_net": 14668907.97,
-    "total_leakage": 2319350.39,
-    "cents_per_dollar": 82.0
+    "total_net": 14813871.43,
+    "total_leakage": 2174386.93,
+    "cents_per_dollar": 82.9
   },
   "meta": {
     "retailers_b2b": 6,
