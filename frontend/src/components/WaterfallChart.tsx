@@ -9,7 +9,7 @@ import {
   Text,
 } from "recharts";
 import type { Lifecycle } from "../types";
-import { TEAL_SCALE, formatDollars, pickTealColor } from "../chartConstants";
+import { formatDollars } from "../chartConstants";
 
 interface Props {
   lifecycle: Lifecycle;
@@ -24,6 +24,8 @@ interface WaterfallBar {
 }
 
 const NAVY = "#1f2e7a";
+const RED = "#d64045";
+const GREEN = "#2D8E47";
 
 function buildWaterfallData(lifecycle: Lifecycle): WaterfallBar[] {
   const { b2b } = lifecycle;
@@ -33,19 +35,18 @@ function buildWaterfallData(lifecycle: Lifecycle): WaterfallBar[] {
     name: "Gross Payments",
     base: 0,
     value: b2b.gross,
-    fill: TEAL_SCALE[0],
+    fill: NAVY,
     isTotal: true,
   });
 
   let running = b2b.gross;
-  const stageCount = b2b.stages.length;
-  b2b.stages.forEach((stage, i) => {
+  b2b.stages.forEach((stage) => {
     running -= stage.amount;
     bars.push({
       name: stage.label,
       base: running,
       value: stage.amount,
-      fill: pickTealColor(i, stageCount),
+      fill: RED,
       isTotal: false,
     });
   });
@@ -54,7 +55,7 @@ function buildWaterfallData(lifecycle: Lifecycle): WaterfallBar[] {
     name: "Net Received",
     base: 0,
     value: b2b.net,
-    fill: NAVY,
+    fill: GREEN,
     isTotal: true,
   });
 
