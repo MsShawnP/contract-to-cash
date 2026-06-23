@@ -25,7 +25,6 @@ interface WaterfallBar {
 
 const NAVY = "#1f2e7a";
 const RED = "#d64045";
-const GREEN = "#2D8E47";
 
 function buildWaterfallData(lifecycle: Lifecycle): WaterfallBar[] {
   const { b2b } = lifecycle;
@@ -55,7 +54,7 @@ function buildWaterfallData(lifecycle: Lifecycle): WaterfallBar[] {
     name: "Net Received",
     base: 0,
     value: b2b.net,
-    fill: GREEN,
+    fill: NAVY,
     isTotal: true,
   });
 
