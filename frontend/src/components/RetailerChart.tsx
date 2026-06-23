@@ -4,12 +4,10 @@ import {
   XAxis,
   YAxis,
   CartesianGrid,
-  Cell,
   ResponsiveContainer,
   LabelList,
 } from "recharts";
 import type { RetailerLeakage } from "../types";
-import { pickTealColor } from "../chartConstants";
 
 interface Props {
   retailers: RetailerLeakage[];
@@ -55,10 +53,7 @@ export function RetailerChart({ retailers }: Props) {
           axisLine={false}
           width={130}
         />
-        <Bar dataKey="leakage_pct" isAnimationActive={false}>
-          {sorted.map((_, i) => (
-            <Cell key={i} fill={pickTealColor(i, sorted.length)} />
-          ))}
+        <Bar dataKey="leakage_pct" fill="#1f2e7a" isAnimationActive={false}>
           <LabelList
             dataKey="leakage_pct"
             position="right"
