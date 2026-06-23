@@ -4,12 +4,10 @@ import {
   XAxis,
   YAxis,
   CartesianGrid,
-  Cell,
   ResponsiveContainer,
   LabelList,
 } from "recharts";
 import type { RetailerTimeToCash } from "../types";
-import { pickTealColor } from "../chartConstants";
 
 interface Props {
   timeToCash: RetailerTimeToCash[];
@@ -59,13 +57,7 @@ export function TimeToCashChart({ timeToCash }: Props) {
           axisLine={false}
           width={130}
         />
-        <Bar dataKey="avg_days" isAnimationActive={false}>
-          {sorted.map((_row, i) => (
-            <Cell
-              key={i}
-              fill={pickTealColor(i, sorted.length)}
-            />
-          ))}
+        <Bar dataKey="avg_days" fill="#1f2e7a" isAnimationActive={false}>
           <LabelList
             dataKey="avg_days"
             position="right"
