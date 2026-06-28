@@ -3,49 +3,49 @@
     {
       "name": "Walmart",
       "gross": 3566628.0,
-      "net": 3004030.26,
-      "leakage": 562597.74,
-      "leakage_pct": 15.8,
+      "net": 2998799.14,
+      "leakage": 567828.86,
+      "leakage_pct": 15.9,
       "remittances": 12
     },
     {
       "name": "Kroger",
       "gross": 3152223.36,
-      "net": 2730242.65,
-      "leakage": 421980.71,
-      "leakage_pct": 13.4,
+      "net": 2732238.4,
+      "leakage": 419984.96,
+      "leakage_pct": 13.3,
       "remittances": 11
     },
     {
       "name": "Whole Foods",
       "gross": 3381264.72,
-      "net": 3005296.64,
-      "leakage": 375968.08,
-      "leakage_pct": 11.1,
+      "net": 3004009.1,
+      "leakage": 377255.62,
+      "leakage_pct": 11.2,
       "remittances": 12
     },
     {
       "name": "Sprouts",
       "gross": 2751642.96,
-      "net": 2414501.51,
-      "leakage": 337141.45,
-      "leakage_pct": 12.3,
+      "net": 2420309.47,
+      "leakage": 331333.49,
+      "leakage_pct": 12.0,
       "remittances": 12
     },
     {
       "name": "Costco",
       "gross": 2180419.2,
-      "net": 1894583.94,
-      "leakage": 285835.26,
-      "leakage_pct": 13.1,
+      "net": 1886500.68,
+      "leakage": 293918.52,
+      "leakage_pct": 13.5,
       "remittances": 12
     },
     {
       "name": "Regional Group",
       "gross": 1765253.76,
-      "net": 1588150.37,
-      "leakage": 177103.39,
-      "leakage_pct": 10.0,
+      "net": 1585951.79,
+      "leakage": 179301.97,
+      "leakage_pct": 10.2,
       "remittances": 11
     }
   ],

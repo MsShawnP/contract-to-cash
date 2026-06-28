@@ -1,75 +1,75 @@
 {
   "b2b": {
     "gross": 16797432.0,
-    "net": 14636805.37,
+    "net": 14627808.58,
     "stages": [
       {
         "stage": "damaged",
         "label": "Damaged",
         "amount": 53785.36,
         "count": 525,
-        "recovered": 8999.25
+        "recovered": 9543.85
       },
       {
         "stage": "spoilage",
         "label": "Spoilage",
         "amount": 51846.48,
         "count": 552,
-        "recovered": 8107.06
+        "recovered": 7930.98
       },
       {
         "stage": "label_fine",
         "label": "Label Fine",
         "amount": 51616.84,
         "count": 536,
-        "recovered": 8671.88
+        "recovered": 7967.83
       },
       {
         "stage": "slotting",
         "label": "Slotting",
         "amount": 49996.87,
         "count": 515,
-        "recovered": 8103.75
+        "recovered": 0
       },
       {
         "stage": "pricing_error",
         "label": "Pricing Error",
         "amount": 49236.65,
         "count": 496,
-        "recovered": 6871.57
+        "recovered": 8117.95
       },
       {
         "stage": "promo_billback",
         "label": "Promo Billback",
         "amount": 48395.65,
         "count": 533,
-        "recovered": 7326.91
+        "recovered": 7063.88
       },
       {
         "stage": "pallet_fine",
         "label": "Pallet Fine",
         "amount": 47941.75,
         "count": 506,
-        "recovered": 7152.36
+        "recovered": 9155.66
       },
       {
         "stage": "short_ship",
         "label": "Short Ship",
         "amount": 25356.52,
         "count": 1275,
-        "recovered": 4405.06
+        "recovered": 4279.03
       },
       {
         "stage": "late_delivery",
         "label": "Late Delivery",
         "amount": 2714.67,
         "count": 77,
-        "recovered": 425.21
+        "recovered": 407.26
       },
       {
         "stage": "unclassified_shortfall",
         "label": "Unclassified Shortfall",
-        "amount": 1779735.84,
+        "amount": 1788732.63,
         "count": 0,
         "recovered": 0
       }

@@ -204,7 +204,7 @@ def export_lifecycle(cur):
             "label": row["deduction_type"].replace("_", " ").title(),
             "amount": round(row["amount"], 2),
             "count": row["count"],
-            "recovered": round(row["recovered"], 2),
+            "recovered": round(row["recovered"] or 0, 2),
         })
 
     cur.execute("""
