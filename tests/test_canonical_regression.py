@@ -72,15 +72,18 @@ class TestCinderhavenCanonicalRegression:
     # ------------------------------------------------------------------
 
     def test_cents_per_dollar_approximately_86(self, summary: dict) -> None:
-        """The canonical headline is 'Eighty-Six Cents' per dollar invoiced.
+        """Lifecycle yield on the canonical 36-month window.
 
-        The exact figure in summary.json is 86.5, so we allow a tight
-        tolerance of +/- 1 cent to catch any meaningful drift while
-        accommodating minor rounding changes.
+        CINDERHAVEN_CANONICAL.md documents 86.4 cents (85-87 band) from the
+        gross-invoiced -> net-collected waterfall. The live pipeline computes
+        combined net / invoiced from the payments mart, which runs ~1 cent
+        higher (87.3 on the current data) because the mart's net_amount is a
+        looser 'net' than the waterfall's net_collected. Band spans both
+        methodologies and still catches real drift (e.g. the old 82.8 CY2024 cut).
         """
         cpd = summary["combined"]["cents_per_dollar"]
-        assert 80.0 <= cpd <= 84.0, (
-            f"Expected ~82 cents per dollar, got {cpd}"
+        assert 85.0 <= cpd <= 88.0, (
+            f"Expected ~86-87 cents per dollar, got {cpd}"
         )
 
     def test_cents_per_dollar_matches_ratio(self, summary: dict) -> None:

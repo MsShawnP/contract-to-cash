@@ -19,9 +19,9 @@ from db import connect
 ROOT = Path(__file__).resolve().parent.parent
 OUT_DIR = ROOT / "frontend" / "public" / "json"
 
-PERIOD_START = "2024-01-01"
-PERIOD_END = "2024-12-31"
-PERIOD_LABEL = "Calendar Year 2024"
+PERIOD_START = "2023-01-01"
+PERIOD_END = "2026-01-02"
+PERIOD_LABEL = "36 Months (2023–2026)"
 
 ONES = ["", "One", "Two", "Three", "Four", "Five", "Six", "Seven", "Eight", "Nine",
         "Ten", "Eleven", "Twelve", "Thirteen", "Fourteen", "Fifteen", "Sixteen",
