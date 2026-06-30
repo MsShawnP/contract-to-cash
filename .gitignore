@@ -25,3 +25,6 @@ venv/
 
 # Project
 .claude-project-url
+
+# Security - secret leak prevention
+secrets.*
