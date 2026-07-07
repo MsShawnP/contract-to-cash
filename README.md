@@ -1,10 +1,10 @@
 # Contract to Cash
 
-Revenue lifecycle analysis for a mid-market CPG brand — tracing where money leaks between invoice and cash receipt. For every dollar Cinderhaven invoiced over the 36-month window, eighty-seven cents arrived as cash.
+Revenue lifecycle analysis for a mid-market CPG brand — tracing where money leaks between invoice and cash receipt.
 
 **Live:** https://cash.lailarallc.com
 
-## What this is
+## What it does
 
 A single-page narrative that answers the question a $25M CPG brand's CFO cannot: *On that deal we signed in Q1 — what did we actually net, and where did the money leak between systems?*
 
@@ -16,42 +16,15 @@ The piece traces $17.8M invoiced across 6 retail partners, 3 distributors (UNFI,
 
 Economist-style visual language: minimal gridlines, text labels on every data point, no decoration. Written in sober, declarative prose.
 
-## Architecture
+## Why it matters
 
-```
-Cinderhaven Data Platform (Postgres)
-    │
-    ├─ scripts/export_json.py ──→ frontend/public/json/ (3 static JSON files)
-    │
-    └─ scripts/validate_*.py ──→ 49 reconciliation + consistency checks
-                                    (17 cross-project, 32 exported JSON)
+For every dollar Cinderhaven invoiced over the 36-month window, eighty-seven cents arrived as cash. The missing thirteen cents is not one line item — it is spread across deduction categories, payment processors, refunds, and float, in systems that don't reconcile against each other. Making that leakage visible by channel and by retailer shows a finance team exactly where recovery effort pays off, and how much working capital is tied up in time-to-cash.
 
-frontend/ (React SPA)
-    ├─ Vite + TypeScript + Recharts
-    ├─ Self-hosted fonts (Playfair Display, Source Sans 3)
-    └─ Deployed to Cloudflare Workers
-```
+For a due-diligence reviewer, the project also demonstrates auditability: every figure in the published page traces to a specific SQL query, and 49 automated checks reconcile the exported data against the canonical platform numbers.
 
-All figures in the SPA trace to specific SQL queries in `scripts/export_json.py`. Two validation scripts verify data integrity:
+## Quick start
 
-- `validate_cross_project.py` — 17 checks against canonical Cinderhaven platform numbers
-- `validate_exported_json.py` — 32 checks on the CY2025-scoped JSON the SPA displays
-
-## Data pipeline
-
-The SPA consumes pre-aggregated static JSON. No runtime database connection.
-
-| Script | Purpose |
-|--------|---------|
-| `scripts/explore_lifecycle.py` | Exploration queries (discovery phase) |
-| `scripts/generate_dtc_payments.py` | Synthesize Shopify payment data for DTC orders |
-| `scripts/export_json.py` | Production export: Postgres → JSON (CY2025, retailers only) |
-| `scripts/validate_cross_project.py` | Reconciliation against other Cinderhaven projects |
-| `scripts/validate_exported_json.py` | Internal consistency of exported JSON |
-
-## Running locally
-
-**Frontend:**
+**Frontend** (no database required — consumes pre-exported static JSON):
 
 ```sh
 cd frontend
@@ -61,7 +34,7 @@ npm run dev
 
 Opens at `http://localhost:5173`.
 
-**Python scripts** (require Cinderhaven Postgres access):
+**Data pipeline** (requires Cinderhaven Postgres access):
 
 ```sh
 pip install -r scripts/requirements.txt
@@ -81,11 +54,38 @@ npm run deploy
 - **Frontend:** React 19, TypeScript 6, Vite 8, Recharts 2.15
 - **Deployment:** Cloudflare Workers (static assets, SPA routing)
 - **Data pipeline:** Python 3, psycopg2, Cinderhaven Data Platform (Postgres)
-- **Design system:** Lailara Design System (self-hosted fonts, teal palette, Economist chart rules)
+- **Design system:** Lailara Design System (self-hosted fonts — Playfair Display, Source Sans 3 — teal palette, Economist chart rules)
+
+## Project structure
+
+```
+Cinderhaven Data Platform (Postgres)
+    │
+    ├─ scripts/export_json.py ──→ frontend/public/json/ (3 static JSON files)
+    │
+    └─ scripts/validate_*.py ──→ 49 reconciliation + consistency checks
+                                    (17 cross-project, 32 exported JSON)
+
+frontend/ (React SPA, deployed to Cloudflare Workers)
+```
+
+| Script | Purpose |
+|--------|---------|
+| `scripts/explore_lifecycle.py` | Exploration queries (discovery phase) |
+| `scripts/generate_dtc_payments.py` | Synthesize Shopify payment data for DTC orders |
+| `scripts/export_json.py` | Production export: Postgres → JSON (CY2025, retailers only) |
+| `scripts/validate_cross_project.py` | Reconciliation against other Cinderhaven projects (17 checks) |
+| `scripts/validate_exported_json.py` | Internal consistency of exported JSON (32 checks) |
+
+The SPA consumes pre-aggregated static JSON — no runtime database connection.
 
 ## Part of the Cinderhaven portfolio
 
 This is the second buyer-facing project built on the Cinderhaven Data Platform. It tells the full revenue lifecycle story — differentiated from [Retailer Deduction Recovery](https://github.com/MsShawnP/retailer-deduction-recovery), which covers deduction recovery in depth.
+
+## License
+
+MIT — see [LICENSE](LICENSE).
 
 ---
 Built by [Lailara LLC](https://lailarallc.com) — data hygiene and analytics consulting for specialty food brands scaling into national retail.
