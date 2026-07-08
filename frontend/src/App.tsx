@@ -20,12 +20,32 @@ export function App() {
 
   const { summary, lifecycle, retailers } = data;
 
-  const stageCount = lifecycle.b2b.stages.length;
+  // Itemized deductions carry real records (count > 0). The gross-to-net
+  // residual (count === 0) is an unreconciled shortfall — largely un-itemized
+  // trade spend — NOT an itemized deduction, so it is reported separately and
+  // never counted as a "deduction category."
+  const itemizedStages = lifecycle.b2b.stages.filter((s) => (s.count ?? 0) > 0);
+  const residualStage = lifecycle.b2b.stages.find((s) => (s.count ?? 0) === 0);
+  const itemizedCount = itemizedStages.length;
+  const itemizedTotal = itemizedStages.reduce((sum, s) => sum + s.amount, 0);
+  const residualTotal = residualStage?.amount ?? 0;
+  const totalShortfall = lifecycle.b2b.gross - lifecycle.b2b.net;
+
   const retailerCount = retailers.leakage.length;
   const leakagePcts = retailers.leakage.map((r) => r.leakage_pct);
   const minLeakage = leakagePcts.length > 0 ? Math.min(...leakagePcts) : 0;
   const maxLeakage = leakagePcts.length > 0 ? Math.max(...leakagePcts) : 0;
   const leakageSpread = (maxLeakage - minLeakage).toFixed(1);
+
+  // Derive the leakage-vs-size relationship from the data instead of asserting
+  // it: in the shipped data the LARGEST partner (Walmart) has the HIGHEST rate.
+  const byGrossDesc = [...retailers.leakage].sort((a, b) => b.gross - a.gross);
+  const byLeakageDesc = [...retailers.leakage].sort((a, b) => b.leakage_pct - a.leakage_pct);
+  const largestRetailer = byGrossDesc[0];
+  const worstLeakageRetailer = byLeakageDesc[0];
+  const largestIsWorst =
+    !!largestRetailer && !!worstLeakageRetailer &&
+    largestRetailer.name === worstLeakageRetailer.name;
 
   const sortedByDays = [...retailers.time_to_cash].sort(
     (a, b) => a.avg_days - b.avg_days,
@@ -70,21 +90,25 @@ export function App() {
       <ErrorBoundary section="waterfall">
         <section className="section" id="waterfall">
           <h2 className="section-title">
-            {formatDollars(lifecycle.b2b.gross - lifecycle.b2b.net)} Deducted Across {stageCount} Categories Before Cash Arrives
+            {formatDollars(totalShortfall)} Separates Gross Payments from Cash — Only {formatDollars(itemizedTotal)} Is Itemized
           </h2>
           <p className="section-body">
             Of {formatDollars(lifecycle.b2b.gross)} in gross B2B payments acknowledged
-            by retailers, {formatDollars(lifecycle.b2b.gross - lifecycle.b2b.net)} was
-            deducted before cash arrived. {stageCount} categories of deductions — from
-            vague post-audit claims to short-ship penalties — each take their cut.
+            by retailers, only {formatDollars(lifecycle.b2b.net)} arrived as cash.
+            {" "}{formatDollars(itemizedTotal)} is itemized across {itemizedCount} deduction
+            categories — from post-audit claims to short-ship penalties. The remaining
+            {" "}{formatDollars(residualTotal)} is an unreconciled gross-to-net shortfall
+            (largely un-itemized trade spend), shown separately because it is not tied
+            to a deduction record.
           </p>
-          <div className="chart-container" role="img" aria-label={`Waterfall chart showing gross payments of ${formatDollars(lifecycle.b2b.gross)} declining through ${stageCount} deduction categories to net received of ${formatDollars(lifecycle.b2b.net)}`}>
+          <div className="chart-container" role="img" aria-label={`Waterfall chart showing gross payments of ${formatDollars(lifecycle.b2b.gross)} declining through ${itemizedCount} itemized deduction categories and an unreconciled residual to net received of ${formatDollars(lifecycle.b2b.net)}`}>
             <WaterfallChart lifecycle={lifecycle} />
           </div>
           <p className="footnote">
-            Source: fct_payments, fct_deductions. Gross = sum of remittance
-            gross_amount across {summary.b2b.remittance_count} remittances.
-            Net = gross minus linked deductions. {summary.meta.time_window}.
+            Source: fct_retailer_payments, fct_retailer_deductions. Gross = sum of
+            remittance gross_amount across {summary.b2b.remittance_count} remittances.
+            Net = gross minus itemized deductions and the unreconciled residual.
+            {" "}{summary.meta.time_window}.
           </p>
         </section>
       </ErrorBoundary>
@@ -97,8 +121,10 @@ export function App() {
           <p className="section-body">
             Leakage rates range from {minLeakage}% to {maxLeakage}% — a{" "}
             {leakageSpread} percentage-point spread across {retailerCount} direct
-            retail partners. The smallest retailers by dollar flow show the highest
-            deduction rates, while the largest are not necessarily the most aggressive.
+            retail partners.{" "}
+            {largestIsWorst
+              ? `The largest partner by dollar flow (${largestRetailer.name}) carries the highest leakage rate (${worstLeakageRetailer.leakage_pct}%) — scale brings more scrutiny, not less.`
+              : `${worstLeakageRetailer?.name ?? "The top partner"} carries the highest leakage rate (${worstLeakageRetailer?.leakage_pct ?? maxLeakage}%).`}
           </p>
           <div className="chart-container" role="img" aria-label={`Horizontal bar chart comparing leakage rates across ${retailerCount} retailers, ranging from ${minLeakage}% to ${maxLeakage}%`}>
             <RetailerChart retailers={retailers.leakage} />
@@ -126,20 +152,20 @@ export function App() {
             <TimeToCashChart timeToCash={retailers.time_to_cash} />
           </div>
           <p className="footnote">
-            Source: fct_orders.order_date to fct_payments.received_date, joined
-            via fct_deductions. Average days to cash across all linked
-            order-payment pairs. {summary.meta.time_window}.
+            Source: fct_retailer_orders.po_date to fct_retailer_payments.received_date,
+            one row per deduction-linked order, dollar-weighted by order value.
+            {" "}{summary.meta.time_window}.
           </p>
         </section>
       </ErrorBoundary>
 
       <footer className="footer">
         <p>
-          Source: Cinderhaven Data Platform. {summary.meta.time_window}.{" "}
-          {summary.b2b.deduction_count.toLocaleString()} deductions across{" "}
+          Source: Cinderhaven Data Platform (synthetic demonstration data).{" "}
+          {summary.meta.time_window}.{" "}
+          {summary.b2b.deduction_count.toLocaleString()} itemized deductions across{" "}
           {summary.meta.orders_b2b.toLocaleString()} B2B orders and{" "}
-          {summary.meta.orders_dtc.toLocaleString()} DTC orders. All figures
-          reconcile with published project data.
+          {summary.meta.orders_dtc.toLocaleString()} DTC orders.
         </p>
       </footer>
     </main>

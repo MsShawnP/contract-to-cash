@@ -24,7 +24,8 @@ interface WaterfallBar {
 }
 
 const NAVY = "#1f2e7a";
-const RED = "#d64045";
+const DEDUCTION = "#8e9ad0"; // Chicago-40 blue tint — deductions are ink-light, never a red fill
+const RESIDUAL = "#c9c6bf";  // muted grey — unreconciled gross-to-net residual, not an itemized deduction
 
 function buildWaterfallData(lifecycle: Lifecycle): WaterfallBar[] {
   const { b2b } = lifecycle;
@@ -40,12 +41,13 @@ function buildWaterfallData(lifecycle: Lifecycle): WaterfallBar[] {
 
   let running = b2b.gross;
   b2b.stages.forEach((stage) => {
+    const isResidual = (stage.count ?? 0) === 0;
     running -= stage.amount;
     bars.push({
-      name: stage.label,
+      name: isResidual ? "Unreconciled" : stage.label,
       base: running,
       value: stage.amount,
-      fill: RED,
+      fill: isResidual ? RESIDUAL : DEDUCTION,
       isTotal: false,
     });
   });
