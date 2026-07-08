@@ -123,7 +123,10 @@ def main() -> None:
         all(s["amount"] > 0 for s in b2b_lc["stages"]),
     )
 
-    categorized = [s for s in b2b_lc["stages"] if s["stage"] != "unclassified_shortfall"]
+    # Itemized deductions carry real records (count > 0); the gross-to-net
+    # residual (count == 0) is not an itemized deduction and is excluded here —
+    # the same count-based split the SPA uses. Robust to the residual's label.
+    categorized = [s for s in b2b_lc["stages"] if s.get("count", 0) != 0]
     check_true(
         "Categorized stages are sorted by amount descending",
         all(

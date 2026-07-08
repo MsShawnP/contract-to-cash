@@ -153,7 +153,8 @@ export function App() {
           </div>
           <p className="footnote">
             Source: fct_retailer_orders.po_date to fct_retailer_payments.received_date,
-            one row per deduction-linked order, dollar-weighted by order value.
+            averaged across deduction-linked order-payment rows (the only
+            order-to-payment link in the current schema).
             {" "}{summary.meta.time_window}.
           </p>
         </section>

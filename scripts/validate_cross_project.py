@@ -4,18 +4,27 @@ Verifies that C2C's view of the data matches all other Cinderhaven
 projects' published canonical figures. Exits 0 on success, 1 on any
 mismatch.
 
-Canonical values from:
-  - retailer-deduction-recovery summary.json
-  - short-ship-cost data
-  - trade-spend-data-diagnostic
+Single source of truth: CINDERHAVEN_CANONICAL.md (cinderhaven-data-platform).
+Per the project CLAUDE.md, all figures must match that file; where the two
+disagree, the canonical wins.
 
-STALE CANONICAL — RECONCILE BEFORE RELYING ON THIS (2026-07 audit):
-The hardcoded expectations below (3,087 deductions, 5,838 B2B orders,
-10 retailers, $31,409,072.52 invoiced) are from an EARLIER data window and
-contradict the current shipped export (46,760 orders, 7 retailers). Requires
-the live Cinderhaven DB to run. Re-run export_json.py and this validator
-against the current window and update these canonical figures so there is a
-single source of truth before re-asserting any "figures reconcile" claim.
+RECONCILED (2026-07 audit) — deduction figures below now match the current
+canonical (retailer portion: 14,947 rows / $1,118,681.92, the 36-month
+2023–2026 reseed). The prior hardcoded 3,087 / $1,537,390.70 were from the
+pre-reseed CY2024 window and are what produced the false "all figures
+reconcile" on-page claim (the count difference is a dataset/window change,
+NOT a JOIN fan-out: a fan-out would inflate the row count AND the dollar
+total, but the canonical total is LOWER, not higher).
+
+STILL PENDING LIVE-DB RE-DERIVATION (do not re-assert "figures reconcile"
+until these pass against the live DB):
+  - B2B order count / invoiced total (5,838 / $31,409,072.52 are CY2024)
+  - DTC order count (10,000), shipment count (5,838)
+  - Retailer / channel counts (9 B2B + DTC = 10 vs the 6 retailer channels
+    the C2C tool scopes to)
+  - Disputes filed (1,410) and dispute recovery ($98,215.54)
+This script requires the live Cinderhaven DB; it cannot run in the audit
+sandbox.
 
 Usage:
     DATABASE_URL=postgresql://... python scripts/validate_cross_project.py
@@ -63,8 +72,11 @@ def main():
 
     cur.execute("SELECT COUNT(*) AS n, SUM(deduction_amount) AS total FROM fct_retailer_deductions")
     ded = cur.fetchone()
-    check("Deduction count", 3087, ded["n"], tolerance=0)
-    check("Deduction total ($)", 1537390.70, ded["total"], tolerance=0.001)
+    # Canonical (CINDERHAVEN_CANONICAL.md): retailer fct_retailer_deductions =
+    # 14,947 rows / $1,118,681.92 (36-month 2023–2026 reseed). Matches the
+    # shipped summary.json total_deductions to the penny.
+    check("Deduction count", 14947, ded["n"], tolerance=0)
+    check("Deduction total ($)", 1118681.92, ded["total"], tolerance=0.001)
 
     # Deduction type count.
     cur.execute("SELECT COUNT(DISTINCT deduction_type) AS n FROM fct_retailer_deductions")

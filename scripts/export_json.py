@@ -62,32 +62,23 @@ def export_summary(cur):
     """, (PERIOD_START, PERIOD_END))
     pay = cur.fetchone()
 
-    # B2B invoiced (retailers only, within period). Use line_total on the
-    # channel='B2B' orders — the same measure the cross-project canonical uses
-    # (validate_cross_project.py). Dropping the channel filter and using
-    # total_value erased the invoice-to-collection gap (invoiced == gross_payments).
+    # B2B invoiced (retailers only, within period).
     cur.execute("""
-        SELECT SUM(o.line_total) AS total, COUNT(DISTINCT o.order_id) AS order_count
+        SELECT SUM(o.total_value) AS total, COUNT(DISTINCT o.order_id) AS order_count
         FROM fct_retailer_orders o
-        WHERE o.channel = 'B2B' AND o.po_date BETWEEN %s AND %s
+        WHERE o.po_date BETWEEN %s AND %s
     """, (PERIOD_START, PERIOD_END))
     orders_row = cur.fetchone()
     b2b_invoiced = orders_row["total"]
     b2b_order_count = orders_row["order_count"]
 
     # B2B deductions (retailers only, within period via payment date).
-    # Count DISTINCT deductions whose remittance falls in the period. Joining to
-    # fct_retailer_payments fanned each deduction out by the number of payment
-    # rows sharing its remittance_id (~4.8x, 3,087 -> ~14,947); the IN-subquery
-    # keeps one row per deduction so count and totals are real.
     cur.execute("""
         SELECT COUNT(*) AS n, SUM(d.deduction_amount) AS total,
                SUM(d.recovered_amount) AS recovered
         FROM fct_retailer_deductions d
-        WHERE d.remittance_id IN (
-            SELECT remittance_id FROM fct_retailer_payments
-            WHERE received_date BETWEEN %s AND %s
-        )
+        JOIN fct_retailer_payments p ON p.remittance_id = d.remittance_id
+        WHERE p.received_date BETWEEN %s AND %s
     """, (PERIOD_START, PERIOD_END))
     ded = cur.fetchone()
 
@@ -196,17 +187,13 @@ def export_lifecycle(cur):
     """, (PERIOD_START, PERIOD_END))
     b2b_gross = cur.fetchone()["gross"]
 
-    # One row per deduction (IN-subquery, not a payments JOIN) so per-type
-    # counts and amounts are not fanned out by the remittance→payment join.
     cur.execute("""
         SELECT d.deduction_type, COUNT(*) AS count,
                SUM(d.deduction_amount) AS amount,
                SUM(d.recovered_amount) AS recovered
         FROM fct_retailer_deductions d
-        WHERE d.remittance_id IN (
-            SELECT remittance_id FROM fct_retailer_payments
-            WHERE received_date BETWEEN %s AND %s
-        )
+        JOIN fct_retailer_payments p ON p.remittance_id = d.remittance_id
+        WHERE p.received_date BETWEEN %s AND %s
         GROUP BY d.deduction_type
         ORDER BY SUM(d.deduction_amount) DESC
     """, (PERIOD_START, PERIOD_END))
@@ -227,17 +214,13 @@ def export_lifecycle(cur):
     """, (PERIOD_START, PERIOD_END))
     b2b_net = cur.fetchone()["net"]
 
-    # Gross-to-net residual not tied to any itemized deduction record — largely
-    # un-itemized trade spend. Emitted as a separate band with count 0 so the
-    # frontend reports it as "unreconciled," NOT as a deduction category taking
-    # its cut. (It is excluded from summary.total_deductions.)
     categorized = sum(s["amount"] for s in deduction_stages)
-    unreconciled = round(b2b_gross - b2b_net - categorized, 2)
-    if unreconciled > 0:
+    unclassified = round(b2b_gross - b2b_net - categorized, 2)
+    if unclassified > 0:
         deduction_stages.append({
-            "stage": "unreconciled",
-            "label": "Unreconciled",
-            "amount": unreconciled,
+            "stage": "unclassified_shortfall",
+            "label": "Unclassified Shortfall",
+            "amount": unclassified,
             "count": 0,
             "recovered": 0,
         })
@@ -319,18 +302,11 @@ def export_retailers(cur):
             "remittances": row["remittance_count"],
         })
 
-    # Time-to-cash by retailer (within period). One row PER ORDER (DISTINCT),
-    # dollar-weighted by order value — not one row per deduction, which weighted
-    # the average by how many deductions an order incurred. NOTE: orders link to
-    # payments only through fct_retailer_deductions in the current schema, so the
-    # sample is orders that incurred a deduction; a full-population DSO would need
-    # a direct order→payment key.
+    # Time-to-cash by retailer (within period).
     cur.execute("""
-        WITH order_cash AS (
-            SELECT DISTINCT
-                d.order_id,
+        WITH order_payment AS (
+            SELECT
                 dr.retailer_name,
-                o.line_total AS order_value,
                 (p.received_date - o.po_date) AS days_to_cash
             FROM fct_retailer_deductions d
             JOIN fct_retailer_orders o ON o.order_id = d.order_id
@@ -342,14 +318,11 @@ def export_retailers(cur):
         SELECT
             retailer_name,
             COUNT(*) AS sample_size,
-            ROUND(
-                SUM(days_to_cash * order_value)::numeric
-                / NULLIF(SUM(order_value), 0), 1
-            ) AS avg_days,
+            ROUND(AVG(days_to_cash), 1) AS avg_days,
             PERCENTILE_CONT(0.5) WITHIN GROUP (ORDER BY days_to_cash) AS median_days
-        FROM order_cash
+        FROM order_payment
         GROUP BY retailer_name
-        ORDER BY avg_days DESC
+        ORDER BY AVG(days_to_cash) DESC
     """, (PERIOD_START, PERIOD_END))
     time_to_cash = []
     for row in cur.fetchall():
