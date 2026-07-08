@@ -9,6 +9,14 @@ Canonical values from:
   - short-ship-cost data
   - trade-spend-data-diagnostic
 
+STALE CANONICAL — RECONCILE BEFORE RELYING ON THIS (2026-07 audit):
+The hardcoded expectations below (3,087 deductions, 5,838 B2B orders,
+10 retailers, $31,409,072.52 invoiced) are from an EARLIER data window and
+contradict the current shipped export (46,760 orders, 7 retailers). Requires
+the live Cinderhaven DB to run. Re-run export_json.py and this validator
+against the current window and update these canonical figures so there is a
+single source of truth before re-asserting any "figures reconcile" claim.
+
 Usage:
     DATABASE_URL=postgresql://... python scripts/validate_cross_project.py
 """
