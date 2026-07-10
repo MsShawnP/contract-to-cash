@@ -54,6 +54,8 @@ export function App() {
   const slowest = sortedByDays[sortedByDays.length - 1] ?? { name: "N/A", avg_days: 0 };
   const daySpread = Math.round(slowest.avg_days - fastest.avg_days);
 
+  const ttc = retailers.time_to_cash_meta;
+
   return (
     <main className="page">
       <header className="hero">
@@ -153,8 +155,12 @@ export function App() {
           </div>
           <p className="footnote">
             Source: fct_retailer_orders.po_date to fct_retailer_payments.received_date,
-            averaged across deduction-linked order-payment rows (the only
-            order-to-payment link in the current schema).
+            measured once per order (first payment) from the purchase-order date.
+            Time to cash for the {ttc.covered_orders.toLocaleString()} orders with a
+            recorded payment ({ttc.coverage_pct}% of all{" "}
+            {ttc.total_orders.toLocaleString()} orders); the rest have no linked
+            payment in this dataset. Payments carry no order_id, so a deduction is
+            the only order-to-payment link.
             {" "}{summary.meta.time_window}.
           </p>
         </section>

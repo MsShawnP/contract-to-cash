@@ -54,39 +54,44 @@
       "name": "Kroger",
       "avg_days": 28.3,
       "median_days": 28.0,
-      "sample_size": 3083
+      "sample_size": 2558
     },
     {
       "name": "Walmart",
-      "avg_days": 27.5,
+      "avg_days": 27.6,
       "median_days": 28.0,
-      "sample_size": 3487
+      "sample_size": 2858
     },
     {
       "name": "Whole Foods",
-      "avg_days": 25.7,
+      "avg_days": 25.6,
       "median_days": 26.0,
-      "sample_size": 2484
+      "sample_size": 2047
     },
     {
       "name": "Regional Group",
-      "avg_days": 25.5,
+      "avg_days": 25.4,
       "median_days": 26.0,
-      "sample_size": 1569
+      "sample_size": 1302
     },
     {
       "name": "Sprouts",
       "avg_days": 25.4,
       "median_days": 25.0,
-      "sample_size": 2299
+      "sample_size": 1877
     },
     {
       "name": "Costco",
-      "avg_days": 24.2,
+      "avg_days": 23.9,
       "median_days": 24.0,
-      "sample_size": 2025
+      "sample_size": 1669
     }
   ],
+  "time_to_cash_meta": {
+    "covered_orders": 12311,
+    "total_orders": 46760,
+    "coverage_pct": 26.3
+  },
   "deduction_mix": {
     "Costco": [
       {

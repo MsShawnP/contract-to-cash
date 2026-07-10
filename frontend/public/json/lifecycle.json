@@ -67,8 +67,8 @@
         "recovered": 1397.47
       },
       {
-        "stage": "unclassified_shortfall",
-        "label": "Unclassified Shortfall",
+        "stage": "unreconciled",
+        "label": "Unreconciled / trade spend not itemized",
         "amount": 5542541.43,
         "count": 0,
         "recovered": 0

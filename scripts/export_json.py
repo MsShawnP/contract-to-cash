@@ -217,9 +217,13 @@ def export_lifecycle(cur):
     categorized = sum(s["amount"] for s in deduction_stages)
     unclassified = round(b2b_gross - b2b_net - categorized, 2)
     if unclassified > 0:
+        # The gross-to-net residual is NOT an itemized deduction: it carries no
+        # deduction record (count == 0), so it is reported separately and never
+        # counted as trade "deductions." It keeps the waterfall footing to
+        # gross - net without mislabeling un-itemized trade spend as a deduction.
         deduction_stages.append({
-            "stage": "unclassified_shortfall",
-            "label": "Unclassified Shortfall",
+            "stage": "unreconciled",
+            "label": "Unreconciled / trade spend not itemized",
             "amount": unclassified,
             "count": 0,
             "recovered": 0,
@@ -302,18 +306,25 @@ def export_retailers(cur):
             "remittances": row["remittance_count"],
         })
 
-    # Time-to-cash by retailer (within period).
+    # Time-to-cash by retailer — ONE ROW PER ORDER (deduped), not one row per
+    # deduction, so the average is not weighted by how many deductions an order
+    # drew. Anchored on po_date, which every retailer records (810 invoice dates
+    # are Walmart-only, so invoice date is not usable across retailers). Payments
+    # carry no order_id, so a deduction is the only bridge from an order to a
+    # payment — this can therefore only be measured for orders that have a
+    # recorded, deduction-linked payment. days_to_cash = po_date to first payment.
     cur.execute("""
         WITH order_payment AS (
             SELECT
                 dr.retailer_name,
-                (p.received_date - o.po_date) AS days_to_cash
+                o.order_id,
+                MIN(p.received_date - o.po_date) AS days_to_cash
             FROM fct_retailer_deductions d
             JOIN fct_retailer_orders o ON o.order_id = d.order_id
             JOIN fct_retailer_payments p ON p.remittance_id = d.remittance_id
             JOIN dim_retailers dr ON dr.retailer_id = d.retailer_id
-            WHERE p.received_date BETWEEN %s AND %s
-              AND o.po_date IS NOT NULL
+            WHERE o.po_date BETWEEN %s AND %s
+            GROUP BY dr.retailer_name, o.order_id
         )
         SELECT
             retailer_name,
@@ -332,6 +343,17 @@ def export_retailers(cur):
             "median_days": float(row["median_days"]),
             "sample_size": row["sample_size"],
         })
+
+    # Coverage: time-to-cash can only be measured for orders that have a linked
+    # payment. Disclose that share honestly instead of implying full coverage.
+    covered_orders = sum(r["sample_size"] for r in time_to_cash)
+    cur.execute("""
+        SELECT COUNT(DISTINCT order_id) AS n
+        FROM fct_retailer_orders
+        WHERE po_date BETWEEN %s AND %s
+    """, (PERIOD_START, PERIOD_END))
+    total_orders = cur.fetchone()["n"]
+    coverage_pct = round(covered_orders / total_orders * 100, 1) if total_orders else 0
 
     # Top deduction types per retailer (within period).
     cur.execute("""
@@ -362,6 +384,11 @@ def export_retailers(cur):
     retailers = {
         "leakage": retailer_leakage,
         "time_to_cash": time_to_cash,
+        "time_to_cash_meta": {
+            "covered_orders": covered_orders,
+            "total_orders": total_orders,
+            "coverage_pct": coverage_pct,
+        },
         "deduction_mix": deduction_mix,
     }
 

@@ -72,7 +72,14 @@ export interface RetailerTimeToCash {
   sample_size: number;
 }
 
+export interface RetailerTimeToCashMeta {
+  covered_orders: number;
+  total_orders: number;
+  coverage_pct: number;
+}
+
 export interface Retailers {
   leakage: RetailerLeakage[];
   time_to_cash: RetailerTimeToCash[];
+  time_to_cash_meta: RetailerTimeToCashMeta;
 }
