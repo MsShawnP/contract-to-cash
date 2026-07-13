@@ -8,11 +8,11 @@ Revenue lifecycle analysis for a mid-market CPG brand — tracing where money le
 
 A single-page narrative that answers the question a $25M CPG brand's CFO cannot: *On that deal we signed in Q1 — what did we actually net, and where did the money leak between systems?*
 
-The piece traces $17.8M invoiced across 6 retail partners, 3 distributors (UNFI, KeHE, DPI Northwest), and a DTC channel — 10 channels total — through deductions, processing fees, refunds, and timing delays. Three charts tell the story:
+The piece traces $52.7M invoiced across 6 retail partners and a DTC channel — 7 channels total — through deductions, processing fees, refunds, and timing delays over a 36-month window. Three charts tell the story:
 
 1. **Waterfall** — gross B2B payments descending through 10 deduction categories to net received
-2. **Retailer comparison** — leakage rates from 11.8% to 12.9% across 6 direct retail partners
-3. **Time-to-cash** — average days from order to payment, ranging 22–29 days by retailer
+2. **Retailer comparison** — leakage rates from 10.0% to 15.7% across 6 direct retail partners
+3. **Time-to-cash** — average days from order to payment, ranging 23.9–28.3 days by retailer
 
 Economist-style visual language: minimal gridlines, text labels on every data point, no decoration. Written in sober, declarative prose.
 
@@ -73,7 +73,7 @@ frontend/ (React SPA, deployed to Cloudflare Workers)
 |--------|---------|
 | `scripts/explore_lifecycle.py` | Exploration queries (discovery phase) |
 | `scripts/generate_dtc_payments.py` | Synthesize Shopify payment data for DTC orders |
-| `scripts/export_json.py` | Production export: Postgres → JSON (CY2025, retailers only) |
+| `scripts/export_json.py` | Production export: Postgres → JSON (36-month window, B2B + DTC) |
 | `scripts/validate_cross_project.py` | Reconciliation against other Cinderhaven projects (17 checks) |
 | `scripts/validate_exported_json.py` | Internal consistency of exported JSON (32 checks) |
 

@@ -270,7 +270,7 @@ body {
 
 @media print {
   body {
-    background: var(--canvas, #f5f3ee);
+    background: #ffffff;
     font-size: 10pt;
   }
 
