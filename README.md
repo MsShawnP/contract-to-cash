@@ -6,7 +6,7 @@ Revenue lifecycle analysis for a mid-market CPG brand — tracing where money le
 
 ## What it does
 
-A single-page narrative that answers the question a $25M CPG brand's CFO cannot: *On that deal we signed in Q1 — what did we actually net, and where did the money leak between systems?*
+A single-page narrative that answers the question the CFO of a specialty food brand invoicing $52.7M over three years cannot: *On that deal we signed in Q1 — what did we actually net, and where did the money leak between systems?*
 
 The piece traces $52.7M invoiced across 6 retail partners and a DTC channel — 7 channels total — through deductions, processing fees, refunds, and timing delays over a 36-month window. Three charts tell the story:
 

@@ -8,6 +8,8 @@ import react from "@vitejs/plugin-react";
  * so the OG/Twitter cards never drift from the shipped data. Tokens:
  *   __CENTS_PER_DOLLAR__  -> summary.combined.cents_per_dollar
  *   __TOTAL_LEAKAGE__     -> summary.combined.total_leakage, formatted $X.XM / $XK
+ *   __TOTAL_INVOICED__    -> summary.combined.total_invoiced, same formatting
+ *   __TIME_WINDOW__       -> summary.meta.time_window (e.g. "36 Months (2023–2026)")
  * Runs in both dev (serve) and build.
  */
 function metaFromSummary(): Plugin {
@@ -24,9 +26,13 @@ function metaFromSummary(): Plugin {
       const summary = JSON.parse(readFileSync(summaryUrl, "utf-8"));
       const cents = summary.combined.cents_per_dollar;
       const leakage = formatDollars(summary.combined.total_leakage);
+      const invoiced = formatDollars(summary.combined.total_invoiced);
+      const window = String(summary.meta.time_window);
       return html
         .replaceAll("__CENTS_PER_DOLLAR__", String(cents))
-        .replaceAll("__TOTAL_LEAKAGE__", leakage);
+        .replaceAll("__TOTAL_LEAKAGE__", leakage)
+        .replaceAll("__TOTAL_INVOICED__", invoiced)
+        .replaceAll("__TIME_WINDOW__", window);
     },
   };
 }

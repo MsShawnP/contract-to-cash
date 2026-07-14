@@ -7,7 +7,7 @@ session. For session-by-session state, see HANDOFF.md.
 
 ## Goal
 
-Build a portfolio piece that tells the complete money-leak story for a $25M CPG brand — tracing where revenue evaporates between contract and cash receipt. React SPA (Vite, Cloudflare Pages), static JSON data from the Cinderhaven Data Platform. Audience is CEO/CFO. The specific visual approach and narrative structure emerge from data exploration, not prescribed upfront.
+Build a portfolio piece that tells the complete money-leak story for a mid-market specialty food brand ($52.7M invoiced over the 36-month window the tool ships) — tracing where revenue evaporates between contract and cash receipt. React SPA (Vite, Cloudflare Pages), static JSON data from the Cinderhaven Data Platform. Audience is CEO/CFO. The specific visual approach and narrative structure emerge from data exploration, not prescribed upfront.
 
 ## Why this arc, why now
 
@@ -19,7 +19,7 @@ On that deal we signed in Q1 — what did we actually net, and where did the mon
 
 ## Constraints
 
-- All Cinderhaven numbers must reconcile: $25M revenue, 90 SKUs, 11 retailers, 3,087 deductions, 5,838 shipments
+- All Cinderhaven numbers must reconcile with CINDERHAVEN_CANONICAL.md. Shipped 36-month (2023–2026) window: $52.7M invoiced ($52.1M B2B + $0.6M DTC), 50 SKUs, 6 B2B retailers + DTC in this tool's scope, 14,947 retailer deductions. (The $25M / 90 SKUs / 11 retailers / 3,087 deductions figures here were pre-reseed canon.)
 - No Streamlit
 - Business story first, claims backed by rigorous analysis
 - New synthetic data is acceptable if needed, but must be additive and consistent with existing projects
