@@ -9,6 +9,24 @@ For things that didn't work, see FAILURES.md.
 
 ---
 
+## 2026-07-24 — /wrap: fix all chart colors to Lailara Design System palette
+
+**Started from:** All arc items complete (v1.0, May 22). Charts using off-palette teal gradients and kelly green.
+
+**Did:**
+- Replaced teal gradient with solid Chicago-20 navy (#1f2e7a) on retailer and time-to-cash bar charts
+- Replaced teal gradient on waterfall with role-based colors: navy gross, red (#d64045) deductions, navy net
+- Removed off-palette kelly green (#2D8E47) from Net Received bar — replaced with navy
+- Fixed headline rounding: "Eighty-Two" → "Eighty-Three" (82.9 rounds to 83)
+- Updated stale og:meta tags from 86.5¢ to 82.9¢
+- All changes deployed and pushed (5 commits)
+
+**State:** All charts on-palette. Build clean. Deployed. TEAL_SCALE and pickTealColor in chartConstants.ts are now dead code (flagged for cleanup).
+
+**Next:** Remove dead TEAL_SCALE/pickTealColor code. Project overdue for /improve (due 2026-06-22). Consider running /improve next session.
+
+---
+
 ## 2026-05-22 16:20 — /wrap: code review, tests, /improve, all arc items complete
 
 **Started from:** All 8 units complete, brand kit applied. Site deployed but not code-reviewed, no tests, project health items pending.
