@@ -12,16 +12,16 @@
     "remittance_count": 222
   },
   "dtc": {
-    "gross": 565099.27,
+    "gross": 563837.43,
     "processing_fees": 16951.33,
     "refunds": 21966.79,
     "chargebacks_lost": 1162.49,
-    "net_received": 525018.66,
+    "net_received": 523756.82,
     "leakage_pct": 7.1
   },
   "combined": {
-    "total_invoiced": 52693876.63,
-    "total_net": 45992572.67,
+    "total_invoiced": 52692614.79,
+    "total_net": 45991310.83,
     "total_leakage": 6701303.96,
     "cents_per_dollar": 87.3
   },
