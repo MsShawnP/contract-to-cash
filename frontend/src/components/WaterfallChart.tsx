@@ -25,7 +25,7 @@ interface WaterfallBar {
 
 const NAVY = "#1f2e7a";
 const DEDUCTION = "#8e9ad0"; // Chicago-40 blue tint — deductions are ink-light, never a red fill
-const RESIDUAL = "#c9c6bf";  // muted grey — unreconciled gross-to-net residual, not an itemized deduction
+const RESIDUAL = "#b3b3b3";  // London-70 — unreconciled gross-to-net residual, not an itemized deduction
 
 function buildWaterfallData(lifecycle: Lifecycle): WaterfallBar[] {
   const { b2b } = lifecycle;
