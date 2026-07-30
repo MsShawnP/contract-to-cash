@@ -66,10 +66,10 @@ export function App() {
         <h1 className="headline">{summary.headline}</h1>
         <p className="subhead">
           Of {formatDollars(summary.combined.total_invoiced)} invoiced across{" "}
-          {summary.meta.retailers_total} channels over {summary.meta.time_window},
-          only {formatDollars(summary.combined.total_net)} arrived as cash. The rest
-          evaporated in retailer deductions, processing fees, refunds, and
-          uncollected receivables.
+          {summary.meta.retailers_b2b} retail partners and a DTC channel over{" "}
+          {summary.meta.time_window}, only {formatDollars(summary.combined.total_net)}{" "}
+          arrived as cash. The rest evaporated in trade allowances, operational
+          deductions, chargebacks, and a payment-timing residual.
         </p>
         <div className="stat-row">
           <div className="stat-card">
