@@ -21,7 +21,7 @@ OUT_DIR = ROOT / "frontend" / "public" / "json"
 
 PERIOD_START = "2023-01-01"
 PERIOD_END = "2026-01-02"
-PERIOD_LABEL = "36 Months (2023–2026)"
+PERIOD_LABEL = "Full corpus, Jan 2023 – Jan 2026"
 
 ONES = ["", "One", "Two", "Three", "Four", "Five", "Six", "Seven", "Eight", "Nine",
         "Ten", "Eleven", "Twelve", "Thirteen", "Fourteen", "Fifteen", "Sixteen",
