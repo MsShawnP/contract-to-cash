@@ -27,7 +27,6 @@ export interface Summary {
   };
   meta: {
     retailers_b2b: number;
-    retailers_total: number;
     orders_b2b: number;
     orders_dtc: number;
     skus: number;

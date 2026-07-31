@@ -162,8 +162,9 @@ def export_summary(cur):
             "cents_per_dollar": cents,
         },
         "meta": {
+            # No flattened counterparty count: canonical phrasing is
+            # "6 retail partners + DTC", never a combined "7" (DTC is not a retailer).
             "retailers_b2b": retailer_count,
-            "retailers_total": retailer_count + 1,
             "orders_b2b": b2b_order_count,
             "orders_dtc": dtc_order_count,
             "skus": 50,  # Cinderhaven product catalog size (canonical: seed_config.py)

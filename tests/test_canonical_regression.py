@@ -62,9 +62,15 @@ class TestCinderhavenCanonicalRegression:
             f"Expected 6 B2B retailers, got {summary['meta']['retailers_b2b']}"
         )
 
-    def test_retailers_total_equals_7(self, summary: dict) -> None:
-        assert summary["meta"]["retailers_total"] == 7, (
-            f"Expected 7 total retailers, got {summary['meta']['retailers_total']}"
+    def test_no_flattened_retailer_count(self, summary: dict) -> None:
+        """Canonical: "6 retail partners + DTC", never a flattened "7".
+
+        DTC is not a retailer, so the export must not ship a combined
+        retailers_total that counts it as one (drift item the canonical
+        names explicitly; superseded 2026-07)."""
+        assert "retailers_total" not in summary["meta"], (
+            "meta.retailers_total flattens 6 retailers + DTC into one count; "
+            "the canonical phrasing is '6 retail partners + DTC'"
         )
 
     # ------------------------------------------------------------------
