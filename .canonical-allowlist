@@ -1,0 +1,5 @@
+# Legitimate historical uses of otherwise-retired tokens.
+#   path/glob   -> skip file    |    TOKEN @ path/glob -> skip token in file
+# docs/plans/* are historical planning artifacts written against older figures
+# (they document the scope decision, not current claims).
+docs/plans/*

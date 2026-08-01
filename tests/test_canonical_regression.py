@@ -20,6 +20,14 @@ JSON_DIR = ROOT / "frontend" / "public" / "json"
 
 EXPECTED_JSON_FILES = ("summary.json", "lifecycle.json", "retailers.json")
 
+# Canonical counts come from the vendored canon (refreshed from the platform by
+# scripts/refresh_canonical.py), not hardcoded here.
+CANON = json.loads(
+    (ROOT / "reference" / "canonical_values.json").read_text(encoding="utf-8")
+)
+CANON_SKUS = CANON["universe"]["skus_total"]["all_time"]
+CANON_RETAILERS = CANON["universe"]["retailers"]["all_time"]
+
 
 class TestCinderhavenCanonicalRegression:
     """Assert baked JSON matches locked canonical figures."""
@@ -53,13 +61,14 @@ class TestCinderhavenCanonicalRegression:
         return json.loads((JSON_DIR / "lifecycle.json").read_text(encoding="utf-8"))
 
     def test_skus_equals_50(self, summary: dict) -> None:
-        assert summary["meta"]["skus"] == 50, (
-            f"Expected 50 SKUs, got {summary['meta']['skus']}"
+        assert summary["meta"]["skus"] == CANON_SKUS, (
+            f"Expected {CANON_SKUS} SKUs (canon), got {summary['meta']['skus']}"
         )
 
     def test_retailers_b2b_equals_6(self, summary: dict) -> None:
-        assert summary["meta"]["retailers_b2b"] == 6, (
-            f"Expected 6 B2B retailers, got {summary['meta']['retailers_b2b']}"
+        assert summary["meta"]["retailers_b2b"] == CANON_RETAILERS, (
+            f"Expected {CANON_RETAILERS} B2B retailers (canon), got "
+            f"{summary['meta']['retailers_b2b']}"
         )
 
     def test_no_flattened_retailer_count(self, summary: dict) -> None:
