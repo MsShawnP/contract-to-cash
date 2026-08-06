@@ -76,6 +76,34 @@ def test_deliverable_prints_basis_window_draft(tmp_path):
     assert "Basis" in html   # provenance footer extra
 
 
+def test_window_label_tracks_invoice_span_not_a_hardcode(tmp_path):
+    """The rendered Window label must be the ACTUAL invoice-date span and must
+    move with the data. A numbers-only suite (as this one was) would pass a
+    hardcoded span that happened to match the demo — the failure mode that let
+    the trade-spend adapter quote 26 weeks of data as 'trailing 52 weeks'.
+
+    Both halves: assert the label tracks each distinct span, AND assert the
+    other span (a stand-in for a plausible hardcoded window) is absent."""
+    res_a = client_mode.run(str(_cfg(tmp_path)), str(_write(tmp_path)), str(tmp_path / "out_a"))
+    html_a = Path(res_a["report"]).read_text(encoding="utf-8")
+    assert "Window: invoices Jan 05, 2023 – Feb 10, 2023" in html_a
+    assert "Aug 20, 2024" not in html_a
+
+    ledger_b = ("invoice_id,retailer,invoice_date,invoice_amount,amount_received,payment_date\n"
+                "INV9,Walmart,2024-08-20,1000,900,2024-09-15\n")
+    res_b = client_mode.run(str(_cfg(tmp_path)),
+                            str(_write(tmp_path, text=ledger_b, name="inv_b.csv")),
+                            str(tmp_path / "out_b"))
+    html_b = Path(res_b["report"]).read_text(encoding="utf-8")
+    assert "Window: invoices Aug 20, 2024 – Aug 20, 2024" in html_b
+    assert "Jan 05, 2023" not in html_b          # not fixed to span A
+
+    for html in (html_a, html_b):
+        low = html.lower()
+        assert "trailing 52" not in low and "52-week" not in low and "52 week" not in low
+        assert "365d" not in low and "trailing 365" not in low
+
+
 def test_missing_amount_received_blocks(tmp_path):
     text = LEDGER.replace(",amount_received", ",x_received").replace(
         ",900,", ",").replace(",850,", ",").replace(",500,", ",").replace(",450,", ",")
