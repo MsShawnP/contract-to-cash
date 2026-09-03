@@ -25,11 +25,8 @@ def connect(search_path: str = "public_marts, public_staging, raw, public"):
     """Return a psycopg2 connection with RealDictCursor and search_path set."""
     url = os.environ.get("DATABASE_URL")
     if not url:
-        if not os.environ.get("POSTGRES_PASSWORD"):
-            print("ERROR: DATABASE_URL or POSTGRES_PASSWORD must be set", file=sys.stderr)
-            sys.exit(1)
-        pw = os.environ["POSTGRES_PASSWORD"]
-        url = f"postgresql://postgres:REDACTED@localhost:5432/cinderhaven"
+        print("ERROR: DATABASE_URL not set", file=sys.stderr)
+        sys.exit(1)
 
     schemas = [s.strip() for s in search_path.split(",")]
     if not all(s in ALLOWED_SCHEMAS for s in schemas):
